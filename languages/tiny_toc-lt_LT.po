@@ -1,0 +1,607 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: tiny_toc 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-06-04 14:42+0300\n"
+"PO-Revision-Date: 2013-06-04 14:43+0300\n"
+"Last-Translator: Arūnas Liuiza <arunas@vini.lt>\n"
+"Language-Team: tinyStudio <studio@tiny.lt>\n"
+"Language: lt_LT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: __;_e;_x;_n\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
+"%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: /var/www/wp-content/plugins/tiny_toc\n"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:28
+msgid "tinyTOC"
+msgstr "tinyTOC"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:29
+msgid "tinyTOC Options"
+msgstr "tinyTOC Nustatymai"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:32
+msgid "Main Settings"
+msgstr "Nustatymai"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:36
+msgid "Minimum entries for TOC"
+msgstr "Mažiausias turinio punktų kiekis"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:53
+msgid "Insert TOC"
+msgstr "Turinį įterpti"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:57
+msgid "Above the text"
+msgstr "Prieš tekstą"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:58
+msgid "Below the text"
+msgstr "Po tekstu"
+
+#: /var/www/wp-content/plugins/tiny_toc/tiny_toc.php:106
+msgid "Table of Contents"
+msgstr "Turinys"
+
+#~ msgid ""
+#~ "So you like using %3$s, huh. Fancy to buy %4$s a coffee? <a href=\"%2$s"
+#~ "\">YES, please!</a> | <a href=\"%1$s\">No, thank you...</a>"
+#~ msgstr ""
+#~ "Tau patinka %3$s, o %4$s mėgsta gerą kavą. Gal norėtum jį pavaišinti? <a "
+#~ "href=\"%2$s\">TAIP, žinoma!</a> | <a href=\"%1$s\">Ne, gal kitą kartą...</"
+#~ "a>"
+
+#~ msgid "powered by"
+#~ msgstr "talpinama pas"
+
+#~ msgid "tribuna.lt"
+#~ msgstr "tribūna.lt"
+
+#~ msgid " Hosted by <a href=\"http://tribuna.lt\">Tribūna.lt</a>"
+#~ msgstr ""
+#~ "Talpinama pas <a href=\"http://tribuna.lt\" title=\"Vieta TAVO "
+#~ "tinklaraščiui\">Tribūna.lt</a>"
+
+#~ msgid "by"
+#~ msgstr "parašė"
+
+#~ msgid "Read more"
+#~ msgstr "Plačiau"
+
+#~ msgid "Comments"
+#~ msgstr "Komentarai"
+
+#~ msgid "Reply to %s"
+#~ msgstr "Atsakyti %s"
+
+#~ msgid "Cancel reply"
+#~ msgstr "Atšaukti atsakymą"
+
+#~ msgid "Comment"
+#~ msgstr "Komentuoti"
+
+#~ msgid "Comment (*)"
+#~ msgstr "Komentaras (*)"
+
+#~ msgid ""
+#~ "Logged in as <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" title=\"Log out "
+#~ "of this account\">Log out?</a>"
+#~ msgstr ""
+#~ "Prisijungęs kaip <a href=\"%1$s\">%2$s</a>. <a href=\"%3$s\" title="
+#~ "\"Atsijungti\">Atsijungti?</a>"
+
+#~ msgid "%1$s at %2$s"
+#~ msgstr "%1$s %2$s"
+
+#~ msgid "(Edit)"
+#~ msgstr "(taisyti)"
+
+#~ msgid "Your comment is awaiting moderation."
+#~ msgstr "Jūsų komentaras laukia patvirtinimo."
+
+#~ msgid "Name (*)"
+#~ msgstr "Vardas (*)"
+
+#~ msgid "Email (*)"
+#~ msgstr "El. paštas (*)"
+
+#~ msgid "Website"
+#~ msgstr "Tinklalapis"
+
+#~ msgid "All rights reserved."
+#~ msgstr ""
+#~ "Visą tinklalapio medžiagą perpublikuoti galima tik gavus autoriaus "
+#~ "sutikimą."
+
+#~ msgid "Footer"
+#~ msgstr "Apačia"
+
+#~ msgid "Footer options"
+#~ msgstr "Apačios nustatymai"
+
+#~ msgid "Misc."
+#~ msgstr "Kita"
+
+#~ msgid "Miscellaneous options"
+#~ msgstr "Kiti nustatymai"
+
+#~ msgid "Year of founding"
+#~ msgstr "Įkūrimo metai"
+
+#~ msgid "Google Analytics tracking code"
+#~ msgstr "„Google Analytics“ sekimo kodas"
+
+#~ msgid "Google Webmaster Tools verification code"
+#~ msgstr "„Google Webmaster Tools“ patvirtinimo kodas"
+
+#~ msgid "Custom icon image (80x80 max)"
+#~ msgstr "Nestandartinis paveikslėlis (80x80)"
+
+#~ msgid "Icon"
+#~ msgstr "Paveikslėlis"
+
+#~ msgid "-- empty --"
+#~ msgstr "-- tuščia --"
+
+#~ msgid "Adjust"
+#~ msgstr "Kontrastas"
+
+#~ msgid "Asterisk"
+#~ msgstr "Žvaigždutė"
+
+#~ msgid "Ban Circle"
+#~ msgstr "Stop"
+
+#~ msgid "Bar Chart"
+#~ msgstr "Diagrama"
+
+#~ msgid "Barcode"
+#~ msgstr "Barkodas"
+
+#~ msgid "Beaker"
+#~ msgstr "Kolba"
+
+#~ msgid "Beer"
+#~ msgstr "Alus"
+
+#~ msgid "Bell"
+#~ msgstr "Varpas"
+
+#~ msgid "Bell 2"
+#~ msgstr "Varpas 2"
+
+#~ msgid "Bolt"
+#~ msgstr "Žaibas"
+
+#~ msgid "Book"
+#~ msgstr "Knyga"
+
+#~ msgid "Bookmark"
+#~ msgstr "Žymeklis"
+
+#~ msgid "Bookmark empty"
+#~ msgstr "Tuščias žymeklis"
+
+#~ msgid "Briefcase"
+#~ msgstr "Lagaminas"
+
+#~ msgid "Bullhorn"
+#~ msgstr "Megafonas"
+
+#~ msgid "Calendar"
+#~ msgstr "Kalendorius"
+
+#~ msgid "Camera"
+#~ msgstr "Foto aparatas"
+
+#~ msgid "Retro"
+#~ msgstr "Retro"
+
+#~ msgid "Certificate"
+#~ msgstr "Sertifikatas"
+
+#~ msgid "Check"
+#~ msgstr "Pažymėta"
+
+#~ msgid "Check empty"
+#~ msgstr "Nepažymėta"
+
+#~ msgid "Circle"
+#~ msgstr "Apskritimas"
+
+#~ msgid "Circle blank"
+#~ msgstr "Tuščias apskritimas"
+
+#~ msgid "Cloud"
+#~ msgstr "Debesis"
+
+#~ msgid "Cloud download"
+#~ msgstr "Debesis - parsisiųsti"
+
+#~ msgid "Cloud upload"
+#~ msgstr "Debesis - įkeltis"
+
+#~ msgid "Coffee"
+#~ msgstr "Kava"
+
+#~ msgid "Cog"
+#~ msgstr "Krumpliaratis"
+
+#~ msgid "Cogs"
+#~ msgstr "Krumpliaračiai"
+
+#~ msgid "Comment 2"
+#~ msgstr "Komenaras 2"
+
+#~ msgid "Comments 2"
+#~ msgstr "Komentarai"
+
+#~ msgid "Credit card"
+#~ msgstr "Kreditinė kortelė"
+
+#~ msgid "Dashboard"
+#~ msgstr "Valdymo skydas"
+
+#~ msgid "Desktop"
+#~ msgstr "Darbastalis"
+
+#~ msgid "Download"
+#~ msgstr "Parsiuntimas"
+
+#~ msgid "Download 2"
+#~ msgstr "Parsiuntimas 2"
+
+#~ msgid "Edit"
+#~ msgstr "Taisyti"
+
+#~ msgid "Envelope"
+#~ msgstr "Vokas"
+
+#~ msgid "Envelope 2"
+#~ msgstr "Vokas 2"
+
+#~ msgid "Exchange"
+#~ msgstr "Keitykla"
+
+#~ msgid "Exclamation sign"
+#~ msgstr "Šauktukas"
+
+#~ msgid "External link"
+#~ msgstr "Išorinė nuoroda"
+
+#~ msgid "Eye closed"
+#~ msgstr "Užmerkta akis"
+
+#~ msgid "Eye open"
+#~ msgstr "Atmerkta akis"
+
+#~ msgid "Facetime video"
+#~ msgstr "Facetime video"
+
+#~ msgid "Fighter jet"
+#~ msgstr "Naikintuvas"
+
+#~ msgid "Film"
+#~ msgstr "Filmas"
+
+#~ msgid "Filter"
+#~ msgstr "FIltras"
+
+#~ msgid "Fire"
+#~ msgstr "Ugnis"
+
+#~ msgid "Flag"
+#~ msgstr "Vėliava"
+
+#~ msgid "Folder closed"
+#~ msgstr "Aplankas užverstas"
+
+#~ msgid "Folder open"
+#~ msgstr "Aplankas atverstas"
+
+#~ msgid "Folder closed 2"
+#~ msgstr "Aplankas užverstas 2"
+
+#~ msgid "Folder open 2"
+#~ msgstr "Aplankas atverstas 2"
+
+#~ msgid "Food"
+#~ msgstr "Maistas"
+
+#~ msgid "Gift"
+#~ msgstr "Dovana"
+
+#~ msgid "Glass"
+#~ msgstr "Stiklinė"
+
+#~ msgid "Globe"
+#~ msgstr "Žemė"
+
+#~ msgid "Group"
+#~ msgstr "Grupė"
+
+#~ msgid "HDD"
+#~ msgstr "HDD"
+
+#~ msgid "Headphones"
+#~ msgstr "Ausinės"
+
+#~ msgid "Heart"
+#~ msgstr "Širdis"
+
+#~ msgid "Heart empty"
+#~ msgstr "Širdis tuščia"
+
+#~ msgid "Home"
+#~ msgstr "Namai"
+
+#~ msgid "Inbox"
+#~ msgstr "I"
+
+#~ msgid "Info"
+#~ msgstr "Informacija"
+
+#~ msgid "Key"
+#~ msgstr "Raktas"
+
+#~ msgid "Leaf"
+#~ msgstr "Lapas"
+
+#~ msgid "Laptop"
+#~ msgstr "Kompiuteris"
+
+#~ msgid "Legal"
+#~ msgstr "Legalus"
+
+#~ msgid "Lemon"
+#~ msgstr "Citrina"
+
+#~ msgid "Lightbulb"
+#~ msgstr "Lemputė"
+
+#~ msgid "Lock"
+#~ msgstr "Užrakinta"
+
+#~ msgid "Unlock"
+#~ msgstr "Atrakinta"
+
+#~ msgid "Magic"
+#~ msgstr "Magija"
+
+#~ msgid "Magnet"
+#~ msgstr "Magnetas"
+
+#~ msgid "Map marker"
+#~ msgstr "Žemėlapio žymeklis"
+
+#~ msgid "Minus"
+#~ msgstr "Minusas"
+
+#~ msgid "Minus sign"
+#~ msgstr "Minuso ženklas"
+
+#~ msgid "Mobile phone"
+#~ msgstr "Mobilusis telefonas"
+
+#~ msgid "Money"
+#~ msgstr "Pinigai"
+
+#~ msgid "Move"
+#~ msgstr "Judinti"
+
+#~ msgid "Music"
+#~ msgstr "Muzika"
+
+#~ msgid "Off"
+#~ msgstr "Išjungta"
+
+#~ msgid "OK"
+#~ msgstr "OK"
+
+#~ msgid "OK Circle"
+#~ msgstr "OK apskritime"
+
+#~ msgid "OK Sign"
+#~ msgstr "OK ženklas"
+
+#~ msgid "Pencil"
+#~ msgstr "Pieštukas"
+
+#~ msgid "Picture"
+#~ msgstr "Paveikslėlis"
+
+#~ msgid "Plane"
+#~ msgstr "Lėktuvas"
+
+#~ msgid "Plus"
+#~ msgstr "Pliusas"
+
+#~ msgid "Plus Sign"
+#~ msgstr "Pliuso ženklas"
+
+#~ msgid "Print"
+#~ msgstr "Spausdinti"
+
+#~ msgid "Pushpin"
+#~ msgstr "Smeigtukas"
+
+#~ msgid "QR Code"
+#~ msgstr "QR kodas"
+
+#~ msgid "Question sign"
+#~ msgstr "Klaustukas"
+
+#~ msgid "Quote left"
+#~ msgstr "Kabutė kairėje"
+
+#~ msgid "Quote right"
+#~ msgstr "Kabutė dešinėje"
+
+#~ msgid "Random"
+#~ msgstr "Atsitiktinis"
+
+#~ msgid "Refresh"
+#~ msgstr "Atnaujinti"
+
+#~ msgid "Remove"
+#~ msgstr "Pašalinti"
+
+#~ msgid "Remove Circle"
+#~ msgstr "Pašalinti apskritime"
+
+#~ msgid "Remove Sign"
+#~ msgstr "Pašalinti ženklas"
+
+#~ msgid "Reorder"
+#~ msgstr "Perrikiuoti"
+
+#~ msgid "Reply"
+#~ msgstr "Atsakyti"
+
+#~ msgid "Resize Horizontal"
+#~ msgstr "Pakeisti dydį horizontaliai"
+
+#~ msgid "Resize Vertical"
+#~ msgstr "Pakeisti dydį vertikaliai"
+
+#~ msgid "Retweet"
+#~ msgstr "Retweet"
+
+#~ msgid "Road"
+#~ msgstr "Kelias"
+
+#~ msgid "RSS"
+#~ msgstr "RSS"
+
+#~ msgid "Screenshot"
+#~ msgstr "Ekranvaizdis"
+
+#~ msgid "Search"
+#~ msgstr "Paieška"
+
+#~ msgid "Share"
+#~ msgstr "Dalintis"
+
+#~ msgid "Share 2"
+#~ msgstr "Dalintis 2"
+
+#~ msgid "Shoping Cart"
+#~ msgstr "Pirkinių krepšelis"
+
+#~ msgid "Signal"
+#~ msgstr "Signalas"
+
+#~ msgid "Sign In"
+#~ msgstr "Prisijungti"
+
+#~ msgid "Sign Out"
+#~ msgstr "Atsijungti"
+
+#~ msgid "Sitemap"
+#~ msgstr "Svetainės medis"
+
+#~ msgid "Sort"
+#~ msgstr "Rikiuoti"
+
+#~ msgid "Sort Down"
+#~ msgstr "Rikiuoti žemyn"
+
+#~ msgid "Sort Up"
+#~ msgstr "Rikiuoti aukštyn"
+
+#~ msgid "Spinner"
+#~ msgstr "Suktukas"
+
+#~ msgid "Star"
+#~ msgstr "Žvaigždutė"
+
+#~ msgid "Star Empty"
+#~ msgstr "Žvaigždutė tuščia"
+
+#~ msgid "Star Half"
+#~ msgstr "Žvaigždutė pusiau"
+
+#~ msgid "Tablet"
+#~ msgstr "Planšetas"
+
+#~ msgid "Tag"
+#~ msgstr "Žyma"
+
+#~ msgid "Tags"
+#~ msgstr "Žymos"
+
+#~ msgid "Tasks"
+#~ msgstr "Užduotys"
+
+#~ msgid "Thumbs Down"
+#~ msgstr "Nykščiai žemyn"
+
+#~ msgid "Thumbs Up"
+#~ msgstr "Nykščiai aukštyn"
+
+#~ msgid "Time"
+#~ msgstr "Laikas"
+
+#~ msgid "Tint"
+#~ msgstr "Lašas"
+
+#~ msgid "Trash"
+#~ msgstr "Šiukšlės"
+
+#~ msgid "Trophy"
+#~ msgstr "Trofėjus"
+
+#~ msgid "Truck"
+#~ msgstr "Sunkvežimis"
+
+#~ msgid "Umbtrella"
+#~ msgstr "Skėtis"
+
+#~ msgid "Upload"
+#~ msgstr "Įkelti"
+
+#~ msgid "Upload 2"
+#~ msgstr "Įkelti 2"
+
+#~ msgid "User"
+#~ msgstr "Vartotojas"
+
+#~ msgid "User MD"
+#~ msgstr "Vartotojas Dr."
+
+#~ msgid "Volume Off"
+#~ msgstr "Garsas išjungtas"
+
+#~ msgid "Volume Down"
+#~ msgstr "Patildyti"
+
+#~ msgid "Volume Up"
+#~ msgstr "Pagarsinti"
+
+#~ msgid "Warning Sign"
+#~ msgstr "Įspėjimas"
+
+#~ msgid "Wrench"
+#~ msgstr "Veržliaraktis"
+
+#~ msgid "Zoom In"
+#~ msgstr "Priartinti"
+
+#~ msgid "Zoom Out"
+#~ msgstr "Patolinti"
+
+#~ msgid "Icon image"
+#~ msgstr "Ikonos paveikslėlis (80x80)"
+
+#~ msgid "Select Something:"
+#~ msgstr "Pasi"
+
+#~ msgid "Informacija"
+#~ msgstr "I"
