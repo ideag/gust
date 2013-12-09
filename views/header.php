@@ -1,22 +1,17 @@
         <header id="global-header" class="navbar">
-            <a class="ghost-logo" href="<?php bloginfo('url');?>" data-off-canvas="left" title="<?php bloginfo('title');?> &middot; <?php bloginfo('description');?>"><span class="hidden">wpGhost</span></a>
+            <a class="ghost-logo" href="<?php bloginfo('url');?>" data-off-canvas="left" title="<?php bloginfo('title');?> &middot; <?php bloginfo('description');?>"><span class="hidden"><?php bloginfo('title'); ?></span></a>
             <nav id="global-nav" role="navigation">
                 <ul id="main-menu" >
 <?php 
   $post_types = get_post_types(array('show_ui'=>true),'objects');
-  //print_r($post_types);
   foreach ($post_types as $name=>$post_type) : 
     if ($name != 'attachment') :
-  //print_r($post_type); ?>
-                        <li class="content" id="menu-<?php echo $name; ?>"><a href="/ghost/<?php echo $name; ?>"><?php echo $post_type->labels->name; ?></a></li>
+?>
+                        <li class="content" id="menu-<?php echo $name; ?>"><a href="<?php echo WP_GHOST_ROOT; ?>/<?php echo $name; ?>"><?php echo $post_type->labels->name; ?></a></li>
 <?php endif; ?>                    
 <?php endforeach; ?>                    
-<!--                        <li class="content"><a href="/ghost/">Posts</a></li>
-                        <li class="content"><a href="/ghost/pages">Pages</a></li>-->
-                    
-                        <li class="editor"><a href="/ghost/editor/post">New Post</a></li>
-                    
-<!-- TODO                        <li class="settings"><a href="/ghost/settings/">Settings</a></li>-->
+                        <li class="editor"><a href="<?php echo WP_GHOST_ROOT; ?>/editor/post">New Post</a></li>                    
+<!-- TODO                        <li class="settings"><a href="<?php echo WP_GHOST_ROOT; ?>/settings/">Settings</a></li>-->
                     
 
                     <li id="usermenu" class="subnav">
@@ -25,11 +20,14 @@
                             <span class="name"><?php $user = wp_get_current_user(); echo($user->data->display_name);?></span>
                         </a>
                         <ul class="user-menu overlay">
-<!--                            <li class="usermenu-profile"><a href="/ghost/settings/user/">Your Profile</a></li>
+<!--                            <li class="usermenu-profile"><a href="<?php echo WP_GHOST_ROOT; ?>/settings/user/"><?php _e('Your Profile','gust'); ?></a></li>
                             <li class="divider"></li>
-                            <li class="usermenu-help"><a href="http://ghost.org/forum/">Help / Support</a></li>
+                            <li class="usermenu-help"><a href="http://ghost.org/forum/"><?php _e('Help / Support','gust'); ?></a></li>
                             <li class="divider"></li>-->
-                            <li class="usermenu-signout"><a href="/ghost/signout/">Sign Out</a></li>
+                            <li class="usermenu"><a href="http://kava.tribuna.lt/en/" target="_blank"><i class="fa fa-coffee"></i> <?php _e('Buy me a coffee','gust'); ?></a></li>
+                            <li class="usermenu"><a href="http://issue.cal.lt/add-issue/?project=gust" target="_blank"><i class="fa fa-question-circle"></i> <?php _e('Report a Bug','gust'); ?></a></li>
+                            <li class="divider"></li>
+                            <li class="usermenu"><a href="<?php echo WP_GHOST_ROOT; ?>/signout/"><i class="fa fa-sign-out"></i> <?php _e('Sign Out','gust'); ?></a></li>
                         </ul>
                     </li>
                 </ul>

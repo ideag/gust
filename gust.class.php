@@ -18,7 +18,7 @@ class wpGhost {
       $return = array(
         'error' => $user->get_error_message()
       );
-      $return['error'] = preg_replace('(href="[^"]*lostpassword")', 'href="/ghost/forgotten"', $return['error']);
+      $return['error'] = preg_replace('(href="[^"]*lostpassword")', 'href="'.GUST_ROOT.'/forgotten"', $return['error']);
     } else {
       $return = array('success'=>true);
       $return['user'] = wp_get_current_user();
@@ -56,21 +56,27 @@ class wpGhost {
         }
   }
   public function new_post($type) {
-    $arr = array('post_type'=>$type,'post_status'=>'draft','post_content'=>' ','post_author'=>get_current_user_id());
+    $arr = array('post_type'=>$type,'post_status'=>'auto-draft','post_content'=>' ','post_author'=>get_current_user_id());
     $id = wp_insert_post($arr,true);
     return $id;
   }
   public function get_post($id) {
     $ret = array();
-    $args = array(
+/*    $args = array(
       'p'=>$id,
-      'post_type'=>'any'
+      'post_type'=>'any',
+      'post_status'=>get_post_stati('','names')
     );
     $query = new WP_Query($args);
     while ($query->have_posts()) : 
       $query->the_post();
       $ret['post'] = wpGhost::format_post($query->post);
-    endwhile;
+    endwhile;*/
+    $p = get_post($id,OBJECT);
+    if ($p->post_status=='auto-draft'){
+      $p->post_status='draft';
+    }
+    $ret['post'] = wpGhost::format_post($p);
     return $ret;
   }
   public function get_posts($page=1,$type='post',$status='any',$limit=15) {
@@ -162,10 +168,11 @@ class wpGhost {
       "image" => null,
       "featured" => is_sticky( $post->ID )?1:0,
       "status" => wpGhost::post_status($post->post_status),
+      "updated_at" => $post->post_modified_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_modified_gmt)):'',//date(DATE_W3C,strtotime($post->post_modified_gmt)),
+      "published_at" => $post->post_date_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_date_gmt)):'',//"2013-11-26T18:21:23.887Z",
+      "created_at" => $post->post_status=='draft'?wpGhost::unpublished_draft_date($post->ID):($post->post_date_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_date_gmt)):''),//"2013-11-26T18:21:23.887Z",
       "author_id" => $post->post_author,
       "author" => wpGhost::format_user( $post->post_author ),
-      "updated_at" => date(DATE_W3C,strtotime($post->post_modified_gmt)),
-      "published_at" => $post->post_date_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_date_gmt)):'',//"2013-11-26T18:21:23.887Z",
       "tags" => array (
         array(
           "id"=> 1,
@@ -185,6 +192,12 @@ class wpGhost {
     );
     return $return;
   }
+  private function unpublished_draft_date($post_id){
+    global $wpdb;
+    $draft_date_array = $wpdb->get_results( 'SELECT post_date FROM wp_posts WHERE ID = '.$post_id );
+    $draft_date = $draft_date_array[0]->post_date;
+    return $draft_date;
+  }  
 }
 
 

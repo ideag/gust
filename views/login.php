@@ -6,14 +6,14 @@
           <section class="login-box js-login-box">
             <form id="login" method="post" novalidate="novalidate">
                 <div class="email-wrap">
-                    <input class="email" type="text" placeholder="Username" name="email" autocapitalize="off" autocorrect="off">
+                    <input class="email" type="text" placeholder="<?php _e('Username','gust'); ?>" name="email" autocapitalize="off" autocorrect="off">
                 </div>
                 <div class="password-wrap">
-                    <input class="password" type="password" placeholder="Password" name="password">
+                    <input class="password" type="password" placeholder="<?php _e('Password','gust'); ?>" name="password">
                 </div>
-                <button class="button-save" type="submit">Log in</button>
+                <button class="button-save" type="submit"><?php _e('Log in','gust'); ?></button>
                 <section class="meta">
-                    <a class="forgotten-password" href="/ghost/forgotten/">Forgotten password?</a>
+                    <a class="forgotten-password" href="<?php echo GUST_ROOT; ?>/forgotten/"><?php _e('Forgotten password?','gust'); ?></a>
                 </section>
             </form>
           </section>

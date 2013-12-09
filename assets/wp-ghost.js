@@ -1,13 +1,19 @@
   wpGhost = {
     api_base : '/api/v0.1',
-    init : function() {
+    ghost_base : '/ghost',
+    plugin_base : '/wp-content/plugins/wp-ghost',
+    init : function(api_base,ghost_base,plugin_base) {
+      if (api_base) wpGhost.api_base = api_base;
+      if (ghost_base) wpGhost.ghost_base = ghost_base;
+      if (plugin_base) wpGhost.plugin_base = plugin_base;
       var address = document.location.pathname;
-      address = address.split('/ghost');
+      address = address.split(wpGhost.ghost_base);
       address = address[1].slice(1);
       address = address.split('/');
       jQuery('.subnav a').click(function(){
         var toggle_object = jQuery(jQuery(this).attr('data-toggle'));
         toggle_object.fadeIn(500);
+        jQuery(document).mouseup(wpGhost.hide_sub);
       });
       switch(address[0]) {
         case 'editor' :
@@ -31,6 +37,13 @@
         break;
       }
       setInterval('wpGhost.update_times()',30000);
+    },
+    hide_sub : function(e){
+          var toggle_object = jQuery(jQuery('.subnav a').data('toggle'));
+          if (!toggle_object.is(e.target) && toggle_object.has(e.target).length === 0) {
+            toggle_object.fadeOut(200);
+            jQuery(document).off('mouseup',wpGhost.hide_sub);
+          }
     },
     init_login  : function() {
       jQuery('#login').submit(function(event){
@@ -56,7 +69,7 @@
               if (typeof resp.error != 'undefined') {
                 wpGhost.throw_error(resp.error);
               } else if (typeof resp.success != 'undefined') {
-                wpGhost.go_to('/ghost');
+                wpGhost.go_to(wpGhost.ghost_base);
               }
             }
           );
@@ -83,7 +96,7 @@
                 wpGhost.throw_error(resp.error);
               } else if (typeof resp.success != 'undefined') {
                 wpGhost.throw_success('Password reset link sent to your e-mail address.');
-                setTimeout('wpGhost.go_to(\'/ghost/login\')',3000);
+                setTimeout('wpGhost.go_to(wpGhost.ghost_base+\'/login\')',3000);
               }
             }
           );
@@ -166,7 +179,7 @@
       }
       jQuery('ul.editor-options li').click(wpGhost.save_post);
       jQuery('.button-save').click(wpGhost.save_post);
-      jQuery('a.delete').attr('href','/ghost/delete/'+entry.id);
+      jQuery('a.delete').attr('href',wpGhost.ghost_base+'/delete/'+entry.id);
       jQuery('a.delete').click(function(event){
         event.preventDefault();
         wpGhost.show_dialog(
@@ -179,7 +192,7 @@
               function(resp){
                 wpGhost.hide_dialog();
                 if (typeof resp.id != 'undefined') {
-                  window.location = '/ghost/';
+                  window.location = wpGhost.ghost_base+'/';
                 } else {
                   wpGhost.throw_error(resp.error);
                 }
@@ -340,13 +353,17 @@
     },
     update_item: function(entry){
       var item = jQuery('.content-list-content ol li[data-id='+entry.id+']');
-      item.find('.entry-title').html(entry.title);
+      item.find('.entry-title').html(entry.title?entry.title:'- untitled -');
       item.data('id',entry.id);
       item.data('entry',entry);
-      item.find('time').attr('datetime',entry.published_at);
       item.find('time').html('<span class="status status-'+entry.status+'">'+entry.status+'</span> <span class="display"></span>');
+      item.find('time').attr('datetime',entry.published_at);
       item.find('time .display').html(moment(entry.published_at).fromNow());
-      item.find('a').attr('href','/ghost/editor/'+entry.id);
+      if (entry.status=='draft') {
+        item.find('time').attr('datetime',entry.created_at);
+        item.find('time .display').html(moment(entry.created_at).fromNow());
+      }
+      item.find('a').attr('href',wpGhost.ghost_base+'/editor/'+entry.id);
       item.dblclick(function(event) {
         window.location = jQuery(this).find('a').attr('href');
       });
@@ -382,7 +399,7 @@
       viewer.find('.author').html(data.author.name);
       viewer.find('.floatingheader>a').attr('class',data.featured==true?'featured':'unfeatured');
       viewer.find('.floatingheader>a').click(wpGhost.toggle_featured);
-      viewer.find('.post-edit').attr('href','/ghost/editor/'+data.id);
+      viewer.find('.post-edit').attr('href',wpGhost.ghost_base+'/editor/'+data.id);
       viewer.find('.post-setting-slug').val(data.slug);
       viewer.find('.post-setting-slug').attr('data-slug',data.slug);
       if (data.published_at) {
@@ -396,7 +413,7 @@
         toggle_object.show();
         jQuery(document).mouseup(wpGhost.hide_settings);
       })
-      viewer.find('a.delete').attr('href','/ghost/delete/'+data.id);
+      viewer.find('a.delete').attr('href',wpGhost.ghost_base+'/delete/'+data.id);
       viewer.find('a.delete').click(function(event){
         event.preventDefault();
         wpGhost.show_dialog(
@@ -503,7 +520,6 @@
       var n = moment(jQuery('.post-setting-date').val());
       var o = moment(jQuery('.post-setting-date').attr('data-date'));
       var id = jQuery('body').data('id');
-      console.log(id);
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         wpGhost.throw_error('Invalid date');
         return false;

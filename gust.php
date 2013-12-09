@@ -1,80 +1,62 @@
 <?php 
 /*
-Plugin Name: wp-ghost
-Plugin URI: http://wp.tribuna.lt/wp-ghost
-Description: A simple port of the Ghost admin interface
+Plugin Name: Gust
+Plugin URI: http://wp.tribuna.lt/gust
+Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
 Version: 0.1
 Author URI: http://wp.tribuna.lt/
 */
-define ('WP_GHOST_ROOT',     '/ghost');
-define ('WP_GHOST_API_ROOT', '/api/v0\.1');
+define ('GUST_ROOT',      '/gust');
+define ('GUST_NAME',      str_replace('/','',GUST_ROOT));
+define ('GUST_API_ROOT',  '/api/v0\.1');
+define ('GUST_TITLE',     'Gust');
+define ('GUST_VERSION',   'v0.1');
+define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
+define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
 
 
-add_action('init','wp_ghost_init_rewrites');
-add_action('pre_get_posts','wp_ghost_drop_in');
+add_action('init','gust_init_rewrites');
+add_action('pre_get_posts','gust_drop_in');
 
-function wp_ghost_init_rewrites() {
-  add_rewrite_tag( '%wp_ghost_api%', '(ghost|api)'); 
-  add_rewrite_tag( '%wp_ghost_q%', '(.*)'); 
-  add_permastruct('ghost_calls', '%wp_ghost_api%/%wp_ghost_q%');
+function gust_init_rewrites() {
+  add_rewrite_tag( '%gust_api%', '(ghost|'.GUST_NAME.'|api)'); 
+  add_rewrite_tag( '%gust_q%', '(.*)'); 
+  add_permastruct('ghost_calls', '%gust_api%/%gust_q%');
   flush_rewrite_rules();
 }
 
-function wp_ghost_drop_in($q) {
-  if ((get_query_var('wp_ghost_api')=='ghost'||get_query_var('wp_ghost_api')=='api' )&& $q->is_main_query()) {
-    $path = plugin_dir_path(__FILE__);
-    require_once($path.'/assets/flight/Flight.php');
-    Flight::set('flight.views.path', $path.'/views');
-    if (get_query_var('wp_ghost_api')=='api' && $q->is_main_query()) {
-      require_once('wp-ghost.class.php');
-      require_once('wp-ghost-api.php');
-    } else if (get_query_var('wp_ghost_api')=='ghost' && $q->is_main_query()) {
-      require_once('wp-ghost.class.php');
-      require_once('wp-ghost-views.php');
+function gust_drop_in($q) {
+  if ((get_query_var('gust_api')=='ghost'||get_query_var('gust_api')==GUST_NAME||get_query_var('gust_api')=='api' )&& $q->is_main_query()) {
+    define('WP_ADMIN',true);
+    require_once(GUST_PLUGIN_PATH.'/assets/flight/Flight.php');
+    Flight::set('flight.views.path', GUST_PLUGIN_PATH.'/views');
+    if (get_query_var('gust_api')=='api' && $q->is_main_query()) {
+      require_once('gust.class.php');
+      require_once('gust-api.php');
+    } else if (get_query_var('gust_api')==GUST_NAME && $q->is_main_query()) {
+      require_once('gust.class.php');
+      require_once('gust-views.php');
+    } else if (get_query_var('gust_api')=='ghost' && $q->is_main_query()) {
+      require_once('gust.class.php');
+      require_once('gust-views.php');
     }
     Flight::start();
     die('');
   }
 }
 
-
-function wp_ghost_parse_q($q) {
-  if ($q) {
-    $ret = explode('/',$q);
-  } else {
-    $ret = array(false);
-  }
-  return $ret;
-}
-
-
-function wp_ghost_dashboard() {
-  $path = plugin_dir_path(__FILE__);
-  require_once($path.'/views/index.php');
-}
-
-function wp_ghost_api_list_posts() {
-  $path = plugin_dir_path(__FILE__);
-  require_once($path.'/schema/posts.php');
-}
-function wp_ghost_api_list_post($id) {
-  $path = plugin_dir_path(__FILE__);
-  $_GET['id']=$id;
-  require_once($path.'/schema/post.php');
-}
-
-
-function wp_ghost_uuid_post($post_id) {
+/*
+function gust_uuid_post($post_id) {
   $uuid = get_post_meta($post_id,'_uuid',true);
   if (!$uuid) {
-    $uuid = wp_ghost_gen_uuid();
+    $uuid = gust_gen_uuid();
     update_post_meta( $post_id, '_uuid', $uuid );
   }
   return $uuid;
 }
 
-function wp_ghost_gen_uuid() {
+function gust_gen_uuid() {
     return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
         // 32 bits for "time_low"
         mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ),
@@ -95,7 +77,7 @@ function wp_ghost_gen_uuid() {
         mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff ), mt_rand( 0, 0xffff )
     );
 }
-
+*/
 function get_avatar_url($id_or_email, $size=96, $default='', $alt=false){
     $get_avatar = get_avatar( $id_or_email, $size, $default, $alt );
     preg_match("/src='(.*?)'/i", $get_avatar, $matches);

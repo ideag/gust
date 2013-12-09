@@ -1,18 +1,18 @@
 <?php 
 
     // login
-    Flight::route('POST '.WP_GHOST_API_ROOT.'/session',function(){
+    Flight::route('POST '.GUST_API_ROOT.'/session',function(){
       $return = wpGhost::login($_POST['username'],$_POST['password']);
       Flight::render('json.php',array('return'=>$return));
     });
     // remind password
-    Flight::route('POST '.WP_GHOST_API_ROOT.'/password',function(){
+    Flight::route('POST '.GUST_API_ROOT.'/password',function(){
       $return = ghost_retrieve_password($_POST['username']);
       Flight::render('json.php',array('return'=>$return));
     });
 
     // get post by id
-    Flight::route('GET '.WP_GHOST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
+    Flight::route('GET '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
       if (wpGhost::auth('edit_post', $id )) {
         $return = wpGhost::get_post($id);
       } else {
@@ -23,12 +23,12 @@
 
 
     // get list of posts
-    Flight::route('GET '.WP_GHOST_API_ROOT.'/posts',function(){
+    Flight::route('GET '.GUST_API_ROOT.'/posts',function(){
       $return = wpGhost::get_posts($_GET['page'],$_GET['type'],$_GET['status'],$_GET['limit']);
       Flight::render('json.php',array('return'=>$return));      
     });
 
-    Flight::route('DELETE '.WP_GHOST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
+    Flight::route('DELETE '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
       if (current_user_can('delete_post',$id )) {
         $ret = wp_delete_post($id);
         if (is_wp_error($ret )) {
@@ -42,7 +42,7 @@
       Flight::render('json.php',array('return'=>$return));      
     });
 
-    Flight::route('POST '.WP_GHOST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
+    Flight::route('POST '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
       if (wpGhost::auth('edit_post',$id)) {
         if (isset($_POST['featured'])) {
           if($_POST['featured']==1) {
