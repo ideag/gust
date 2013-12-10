@@ -25,7 +25,7 @@
                             <li class="usermenu-help"><a href="http://ghost.org/forum/"><?php _e('Help / Support','gust'); ?></a></li>
                             <li class="divider"></li>-->
                             <li class="usermenu" id="coffee"><a href="http://kava.tribuna.lt/en/" target="_blank"><i class="fa fa-coffee"></i> <?php _e('Buy Arūnas a coffee','gust'); ?></a></li>
-                            <li class="usermenu"><a href="http://issue.cal.lt/add-issue/?project=gust" target="_blank"><i class="fa fa-question-circle"></i> <?php _e('Report a Bug','gust'); ?></a></li>
+                            <li class="usermenu"><a href="https://github.com/ideag/gust/issues/new" target="_blank"><i class="fa fa-question-circle"></i> <?php _e('Report a Bug','gust'); ?></a></li>
                             <li class="divider"></li>
                             <li class="usermenu"><a href="<?php echo GUST_ROOT; ?>/signout/"><i class="fa fa-sign-out"></i> <?php _e('Sign Out','gust'); ?></a></li>
                         </ul>
