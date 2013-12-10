@@ -17,6 +17,7 @@
 
         <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700">
         <link rel="stylesheet" href="<?php echo GUST_PLUGIN_URL; ?>/assets/screen.css"/>
+        <link rel="stylesheet" href="<?php echo GUST_PLUGIN_URL; ?>/assets/jquery.nouislider.min.css"/>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.css"/>        
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css"/>
     </head>

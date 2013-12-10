@@ -3,8 +3,31 @@
         <main role="main" id="main">
             <aside id="notifications">
             </aside>
-
-
+            <section class="entry-container">
+                <header>
+                    <section class="box entry-title">
+                        <input type="text" id="entry-title" placeholder="<?php _e('Your Post Title','gust'); ?>" value="" tabindex="1">
+                    </section>
+                </header>
+                <section class="entry-markdown active">
+                    <header class="floatingheader">
+                        <?php _e('Markdown','gust'); ?>
+                        <a class="markdown-help" href="#"><span class="hidden"><?php _e('What is Markdown?','gust'); ?></span></a>
+                    </header>
+                    <section class="entry-markdown-content">
+                        <textarea id="entry-markdown"></textarea>        
+                    </section>
+                </section>
+                <section class="entry-preview">
+                    <header class="floatingheader">
+                        <?php _e('Preview','gust'); ?> 
+                        <span class="entry-word-count js-entry-word-count">0 words</span>
+                    </header>        
+                    <section class="entry-preview-content">            
+                        <div class="rendered-markdown"></div>
+                    </section>
+                </section>
+            </section>
         </main>
 
         <div id="modal-container"></div>

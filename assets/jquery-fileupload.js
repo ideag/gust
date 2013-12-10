@@ -48,7 +48,7 @@
                         .attr({'src': '', "width": 'auto', "height": 'auto'});
 
                     $progress.animate({"opacity": 0}, 250, function () {
-                        $dropzone.find('span.media').after('<img class="fileupload-loading"  src="'+wpGhost.plugin_base+'/img/loadingcat.gif" />');
+                        $dropzone.find('span.media').after('<img class="fileupload-loading"  src="'+Gust.plugin_base+'/img/loadingcat.gif" />');
                         if (!settings.editor) {$progress.find('.fileupload-loading').css({"top": "56px"}); }
                     });
                     $dropzone.trigger("uploadsuccess", [result]);
@@ -63,7 +63,7 @@
                 var self = this;
 
                 $dropzone.find('.js-fileupload').fileupload().fileupload("option", {
-                    url: wpGhost.ghost_base+'/upload/'+jQuery('body').data('id'),
+                    url: Gust.api_base+'/upload/'+jQuery('body').data('id'),
                     headers: {
                         'X-CSRF-Token': $("meta[name='csrf-param']").attr('content')
                     },
@@ -152,6 +152,7 @@
                 $dropzone.find('.js-fileupload').addClass('right');
                 $dropzone.append($cancel);
                 $dropzone.find('.js-cancel').on('click', function () {
+                    alert($dropzone.find('.js-url'));
                     $dropzone.find('.js-url').remove();
                     $dropzone.find('.js-fileupload').removeClass('right');
                     $dropzone.find('button.centre').remove();
@@ -185,14 +186,24 @@
                 $dropzone.find('div.description').hide();
                 $dropzone.append($cancel);
                 $dropzone.find('.js-cancel').on('click', function () {
-                    $dropzone.find('img.js-upload-target').attr({'src': ''});
-                    $dropzone.find('div.description').show();
-                    $dropzone.delay(2500).animate({opacity: 100}, 1000, function () {
-                        self.init();
-                    });
+//                    alert($dropzone.find('img.js-upload-target').attr('src'));
+                    Gust.api(
+                        '/upload?url='+$dropzone.find('img.js-upload-target').attr('src'),
+                        'DELETE',
+                        {},
+                        function(resp){
+                            console.log(resp);
+                            $dropzone.find('img.js-upload-target').attr({'src': ''});
+                            $dropzone.find('div.description').show();
+                            $dropzone.delay(2500).animate({opacity: 100}, 1000, function () {
+                                self.init();
+                            });
 
-                    $dropzone.trigger("uploadsuccess", 'http://');
-                    self.initWithDropzone();
+                            $dropzone.trigger("uploadsuccess", 'http://');
+                            self.initWithDropzone();
+
+                        }
+                    );
                 });
             },
 
