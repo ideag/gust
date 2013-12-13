@@ -59,7 +59,7 @@
                                     <label for="pub-date">Pub Date</label>
                                 </div>
                                 <div class="post-setting-field">
-                                    <input id="pub-date" class="post-setting-date" type="text" value=""><!--<span class="post-setting-calendar"></span>-->
+                                    <input id="pub-date" class="post-setting-date" type="text" value="" placeholder="YYYY Mon DD hh:mm"><!--<span class="post-setting-calendar"></span>-->
                                 </div>
                             </li>
                             <li><a href="#" class="delete">Delete This Post</a></li>
