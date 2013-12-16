@@ -4,7 +4,7 @@ Plugin Name: Gust
 Plugin URI: http://wp.tribuna.lt/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.1.1
+Version: 0.2
 Author URI: http://wp.tribuna.lt/
 */
 define ('GUST_ROOT',      '/gust');

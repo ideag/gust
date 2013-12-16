@@ -34,13 +34,13 @@
         <div class="modal-background fade"></div>
         <footer id="publish-bar">
             <nav>
-<!--                <section id="entry-tags" href="#" class="left">
+                <section id="entry-tags" href="#" class="left">
                     <label class="tag-label" for="tags"><span class="hidden">Tags</span></label>
-                    <div class="tags" style="max-width: 1040px;"><span class="tag" data-tag-id="1">Getting Started</span></div>
+                    <div class="tags"></div>
                     <input type="hidden" class="tags-holder" id="tags-holder">
                     <input class="tag-input" id="tags" type="text" data-input-behaviour="tag">
                     <ul class="suggestions overlay" style="display: none;"></ul>
-                </section>-->
+                </section>
                 <div class="right">
 
                     <section id="entry-controls">

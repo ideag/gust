@@ -2,8 +2,8 @@
     api_base : '/api/v0.1',
     ghost_base : '/ghost',
     plugin_base : '/wp-content/plugins/wp-ghost',
+    all_tags : [{'name':'Alpha'},{'name':'Beta'},{'name':'Gama'},{'name':'Delta'}],
     show_amount : function(val) {
-      console.log(val);
       jQuery('.count2').text('€'+val);
       jQuery('#tiny_amount').val(val);
       jQuery('.count').html('');
@@ -107,7 +107,6 @@
               'password':jQuery('input[name=password]').val()
             },
             function(resp){
-              console.log(resp);
               if (typeof resp.error != 'undefined') {
                 Gust.throw_error(resp.error);
               } else if (typeof resp.success != 'undefined') {
@@ -133,7 +132,6 @@
               'username':jQuery('input[name=email]').val()
             },
             function(resp){
-              console.log(resp);
               if (typeof resp.error != 'undefined') {
                 Gust.throw_error(resp.error);
               } else if (typeof resp.success != 'undefined') {
@@ -246,9 +244,16 @@
       });
     },
     init_editor : function(id){
-//      jQuery('#main').html(Gust.templates.aside + Gust.templates.editor);
       jQuery('body').attr('class','editor');
       jQuery('body').data('id',id);
+      Gust.api(
+        '/tags',
+        'GET',
+        {},
+        function(resp){
+          Gust.all_tags = resp;
+        }
+      );
       Gust.api(
         '/post/'+id,
         'GET',
@@ -269,6 +274,12 @@
           Gust.converter = new Showdown.converter({extensions: ['ghostdown', 'github']});
           Gust.converter_backend = new Showdown.converter({extensions: ['github']});
           Gust.editor.setOption("readOnly", false);
+          if(resp.post.type=='page') {
+            jQuery('#entry-tags').hide();
+          }
+          jQuery.each(resp.post.tags,function(){
+            Gust.add_tag(this.name,this.term_id);
+          });
           Gust.editor.on('change', function () {
             Gust.render_preview();
           });
@@ -277,7 +288,8 @@
           jQuery('.CodeMirror-scroll').scroll(Gust.sync_scroll);
           jQuery('.CodeMirror-scroll').scrollClass({target: '.entry-markdown', offset: 10});
           jQuery('.entry-preview-content').scrollClass({target: '.entry-preview', offset: 10});
-          jQuery('.options.up').click(function(){
+          jQuery('.options.up').click(function(e){
+            e.preventDefault();
             var toggle_object = jQuery(jQuery(this).attr('data-toggle'));
             toggle_object.show();
             jQuery(document).on('mouseup',Gust.hide_save);
@@ -297,10 +309,116 @@
           Gust.update_editor(resp.post);
         }
       );
+      jQuery('#tags').keyup(function(e){
+        var triggers = [188,13];
+        var tag = jQuery.trim(jQuery(this).val());
+        if (e.keyCode==38) {
+          if (jQuery('#entry-tags ul li.selected').size()>0) {
+            jQuery('#entry-tags ul li.selected').removeClass('selected').prev('li').addClass('selected');
+          }
+        } else if (e.keyCode==40){
+          if (jQuery('#entry-tags ul li.selected').size()>0) {
+            jQuery('#entry-tags ul li.selected').removeClass('selected').next('li').addClass('selected');
+          }
+        } else if(triggers.indexOf(e.keyCode)>-1) {
+          e.preventDefault();
+          if (jQuery('#entry-tags ul li.selected').size()>0) {
+            tag = jQuery('#entry-tags ul li.selected').text();
+          }
+          tag = tag.replace(',','');
+          Gust.add_tag(tag,'');
+          jQuery(this).val('').focus();
+        } else {
+          e.preventDefault();
+          Gust.show_suggestions(jQuery('#tags'),tag);
+        }
+      }).keydown(function(e){
+        var tag = jQuery.trim(jQuery(this).val());
+        if (e.keyCode==8 && !tag) {
+          e.preventDefault();
+          Gust.remove_tag(jQuery('div.tags span').last());
+        }
+      });
       jQuery('.markdown-help').click(function(e){
         e.preventDefault();
         Gust.show_dialog_md();
       });
+    },
+    find_tags: function (searchTerm) {
+      var matchingTagModels,
+      self = this;
+      if (!Gust.all_tags) {
+        return [];
+      }
+      searchTerm = searchTerm.toString().toUpperCase();
+      matchingTagModels = _.filter(Gust.all_tags, function (tag) {
+        var tagNameMatches,
+        hasAlreadyBeenAdded;
+
+        tagNameMatches = tag.name.toString().toUpperCase().indexOf(searchTerm) !== -1;
+//        hasAlreadyBeenAdded = _.some(self.model.get('tags'), function (usedTag) {
+//          return tag.name.toUpperCase() === usedTag.name.toUpperCase();
+//        });
+        return tagNameMatches && !hasAlreadyBeenAdded;
+      });
+      return matchingTagModels;
+    },    
+    show_suggestions: function (target, _searchTerm) {
+      jQuery('#entry-tags ul').show();
+      var searchTerm = _searchTerm.toString().toLowerCase(),
+      matchingTags = Gust.find_tags(searchTerm),
+      maxSuggestions = 5, // Limit the suggestions number
+      regexTerm = searchTerm.toString().replace(/(\s+)/g, "(<[^>]+>)*$1(<[^>]+>)*"),
+      regexPattern = new RegExp("(" + regexTerm + ")", "i");
+
+      jQuery('#entry-tags ul').css({left: jQuery(target).position().left});
+      jQuery('#entry-tags ul').html('');
+
+      matchingTags = _.first(matchingTags, maxSuggestions);
+      _.each(matchingTags, function (matchingTag) {
+        var highlightedName,
+        suggestionHTML;
+
+        highlightedName = matchingTag.name.toString().replace(regexPattern, "<mark>$1</mark>");
+        highlightedName = highlightedName.toString().replace(/(<mark>[^<>]*)((<[^>]+>)+)([^<>]*<\/mark>)/, "$1</mark>$2<mark>$4");
+
+        suggestionHTML = "<li data-tag-id='" + matchingTag.term_id + "' data-tag-name='" + matchingTag.name + "'><a href='#'>" + highlightedName + "</a></li>";
+        jQuery('#entry-tags ul').append(suggestionHTML);
+      }, this);
+      jQuery('#entry-tags ul li:first-child').addClass('selected');
+      jQuery('#entry-tags ul li').click(function(){
+        Gust.add_tag(
+          jQuery(this).attr('data-tag-name'),
+          jQuery(this).attr('data-tag-id')
+        );
+        jQuery('#tags').val('').focus();
+      });
+    },
+    add_tag : function(tag,id) {
+      var tags = [];
+      jQuery('div.tags span').each(function(){
+        tags[tags.length] = jQuery(this).attr('data-tag-id')?jQuery(this).attr('data-tag-id'):jQuery(this).text();
+      })
+      if (tags.indexOf(tag)==-1) {
+        var tag_id = id;
+        tags[tags.length] = tag_id?tag_id:tag;
+        var new_tag = Gust.templates.tag.replace('%id%',tag_id);
+        new_tag = new_tag.replace('%title%',tag);
+        jQuery('div.tags').append(new_tag);
+        jQuery('div.tags span:last-child').click(function(){
+          Gust.remove_tag(jQuery(this));
+        });
+      }
+      jQuery('#tags-holder').val(tags.join(','));
+      jQuery('#entry-tags ul').hide();
+    },
+    remove_tag : function(el){
+      el.remove();
+      var tags = [];
+      jQuery('div.tags span').each(function(){
+        tags[tags.length] = jQuery(this).attr('data-tag-id')?jQuery(this).attr('data-tag-id'):jQuery(this).text();
+      })
+      jQuery('#tags-holder').val(tags.join(','));
     },
     save_post : function(e){
       e.preventDefault();
@@ -309,6 +427,7 @@
       data.html = Gust.converter_backend.makeHtml(Gust.uploadMgr.getEditorValue());
       data.title = jQuery('#entry-title').val();
       data.id = jQuery('body').data('id');
+      data.tags = jQuery('#tags-holder').val();
       data.status = jQuery(this).attr('data-status');
       if (data.status == 'published')
         data.status = 'publish';
@@ -693,7 +812,8 @@
       'notice_success'  : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
       'dialog'          : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%text%</h1></header>                <section class="modal-body"><div></div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
       'dialog_markdown' : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
-      'dialog_coffee'   : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>'
+      'dialog_coffee'   : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
+      'tag'             : '<span class="tag" data-tag-id="%id%">%title%</span>'
     }
   };
 

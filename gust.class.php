@@ -69,6 +69,10 @@ class Gust {
     $id = wp_insert_post($arr,true);
     return $id;
   }
+  public function get_tags(){
+    $ret = get_terms('post_tag',array('hide_empty'=>'0'));
+    return $ret;
+  }
   public function get_post($id) {
     $ret = array();
     $args = array(
@@ -145,6 +149,9 @@ class Gust {
     echo '<script>document.getElementById("form").submit();</script></body></html>';
     die('PAYPAL');    
   }
+  public function get_post_tags($post_id){
+    return wp_get_post_terms($post_id, 'post_tag');
+  }
 
 
 
@@ -199,10 +206,15 @@ class Gust {
     );
     return $return;
   }
+//  private function format_tag($tag_id) {
+//    $return = $tag_id
+//    return $return;
+//  }
   private function format_post($post) {
     $return = array(
       "id" => $post->ID*1,
       "title" => $post->post_title,
+      "type" => $post->post_type,
       "slug" => $post->post_name,
       "markdown" => Gust::content_markdown($post->ID,$post->post_content),
       "html" => Gust::content_html($post->post_content),
@@ -214,22 +226,7 @@ class Gust {
       "created_at" => $post->post_status=='draft'?Gust::unpublished_draft_date($post->ID):($post->post_date_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_date_gmt)):''),//"2013-11-26T18:21:23.887Z",
       "author_id" => $post->post_author,
       "author" => Gust::format_user( $post->post_author ),
-      "tags" => array (
-        array(
-          "id"=> 1,
-          "uuid"=> "c1761690-14e3-463d-9348-a90401b9a29e",
-          "name"=> "Getting Started",
-          "slug"=> "getting-started",
-          "description"=> null,
-          "parent_id"=> null,
-          "meta_title"=> null,
-          "meta_description"=> null,
-          "created_at"=> "2013-11-26T18:21:23.945Z",
-          "created_by"=> 1,
-          "updated_at"=> "2013-11-26T18:21:23.945Z",
-          "updated_by"=> 1
-        )
-      )
+      "tags" => Gust::get_post_tags($post->ID*1)
     );
     return $return;
   }

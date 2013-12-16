@@ -36,6 +36,15 @@
     });
 
 
+    Flight::route('GET '.GUST_API_ROOT.'/tags',function(){
+      if (Gust::auth('edit_post', $id )) {
+        $return = Gust::get_tags();
+      } else {
+        $return = array('error'=>'You have no permission to edit this post');
+      }
+      Flight::render('json.php',array('return'=>$return));      
+    });
+
     // get list of posts
     Flight::route('GET '.GUST_API_ROOT.'/posts',function(){
       if (Gust::auth('edit_post', $id )) {
@@ -92,6 +101,15 @@
             'post_content' => $_POST['html']?$_POST['html']:' ',
             'post_status' => $_POST['status']
           ); 
+          if($_POST['type']!='page') {
+            $tags=$_POST['tags'];
+            $tags=explode(',',$tags);
+            foreach ($tags as $key=>$tag) {
+              $no = $tag * 1;
+              $tags[$key] = $no?$no:$tag;
+            }
+            wp_set_post_terms($id,$tags,'post_tag');
+          }
           wp_update_post($arr,true);
 //          print_r($id);
           $return = Gust::get_post($id);
