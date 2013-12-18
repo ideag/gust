@@ -1,6 +1,6 @@
 <?php
 class Gust {
-  public function auth($cap='edit_posts',$id=false) {
+  public static function auth($cap='edit_posts',$id=false) {
     if(is_user_logged_in() && current_user_can($cap,$id)) {
       return true;
     } else {
@@ -9,7 +9,7 @@ class Gust {
   }
 
   // login
-  public function login($user,$pass) {
+  public static function login($user,$pass) {
     $creds['user_login']    = $user;
     $creds['user_password'] = $pass;
     $creds['remember'] = true;
@@ -25,7 +25,7 @@ class Gust {
     }
     return $return;
   }
-  public function delete($url) {
+  public static function delete($url) {
     $id = Gust::get_attachment_id_from_src($url);
     $res = wp_delete_attachment($id, true );
     if ($res===false) {
@@ -34,7 +34,7 @@ class Gust {
       $ret = array('success'=>'Image deleted');
     }
   }
-  public function upload($id) {
+  public static function upload($id) {
         $ret = array('files'=>array());
         if ( ! function_exists( 'wp_handle_upload' ) ) require_once( ABSPATH . 'wp-admin/includes/file.php' );
         $uploadedfile = $_FILES['uploadimage'];
@@ -64,16 +64,16 @@ class Gust {
           return  $attachment['guid'];
         }
   }
-  public function new_post($type) {
+  public static function new_post($type) {
     $arr = array('post_type'=>$type,'post_status'=>'auto-draft','post_content'=>' ','post_author'=>get_current_user_id());
     $id = wp_insert_post($arr,true);
     return $id;
   }
-  public function get_tags(){
+  public static function get_tags(){
     $ret = get_terms('post_tag',array('hide_empty'=>'0'));
     return $ret;
   }
-  public function get_post($id) {
+  public static function get_post($id) {
     $ret = array();
     $args = array(
       'p'=>$id,
@@ -94,7 +94,7 @@ class Gust {
     }
     return $ret;
   }
-  public function get_posts($page=1,$type='post',$status='any',$limit=15) {
+  public static function get_posts($page=1,$type='post',$status='any',$limit=15) {
     if (!$status) $status = 'any';
     if (!$limit) $limit = 15;
     if (!$page) $page = 1;
@@ -125,7 +125,7 @@ class Gust {
     return $ret;
   }
 
-  public function paypal_submit() {
+  public static function paypal_submit() {
 //        $address = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
         $address = 'https://www.paypal.com/cgi-bin/webscr';
 
@@ -149,7 +149,7 @@ class Gust {
     echo '<script>document.getElementById("form").submit();</script></body></html>';
     die('PAYPAL');    
   }
-  public function get_post_tags($post_id){
+  public static function get_post_tags($post_id){
     return wp_get_post_terms($post_id, 'post_tag');
   }
 
@@ -244,7 +244,7 @@ class Gust {
     return $id;
 
   }
-  public function retrieve_password($user_login) {
+  public static function retrieve_password($user_login) {
     global $wpdb, $current_site;
 
     if ( empty( $user_login) ) {

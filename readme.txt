@@ -20,6 +20,9 @@ Current features:
 *   Media upload integration
 *   **NEW** Post tags support
 
+Requirements:
+*   PHP **5.3** or greater
+
 == Installation ==
 
 1. Upload `gust` directory to the `/wp-content/plugins/` directory
@@ -28,6 +31,10 @@ Current features:
 1. Go to yourdomain.com/gust
 
 == Frequently Asked Questions ==
+
+= Why do you require PHP 5.3? =
+
+One of the libraries Gust uses, Flight, requires it.
 
 = Are you affiliated with Ghost =
 
@@ -38,6 +45,9 @@ No, I am not. This is an unofficial port, hence the different name.
 This is an early release, so some features, like category/featured images support, are not present, yet. They will be, later on, if the plugin gets enough interest.
 
 == Changelog ==
+
+= 0.2.1 = 
+Bugfix - converted to static methods in Gust class
 
 = 0.2 = 
 Post tags support
