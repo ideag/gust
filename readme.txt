@@ -4,7 +4,7 @@ Donate link: http://wordofpress.com/gust
 Tags: ghost, admin panel, markdown, editor, dashboard
 Requires at least: 3.0.1
 Tested up to: 3.8
-Stable tag: trunk
+Stable tag: 0.2.2
 License: MIT
 License URI: http://wordofpress.com/gust/license
 
@@ -21,6 +21,7 @@ Current features:
 *   **NEW** Post tags support
 
 Requirements:
+
 *   PHP **5.3** or greater
 
 == Installation ==
