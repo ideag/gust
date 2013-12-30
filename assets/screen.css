@@ -5116,3 +5116,120 @@ p.note {
   margin-left  : 15px;
   margin-right : 15px;
 }
+
+#entry-categories {
+  display: block;
+  float:left;
+  height:40px;
+  width:40px;
+  position: relative;
+}
+#entry-categories>a {
+  line-height: 40px;  
+}
+.entry-categories {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: inline-block;
+  padding: 0 10px;
+  color: #7d878a;
+  -webkit-transition: all 0.15s ease-out 0;
+  -moz-transition: all 0.15s ease-out 0;
+  transition: all 0.15s ease-out 0;
+  position: relative;
+  top: 1px; }
+  .entry-categories:hover {
+    text-decoration: none; }
+  .entry-categories:hover, .entry-categories.active {
+    color: #e2edf2; }
+
+.entry-categories-menu {
+}
+  .entry-categories-menu li a {
+    padding: 10px 15px; }
+    .entry-categories-menu li a:before {
+      font-size: 11px;
+      line-height: 1em; }
+
+
+.category-title {
+  padding: 10px 15px;  
+}
+
+.entry-categories-menu li:last-child {
+  border-bottom-width: 0px;
+}
+
+.entry-categories-menu li {
+  cursor: pointer;  
+}
+.entry-categories-menu li i {
+  display: inline-block;
+  width: 20px;
+}
+
+.entry-categories-menu li>ul.submenu {
+  border-top: none;
+}
+.entry-categories-menu li>ul.submenu>li:first-child {
+  border-top: 1px solid #35393b;
+  /*border-top: #edece4 1px solid;*/
+}
+
+.entry-categories-menu li>ul.submenu>li {
+  padding-left:15px;
+}
+
+.entry-categories-menu li>ul.submenu>li>ul>li {
+  padding-left:20px;
+
+}
+
+.entry-categories-menu {
+  max-height: 400px;
+  overflow: hidden;
+  border-top: none;
+}
+#entry-categories:before{
+}
+nav li li {font-size: 1em;}
+
+div.toggle:after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 10px;
+    margin-left: -10px;
+    border-width: 10px 10px 0 10px;
+    border-style: solid;
+    border-color: #242628 transparent;
+    display: block;
+    width: 0; 
+    z-index:1000;  
+}
+
+div.toggle {
+  min-height: 100px;
+  position: absolute;
+  bottom: 44px;
+  left: 3px;   
+  display: block;
+  position: absolute;
+  z-index: 960;
+  padding: 6px 0;
+  border: none;
+  list-style: none;
+  color: #e2edf2;
+  background: #242628;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0 1px 15px;
+}
+
+div.toggle {
+  display: none;
+}
+
+#entry-tags {
+  margin-left:40px;
+}

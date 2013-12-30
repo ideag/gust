@@ -2,7 +2,7 @@
     api_base : '/api/v0.1',
     ghost_base : '/ghost',
     plugin_base : '/wp-content/plugins/wp-ghost',
-    all_tags : [{'name':'Alpha'},{'name':'Beta'},{'name':'Gama'},{'name':'Delta'}],
+    all_tags : [],
     show_amount : function(val) {
       jQuery('.count2').text('€'+val);
       jQuery('#tiny_amount').val(val);
@@ -167,15 +167,12 @@
       jQuery(this).parent().parent().remove();
       e.preventDefault();
     },
-    update_editor :function(entry) {
-      var id = entry.id;
-      jQuery('.post-setting-slug').val(entry.slug);
-      jQuery('.post-setting-slug').attr('data-slug',entry.slug);
-      jQuery('body').data('id',entry.id);
+    update_editor_button : function(entry){
       if (entry.published_at) {
         jQuery('.post-setting-date').val(moment(entry.published_at).format('YYYY MMM DD HH:mm'));
         jQuery('.post-setting-date').attr('data-date',moment(entry.published_at).format('YYYY MMM DD HH:mm'));
       }
+      jQuery('.entry-settings').unbind('click');
       jQuery('.entry-settings').click(function(event){
         event.preventDefault();
         var toggle_object = jQuery(jQuery(this).data('toggle'));
@@ -217,9 +214,17 @@
           jQuery('ul.editor-options').append('<li data-status="draft"><a href="#">Unshedule Post</a></li>');
         break;
       }
+      jQuery('ul.editor-options li').unbind('click',Gust.save_post);
       jQuery('ul.editor-options li').click(Gust.save_post);
       jQuery('.button-save').unbind('click',Gust.save_post)
       jQuery('.button-save').click(Gust.save_post);
+    },
+    update_editor :function(entry) {
+      var id = entry.id;
+      jQuery('.post-setting-slug').val(entry.slug);
+      jQuery('.post-setting-slug').attr('data-slug',entry.slug);
+      jQuery('body').data('id',entry.id);
+      Gust.update_editor_button(entry);
       jQuery('a.delete').attr('href',Gust.ghost_base+'/delete/'+entry.id);
       jQuery('a.delete').click(function(event){
         event.preventDefault();
@@ -255,58 +260,89 @@
         }
       );
       Gust.api(
-        '/post/'+id,
+        '/categories',
         'GET',
         {},
         function(resp){
-          var entry = resp.post;
-          var id = entry.id;
-          jQuery('#entry-title').val(entry.title);
-          jQuery('#entry-markdown').html(entry.markdown);
-          Gust.editor = CodeMirror.fromTextArea(document.getElementById('entry-markdown'), {
-            mode: 'gfm',
-            tabMode: 'indent',
-            tabindex: "2",
-            lineWrapping: true,
-            dragDrop: false
+          Gust.all_categories = resp;
+          jQuery('.entry-categories-menu').html('');
+          jQuery.each(Gust.all_categories,function(){
+            Gust.add_category(this.name,this.term_id,this);
           });
-          Gust.uploadMgr = new UploadManager(Gust.editor);
-          Gust.converter = new Showdown.converter({extensions: ['ghostdown', 'github']});
-          Gust.converter_backend = new Showdown.converter({extensions: ['github']});
-          Gust.editor.setOption("readOnly", false);
-          if(resp.post.type=='page') {
-            jQuery('#entry-tags').hide();
-          }
-          jQuery.each(resp.post.tags,function(){
-            Gust.add_tag(this.name,this.term_id);
+          jQuery('.entry-categories-menu li>i,.entry-categories-menu li>div').click(Gust.toggle_checkbox);
+          jQuery('.entry-categories-menu').bind('wheel',function(event) {
+            var delta = event.originalEvent.deltaY;
+            jQuery(this).scrollTop(jQuery(this).scrollTop()+delta);
           });
-          Gust.editor.on('change', function () {
-            Gust.render_preview();
-          });
-          Gust.render_preview();
-          Gust.editor.focus();
-          jQuery('.CodeMirror-scroll').scroll(Gust.sync_scroll);
-          jQuery('.CodeMirror-scroll').scrollClass({target: '.entry-markdown', offset: 10});
-          jQuery('.entry-preview-content').scrollClass({target: '.entry-preview', offset: 10});
-          jQuery('.options.up').click(function(e){
-            e.preventDefault();
-            var toggle_object = jQuery(jQuery(this).attr('data-toggle'));
-            toggle_object.show();
-            jQuery(document).on('mouseup',Gust.hide_save);
-          });
-/*          shortcut.add("Ctrl+Alt+C", function () {
-                self.showHTML();
-          });
-            shortcut.add("Ctrl+Alt+C", function () {
-                self.showHTML();
-            });*/
+          Gust.init_toggle(
+            'a.entry-categories',
+            function(){
+            },
+            function(){
+              return true;
+            }
+          );
+          Gust.api(
+            '/post/'+id,
+            'GET',
+            {},
+            function(resp){
+              var entry = resp.post;
+              var id = entry.id;
+              jQuery('#entry-title').val(entry.title);
+              jQuery('#entry-markdown').html(entry.markdown);
+              Gust.editor = CodeMirror.fromTextArea(document.getElementById('entry-markdown'), {
+                mode: 'gfm',
+                tabMode: 'indent',
+                tabindex: "2",
+                lineWrapping: true,
+                dragDrop: false
+              });
+              Gust.uploadMgr = new UploadManager(Gust.editor);
+              Gust.converter = new Showdown.converter({extensions: ['ghostdown', 'github']});
+              Gust.converter_backend = new Showdown.converter({extensions: ['github']});
+              Gust.editor.setOption("readOnly", false);
+              if(resp.post.type=='page') {
+                jQuery('#entry-tags').hide();
+              }
+              jQuery.each(resp.post.tags,function(){
+                Gust.add_tag(this.name,this.term_id);
+              });
+              jQuery.each(resp.post.categories,function(){
+                var item = jQuery('#entry-categories li[data-category-id='+this.term_id+']');
+                item.children('div').first().find('i.fa').click();
+                item.parent('ul').prepend(item);
+              });
 
-            _.each(MarkdownShortcuts, function (combo) {
-                shortcut.add(combo.key, function () {
-                    return Gust.editor.addMarkdown({style: combo.style});
-                });
-            });          
-          Gust.update_editor(resp.post);
+              Gust.editor.on('change', function () {
+                Gust.render_preview();
+              });
+              Gust.render_preview();
+              Gust.editor.focus();
+              jQuery('.CodeMirror-scroll').scroll(Gust.sync_scroll);
+              jQuery('.CodeMirror-scroll').scrollClass({target: '.entry-markdown', offset: 10});
+              jQuery('.entry-preview-content').scrollClass({target: '.entry-preview', offset: 10});
+              jQuery('.options.up').click(function(e){
+                e.preventDefault();
+                var toggle_object = jQuery(jQuery(this).attr('data-toggle'));
+                toggle_object.show();
+                jQuery(document).on('mouseup',Gust.hide_save);
+              });
+    /*          shortcut.add("Ctrl+Alt+C", function () {
+                    self.showHTML();
+              });
+                shortcut.add("Ctrl+Alt+C", function () {
+                    self.showHTML();
+                });*/
+
+                _.each(MarkdownShortcuts, function (combo) {
+                    shortcut.add(combo.key, function () {
+                        return Gust.editor.addMarkdown({style: combo.style});
+                    });
+                });          
+              Gust.update_editor(resp.post);
+            }
+          );
         }
       );
       jQuery('#tags').keyup(function(e){
@@ -394,6 +430,30 @@
         jQuery('#tags').val('').focus();
       });
     },
+    add_category : function(tag,id,term) {
+      var tag_id = id;
+//      tags[tags.length] = tag_id?tag_id:tag;
+      var new_tag = Gust.templates.category.replace('%id%',tag_id);
+      new_tag = new_tag.replace('%title%',tag);
+      if (term.parent!=0) {
+        var parent = jQuery('.entry-categories-menu li[data-category-id='+term.parent+']>ul');
+      } else {
+        var parent = jQuery('.entry-categories-menu');
+      }
+      parent.append(new_tag);
+    },
+    toggle_checkbox: function(){
+      var box = jQuery(this).parent().find('i.fa').first();
+      if (box.hasClass('fa-square-o')) {
+        box.removeClass('fa-square-o').addClass('fa-check-square-o');
+        if (box.parent().parent().parent().parent().find('i.fa').first().hasClass('fa-square-o')) {
+          box.parent().parent().parent().parent().find('i.fa').first().click();
+        }
+      } else {
+        box.removeClass('fa-check-square-o').addClass('fa-square-o');
+        box.parent().parent().find('i.fa').removeClass('fa-check-square-o').addClass('fa-square-o');
+      }
+    },
     add_tag : function(tag,id) {
       var tags = [];
       jQuery('div.tags span').each(function(){
@@ -428,6 +488,12 @@
       data.title = jQuery('#entry-title').val();
       data.id = jQuery('body').data('id');
       data.tags = jQuery('#tags-holder').val();
+      var cats = [];
+      jQuery('#entry-categories li .fa-check-square-o').each(function(index, val) {
+         cats.push(jQuery(val).parent().parent().attr('data-category-id'));
+      });
+      cats = cats.join(',');
+      data.categories = cats;
       data.status = jQuery(this).attr('data-status');
       if (data.status == 'published')
         data.status = 'publish';
@@ -530,6 +596,7 @@
       }
       item.attr('data-id',entry.id);
       item.click(Gust.item_click);
+      Gust.update_item(entry);
     },
     update_item: function(entry){
       var item = jQuery('.content-list-content ol li[data-id='+entry.id+']');
@@ -649,14 +716,14 @@
       }
     },
     validate_settings : function() {
-      var n = moment(jQuery('.post-setting-date').val());
-      var o = moment(jQuery('.post-setting-date').attr('data-date'));
+      var n = jQuery('.post-setting-date').val()?moment(jQuery('.post-setting-date').val()):0;
+      var o = jQuery('.post-setting-date').attr('data-date')?moment(jQuery('.post-setting-date').attr('data-date')):0;
       var id = jQuery('.content-list-content ol li.active').attr('data-id');
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         Gust.throw_error('Invalid date');
         return false;
       } 
-      if (jQuery('.post-setting-date').val() && n.unix()!=o.unix()) {
+      if (n &&o && n.unix()!=o.unix()) {
         var data = {'published_at':n.unix()};
         Gust.api(
           '/post/'+id,
@@ -697,14 +764,14 @@
       return true;
     },
     validate_settings_editor : function() {
-      var n = moment(jQuery('.post-setting-date').val());
-      var o = moment(jQuery('.post-setting-date').attr('data-date'));
+      var n = jQuery('.post-setting-date').val()?moment(jQuery('.post-setting-date').val()):0;
+      var o = jQuery('.post-setting-date').attr('data-date')?moment(jQuery('.post-setting-date').attr('data-date')):0;
       var id = jQuery('body').data('id');
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         Gust.throw_error('Invalid date');
         return false;
       } 
-      if (jQuery('.post-setting-date').val() && n.unix()!=o.unix()) {
+      if (/*jQuery('.post-setting-date').val() && */n &&o && n.unix()!=o.unix()) {
         var data = {'published_at':n.unix()};
         Gust.api(
           '/post/'+id,
@@ -714,10 +781,10 @@
             if ( typeof resp.error != 'undefined') {
               Gust.throw_error(resp.error);
             } else {
-              jQuery('.post-setting-date').val(moment(resp.post.published_at).format('YYYY MMM DD HH:mm'));  
-              jQuery('.post-setting-date').attr('data-date',moment(resp.post.published_at).format('YYYY MMM DD HH:mm'));  
-              Gust.update_item(resp.post);
-              jQuery('.content-list-content ol li[data-id='+resp.post.id+']').click();
+              var date_show = resp.post.published_at?resp.post.published_at:resp.post.created_at;
+              Gust.update_editor_button(resp.post);
+//             jQuery('.post-setting-date').val(moment(date_show).format('YYYY MMM DD HH:mm'));  
+//              jQuery('.post-setting-date').attr('data-date',moment(date_show).format('YYYY MMM DD HH:mm'));  
               Gust.throw_success('Date updated');
             }
           }
@@ -743,6 +810,33 @@
         );
       }
       return true;
+    },
+    hide_toggle : function(e){
+      e.preventDefault();
+      var toggle_object = jQuery(jQuery(document).attr('data-toggle-object'));
+      if (!toggle_object.is(e.target) && toggle_object.has(e.target).length === 0) {
+        if (document.callback_hide()){
+          toggle_object.fadeOut(200);
+          jQuery(document).off('mouseup',Gust.hide_toggle);
+        }
+      }
+    },
+    init_toggle : function(el,callback_show,callback_hide){
+      var el = jQuery(el);
+      el.click(function(e){
+        e.preventDefault();
+        if(jQuery(document).attr('data-toggle-flag')=='1'){
+          jQuery(document).mouseup();
+          jQuery(document).attr('data-toggle-flag','0');
+        } else {
+          jQuery(el.attr('data-toggle')).fadeIn(250);
+          callback_show();
+          jQuery(document).attr('data-toggle-flag','1');
+          jQuery(document).attr('data-toggle-object',el.attr('data-toggle'));
+          document.callback_hide = callback_hide;
+          jQuery(document).mouseup(Gust.hide_toggle);
+        }
+      });
     },
     show_dialog : function(text,confirm,deny) {
       jQuery('#modal-container, .modal-background').show();
@@ -807,13 +901,14 @@
     },
     templates : {
       'list_item'       : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',
-      'preview_item'    : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
+      'preview_item'    : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="" placeholder="YYYY Mon DD hh:mm">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
       'notice_error'    : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-error notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
       'notice_success'  : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
       'dialog'          : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%text%</h1></header>                <section class="modal-body"><div></div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
       'dialog_markdown' : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
       'dialog_coffee'   : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
-      'tag'             : '<span class="tag" data-tag-id="%id%">%title%</span>'
+      'tag'             : '<span class="tag" data-tag-id="%id%">%title%</span>',
+      'category'        : '<li class="post-setting" data-category-id="%id%"><div class="category-title"><i class="fa fa-square-o"></i> %title%</div><ul class="submenu"></ul></li>'
     }
   };
 

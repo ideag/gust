@@ -45,6 +45,16 @@
       Flight::render('json.php',array('return'=>$return));      
     });
 
+    Flight::route('GET '.GUST_API_ROOT.'/categories',function(){
+      if (Gust::auth('edit_post', $id )) {
+        $return = Gust::get_categories();
+      } else {
+        $return = array('error'=>'You have no permission to edit this post');
+      }
+      Flight::render('json.php',array('return'=>$return));      
+    });
+
+
     // get list of posts
     Flight::route('GET '.GUST_API_ROOT.'/posts',function(){
       if (Gust::auth('edit_post', $id )) {
@@ -79,10 +89,17 @@
           }
           $return = Gust::get_post($id);
         } else if (isset($_POST['published_at']) && !isset($_POST['markdown'])) {
+          if ($_POST['published_at']=='NaN'){
+            $date = '0000-00-00 00:00:00';
+          } else {
+            $date = date('Y-m-d H:i:s',$_POST['published_at']+ get_option( 'gmt_offset' ) * 3600);            
+          }
+//          $date = date('Y-m-d H:i:s',$_POST['published_at']);
           $arr = array(
             'ID' => $id,
-            'post_date_gmt' => date('Y-m-d H:i:s',$_POST['published_at']),
-            'post_date' => date('Y-m-d H:i:s',$_POST['published_at']+ get_option( 'gmt_offset' ) * 3600)
+            'edit_date' => true,
+            'post_date' => $date,
+            'post_date_gmt' => $date=='0000-00-00 00:00:00'?'0000-00-00 00:00:00':get_gmt_from_date($date)//date('Y-m-d H:i:s',$_POST['published_at']),
           ); 
           $id = wp_update_post($arr);
           $return = Gust::get_post($id);
@@ -109,6 +126,14 @@
               $tags[$key] = $no?$no:$tag;
             }
             wp_set_post_terms($id,$tags,'post_tag');
+
+            $tags=$_POST['categories'];
+            $tags=explode(',',$tags);
+            foreach ($tags as $key=>$tag) {
+              $no = $tag * 1;
+              $tags[$key] = $no?$no:$tag;
+            }
+            wp_set_post_terms($id,$tags,'category');
           }
           wp_update_post($arr,true);
 //          print_r($id);

@@ -34,6 +34,13 @@
         <div class="modal-background fade"></div>
         <footer id="publish-bar">
             <nav>
+                <section id="entry-categories">
+                    <a class="entry-categories" href="#" data-toggle="#entry-categories .toggle" title="Categories"><i class="fa fa-tags"></i></a>
+                    <div class="toggle">
+                        <ul class="entry-categories-menu">
+                        </ul>
+                    </div>
+                </section>
                 <section id="entry-tags" href="#" class="left">
                     <label class="tag-label" for="tags"><span class="hidden">Tags</span></label>
                     <div class="tags"></div>

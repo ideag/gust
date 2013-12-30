@@ -70,7 +70,11 @@ class Gust {
     return $id;
   }
   public static function get_tags(){
-    $ret = get_terms('post_tag',array('hide_empty'=>'0'));
+    $ret = get_terms('post_tag',array('hide_empty'=>'0','orderby'=>'count'));
+    return $ret;
+  }
+  public static function get_categories(){
+    $ret = get_terms('category',array('hide_empty'=>'0','orderby'=>'count'));
     return $ret;
   }
   public static function get_post($id) {
@@ -149,8 +153,8 @@ class Gust {
     echo '<script>document.getElementById("form").submit();</script></body></html>';
     die('PAYPAL');    
   }
-  public static function get_post_tags($post_id){
-    return wp_get_post_terms($post_id, 'post_tag');
+  public static function get_post_tags($post_id,$taxonomy='post_tag'){
+    return wp_get_post_terms($post_id, $taxonomy);
   }
 
 
@@ -161,7 +165,9 @@ class Gust {
     if (!$md) {
       $path = plugin_dir_path(__FILE__);
       require_once($path.'/markdown.php');
-      $markdown = new HTML_To_Markdown($post_content);
+      if (function_exists('mb_convert_encoding'))
+        $post_content = mb_convert_encoding($post_content, 'HTML-ENTITIES', 'UTF-8');
+      $markdown = new HTML_To_Markdown($post_content,array('header_style'=>'atx'));
       $md = $markdown->output();
       update_post_meta( $post_id, '_md', $md );
     }
@@ -226,7 +232,8 @@ class Gust {
       "created_at" => $post->post_status=='draft'?Gust::unpublished_draft_date($post->ID):($post->post_date_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_date_gmt)):''),//"2013-11-26T18:21:23.887Z",
       "author_id" => $post->post_author,
       "author" => Gust::format_user( $post->post_author ),
-      "tags" => Gust::get_post_tags($post->ID*1)
+      "tags" => Gust::get_post_tags($post->ID*1),
+      "categories" => Gust::get_post_tags($post->ID*1,'category')
     );
     return $return;
   }
@@ -234,6 +241,7 @@ class Gust {
     global $wpdb;
     $draft_date_array = $wpdb->get_results( 'SELECT post_date FROM wp_posts WHERE ID = '.$post_id );
     $draft_date = $draft_date_array[0]->post_date;
+    $draft_date = date(DATE_W3C,strtotime($draft_date));
     return $draft_date;
   }  
   private function get_attachment_id_from_src ($image_src) {

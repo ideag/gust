@@ -1,17 +1,17 @@
 <?php 
 /*
 Plugin Name: Gust
-Plugin URI: http://wp.tribuna.lt/gust
+Plugin URI: https://github.com/ideag/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.2.2
+Version: 0.3
 Author URI: http://wp.tribuna.lt/
 */
 define ('GUST_ROOT',          '/gust');
 define ('GUST_NAME',          str_replace('/','',GUST_ROOT));
 define ('GUST_API_ROOT',      '/api/v0\.1');
-define ('GUST_TITLE',         'GUST');
-define ('GUST_VERSION',       'v0.2.1');
+define ('GUST_TITLE',         'Gust');
+define ('GUST_VERSION',       'v0.3');
 define ('GUST_PHP_REQUIRED',  '5.3.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
