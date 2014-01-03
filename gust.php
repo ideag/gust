@@ -4,19 +4,20 @@ Plugin Name: Gust
 Plugin URI: https://github.com/ideag/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.3
+Version: 0.3.1
 Author URI: http://wp.tribuna.lt/
 */
-define ('GUST_ROOT',          '/gust');
-define ('GUST_NAME',          str_replace('/','',GUST_ROOT));
+define ('GUST_NAME',          'gust');
+define ('GUST_SUBPATH',       gust_get_subpath());
+define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
 define ('GUST_API_ROOT',      '/api/v0\.1');
 define ('GUST_TITLE',         'Gust');
-define ('GUST_VERSION',       'v0.3');
+define ('GUST_VERSION',       'v0.3.1');
 define ('GUST_PHP_REQUIRED',  '5.3.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
-
 add_action('admin_init','gust_version_check');
+add_action('admin_init','gust_permalink_check');
 function gust_version_check() {
   // check for PHP >= 5.3
   if (version_compare(phpversion(), GUST_PHP_REQUIRED) < 0) {
@@ -35,6 +36,26 @@ function gust_bad_version_notice() {
     </div>
     <?php
 }
+function gust_permalink_check(){
+  if (!gust_is_pretty_permalinks()) {
+    add_action( 'admin_notices', 'gust_no_permalink_notice',1000 );   
+  }
+}
+function gust_no_permalink_notice() {
+    ?>
+    <div class="error">
+        <p><?php _e('Gust: You do not use pretty permalinks. Please enable them <a href="options-permalink.php">here</a> to use Gust.', 'gust' ); ?></p>
+    </div>
+    <?php
+}
+
+function gust_is_pretty_permalinks(){
+  global $wp_rewrite;
+  if ($wp_rewrite->permalink_structure == '')
+    return false;
+  else
+    return true;
+}
 
 add_action('init','gust_init_rewrites');
 add_action('pre_get_posts','gust_drop_in');
@@ -42,7 +63,7 @@ add_action('pre_get_posts','gust_drop_in');
 function gust_init_rewrites() {
   add_rewrite_tag( '%gust_api%', '(ghost|'.GUST_NAME.'|api)'); 
   add_rewrite_tag( '%gust_q%', '(.*)'); 
-  add_permastruct('gust_calls', '%gust_api%/%gust_q%');
+  add_permastruct('gust_calls', '%gust_api%/%gust_q%',array('with_front'=>false));
   flush_rewrite_rules();
 }
 
@@ -104,5 +125,11 @@ function get_avatar_url($id_or_email, $size=96, $default='', $alt=false){
     return $matches[1];
 }
 
+function gust_get_subpath(){
+  $url = get_bloginfo('url');
+  $url = parse_url($url);
+  $url = $url['path'];
+  return $url;
+}
 
 ?>
