@@ -18,7 +18,7 @@ class Gust {
       $return = array(
         'error' => $user->get_error_message()
       );
-      $return['error'] = preg_replace('(href="[^"]*lostpassword")', 'href="'.GUST_ROOT.'/forgotten"', $return['error']);
+      $return['error'] = preg_replace('(href="[^"]*lostpassword")', 'href="'.GUST_ROOT_SUBDIR.'/forgotten"', $return['error']);
     } else {
       $return = array('success'=>true);
       $return['user'] = wp_get_current_user();
@@ -138,7 +138,7 @@ class Gust {
       'cmd' => '_xclick',
       'rm' => '2',
       'amount' => round($_POST['tiny_amount'],2),
-      'return' => get_bloginfo( 'url' ).GUST_ROOT.'/coffee/confirm',
+      'return' => get_bloginfo( 'url' ).GUST_ROOT_SUBDIR.'/coffee/confirm',
       'cancel_return' => get_bloginfo( 'url' ).'',
       'item_name' => $_POST['tiny_text'],
       'custom' => isset($_POST['tiny_text2'])?': '.$_POST['tiny_text2']:'',
