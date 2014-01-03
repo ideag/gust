@@ -9,7 +9,7 @@
                         <section class="content-filter">                          
                             <span></span>
                         </section>                      
-                        <a href="/ghost/editor/" class="button button-add"><span class="hidden">New Post</span></a>
+                        <a href="<?php echo GUST_ROOT; ?>/editor/" class="button button-add" id="add-post-list"><span class="hidden">New Post</span></a>
                     </header>                  
                     <section class="content-list-content">                      
                         <ol></ol>                  

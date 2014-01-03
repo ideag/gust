@@ -536,6 +536,7 @@
       jQuery('body').attr('class','manage');
       jQuery('.content-filter span').html(title);
       jQuery('#menu-'+type).addClass('active');
+      jQuery('#add-post-list').attr('href',Gust.ghost_base+'/'+type);
       jQuery('.content-list-content ol').data('type',type);
       jQuery('.content-list-content ol').data('loaded',false);
       jQuery('.content-list-content ol').data('current',1);

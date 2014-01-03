@@ -23,7 +23,7 @@
         <script>
           jQuery(document).ready(function(){
             Gust.init(
-              '<?php echo GUST_API_ROOT; ?>',
+              '<?php echo GUST_SUBPATH.GUST_API_ROOT; ?>',
               '<?php echo GUST_ROOT; ?>',
               '<?php echo GUST_PLUGIN_URL; ?>'
             );

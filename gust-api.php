@@ -57,7 +57,7 @@
 
     // get list of posts
     Flight::route('GET '.GUST_API_ROOT.'/posts',function(){
-      if (Gust::auth('edit_post', $id )) {
+      if (Gust::auth('edit_posts')) {
         $return = Gust::get_posts($_GET['page'],$_GET['type'],$_GET['status'],$_GET['limit']);
       } else {
         $return = array('error'=>'You have no permission to edit this post');
