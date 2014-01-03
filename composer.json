@@ -1,0 +1,9 @@
+{
+    "name": "ideag/gust",
+    "description": "Gust is a port of Ghost admin panel for WordPress.",
+    "license": "GPL-2.0+",
+    "type": "wordpress-plugin",
+    "require": {
+        "composer/installers": "~1.0"
+    }
+}
