@@ -12,7 +12,7 @@ define ('GUST_SUBPATH',       gust_get_subpath());
 define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
 define ('GUST_API_ROOT',      '/api/v0\.1');
 define ('GUST_TITLE',         'Gust');
-define ('GUST_VERSION',       'v0.3.1');
+define ('GUST_VERSION',       'v0.3.2');
 define ('GUST_PHP_REQUIRED',  '5.3.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
