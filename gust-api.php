@@ -117,6 +117,9 @@
           $return = Gust::get_post($id);
         } else if (isset($_POST['markdown'])) {
           update_post_meta($id,'_md',$_POST['markdown']);
+          if (!current_user_can('publish_post',$id) && $_POST['status']=='publish') {
+            $_POST['status']='pending';
+          }
           $arr = array(
             'ID' => $id,
             'post_title' => $_POST['title']?$_POST['title']:'',

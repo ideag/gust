@@ -68,6 +68,9 @@
       if (typeof get.coffee != 'undefined' && get.coffee == 'confirm') {
         Gust.throw_success('Thank you for the coffee!');
       }
+      if (typeof get.message != 'undefined' && get.message=='subscriber') {
+        Gust.throw_error('As a subscriber, you do not have permission to edit this blog');        
+      }
       setInterval('Gust.update_times()',30000);
     },
     detect_get : function() {

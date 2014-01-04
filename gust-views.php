@@ -2,6 +2,8 @@
     Flight::route('GET /'.GUST_NAME,function(){
       if (Gust::auth()) {
         Flight::redirect(GUST_ROOT.'/post');
+      } else if (Gust::auth('read')) {
+        Flight::redirect(GUST_ROOT.'/login?message=subscriber');
       } else {
         Flight::redirect(GUST_ROOT.'/login');
       }
