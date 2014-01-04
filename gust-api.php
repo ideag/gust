@@ -37,7 +37,7 @@
 
 
     Flight::route('GET '.GUST_API_ROOT.'/tags',function(){
-      if (Gust::auth('edit_post', $id )) {
+      if (Gust::auth('edit_posts' )) {
         $return = Gust::get_tags();
       } else {
         $return = array('error'=>'You have no permission to edit this post');
@@ -46,7 +46,7 @@
     });
 
     Flight::route('GET '.GUST_API_ROOT.'/categories',function(){
-      if (Gust::auth('edit_post', $id )) {
+      if (Gust::auth('edit_posts')) {
         $return = Gust::get_categories();
       } else {
         $return = array('error'=>'You have no permission to edit this post');
@@ -58,7 +58,12 @@
     // get list of posts
     Flight::route('GET '.GUST_API_ROOT.'/posts',function(){
       if (Gust::auth('edit_posts')) {
-        $return = Gust::get_posts($_GET['page'],$_GET['type'],$_GET['status'],$_GET['limit']);
+        $return = Gust::get_posts(
+          isset($_GET['page'])?$_GET['page']:1,
+          isset($_GET['type'])?$_GET['type']:'post',
+          isset($_GET['status'])?$_GET['status']:false,
+          isset($_GET['limit'])?$_GET['limit']:false
+        );
       } else {
         $return = array('error'=>'You have no permission to edit this post');
       }
@@ -118,7 +123,7 @@
             'post_content' => $_POST['html']?$_POST['html']:' ',
             'post_status' => $_POST['status']
           ); 
-          if($_POST['type']!='page') {
+          if(!isset($_POST['type']) || $_POST['type']!='page') {
             $tags=$_POST['tags'];
             $tags=explode(',',$tags);
             foreach ($tags as $key=>$tag) {

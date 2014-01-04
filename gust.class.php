@@ -89,7 +89,7 @@ class Gust {
       $query->the_post();
       $ret['post'] = Gust::format_post($query->post);
     endwhile;
-    if (!$p) {
+    if (!isset($ret['post'])) {
       $p = get_post($id,OBJECT);
       if ($p->post_status=='auto-draft'){
         $p->post_status='draft';
@@ -122,7 +122,7 @@ class Gust {
     $ret['pages'] = $query->max_num_pages*1;
     if ($ret['pages']>1 && $page<$ret['pages'])
       $ret['next'] = $page+1;
-    if ($ret['next']>$ret['pages'])
+    if (isset($ret['next']) && ($ret['next']>$ret['pages']))
       $ret['next'] = $ret['pages'];
     if ($ret['pages']>1 && $page>1)
       $ret['prev'] = $page-1;
@@ -160,7 +160,7 @@ class Gust {
 
 
 
-  private function content_markdown($post_id,$post_content) {
+  private static function content_markdown($post_id,$post_content) {
     $md = get_post_meta($post_id,'_md',true);
     if (!$md) {
       $path = plugin_dir_path(__FILE__);
@@ -173,11 +173,11 @@ class Gust {
     }
     return $md;
   }
-  private function content_html($post_content) {
+  private static function content_html($post_content) {
     $return = apply_filters( 'the_content', $post_content );
     return $return;
   }
-  private function post_status($status) {
+  private static function post_status($status) {
     switch ($status) {
       case 'publish' :
         $return = 'published';
@@ -191,12 +191,12 @@ class Gust {
     }
     return $return;
   }
-  private function avatar_url($id_or_email, $size=96, $default='', $alt=false){
+  private static function avatar_url($id_or_email, $size=96, $default='', $alt=false){
     $get_avatar = get_avatar( $id_or_email, $size, $default, $alt );
     preg_match("/src='(.*?)'/i", $get_avatar, $matches);
     return $matches[1];
   }
-  private function format_user($user_id) {
+  private static function format_user($user_id) {
     $user = get_userdata($user_id);
     $return = array(
       "id"        => $user_id,
@@ -216,7 +216,7 @@ class Gust {
 //    $return = $tag_id
 //    return $return;
 //  }
-  private function format_post($post) {
+  private static function format_post($post) {
     $return = array(
       "id" => $post->ID*1,
       "title" => $post->post_title,
@@ -237,7 +237,7 @@ class Gust {
     );
     return $return;
   }
-  private function unpublished_draft_date($post_id){
+  private static function unpublished_draft_date($post_id){
     global $wpdb;
     $draft_date_array = $wpdb->get_results( 'SELECT post_date FROM wp_posts WHERE ID = '.$post_id );
     $draft_date = $draft_date_array[0]->post_date;

@@ -4,7 +4,7 @@ Plugin Name: Gust
 Plugin URI: https://github.com/ideag/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.3.1
+Version: 0.3.2
 Author URI: http://wp.tribuna.lt/
 */
 define ('GUST_NAME',          'gust');
@@ -128,7 +128,7 @@ function get_avatar_url($id_or_email, $size=96, $default='', $alt=false){
 function gust_get_subpath(){
   $url = get_bloginfo('url');
   $url = parse_url($url);
-  $url = $url['path'];
+  $url = isset($url['path'])?$url['path']:'';
   return $url;
 }
 

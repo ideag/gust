@@ -308,6 +308,9 @@
               jQuery.each(resp.post.tags,function(){
                 Gust.add_tag(this.name,this.term_id);
               });
+              if(resp.post.type=='page') {
+                jQuery('#entry-categories').hide();
+              }
               jQuery.each(resp.post.categories,function(){
                 var item = jQuery('#entry-categories li[data-category-id='+this.term_id+']');
                 item.children('div').first().find('i.fa').click();
@@ -536,7 +539,7 @@
       jQuery('body').attr('class','manage');
       jQuery('.content-filter span').html(title);
       jQuery('#menu-'+type).addClass('active');
-      jQuery('#add-post-list').attr('href',Gust.ghost_base+'/'+type);
+      jQuery('#add-post-list').attr('href',Gust.ghost_base+'/editor/'+type);
       jQuery('.content-list-content ol').data('type',type);
       jQuery('.content-list-content ol').data('loaded',false);
       jQuery('.content-list-content ol').data('current',1);
