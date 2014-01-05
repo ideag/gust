@@ -54,7 +54,8 @@ This is an early release, so some features, like category/featured images suppor
 == Changelog ==
 
 = 0.3.2 = 
-* Bugfix with low level php notices failing on some setups
+* Bugfix - low level php notices failing on some setups
+* Bugfix - contributors no longer can publish a post (thanks to [glaxxon]{https://github.com/glaxxon} for reporting)
 
 = 0.3.1 =
 * Bugfix for subdirectory setup (e.g. `domain.com/blog`)
