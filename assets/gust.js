@@ -224,6 +224,7 @@
     },
     update_editor :function(entry) {
       var id = entry.id;
+      var type = entry.type;
       jQuery('.post-setting-slug').val(entry.slug);
       jQuery('.post-setting-slug').attr('data-slug',entry.slug);
       jQuery('body').data('id',entry.id);
@@ -239,9 +240,10 @@
               'DELETE',
               {},
               function(resp){
+                localStorage.removeItem('list_position_'+type);
                 Gust.hide_dialog();
                 if (typeof resp.id != 'undefined') {
-                  window.location = Gust.ghost_base+'/';
+                  window.location = Gust.ghost_base+'/'+type;
                 } else {
                   Gust.throw_error(resp.error);
                 }
@@ -250,6 +252,18 @@
           }
         );
       });
+    },
+    store_position : function(id,type){
+      localStorage.setItem('list_position_'+type,id);
+    },
+    load_position : function(type){
+      var position = localStorage.getItem('list_position_'+type);
+      if (position){
+        localStorage.removeItem('list_position_'+type);
+        return position;
+      } else {
+        return false;
+      }
     },
     init_editor : function(id){
       jQuery('body').attr('class','editor');
@@ -292,6 +306,7 @@
             function(resp){
               var entry = resp.post;
               var id = entry.id;
+              Gust.store_position(id,entry.type);
               jQuery('#entry-title').val(entry.title);
               jQuery('#entry-markdown').html(entry.markdown);
               Gust.editor = CodeMirror.fromTextArea(document.getElementById('entry-markdown'), {
@@ -560,7 +575,17 @@
             jQuery('.content-list-content ol').data('current',1);
             jQuery('.content-list-content ol').data('next',resp.next);
             jQuery('.content-list-content ol').data('loaded',true);
-            jQuery('.content-list-content ol li:first-child').click();
+            var position = Gust.load_position(resp.posts[0].type);
+            if (position) {
+              if (jQuery('li[data-id='+position+']').size()>0) {
+                jQuery('li[data-id='+position+']').click();
+                jQuery('.content-list-content').scrollTop(jQuery('li[data-id='+position+']').position().top-jQuery('li[data-id='+position+']').parent().position().top);
+              } else {
+                Gust.append_list(position);
+              } 
+            } else {
+              jQuery('.content-list-content ol li:first-child').click();              
+            }
             watchScrollPosition(
               '.content-list-content',
               '.content-list-content ol',
@@ -571,7 +596,7 @@
         }
       );
     },
-    append_list : function() {
+    append_list : function(position) {      
       var page = jQuery('.content-list-content ol').data('next');
       var current = jQuery('.content-list-content ol').data('current');
       if (page!=current && jQuery('.content-list-content ol').data('loaded')) {
@@ -585,6 +610,14 @@
             resp.posts.forEach(function(entry){
               Gust.add_item(entry);
             });
+            if (position) {
+              if (jQuery('li[data-id='+position+']').size()>0) {
+                jQuery('li[data-id='+position+']').click();
+                jQuery('.content-list-content').scrollTop(jQuery('li[data-id='+position+']').position().top-jQuery('li[data-id='+position+']').parent().position().top);
+              } else {
+                Gust.append_list(position);
+              } 
+            }
             jQuery('.content-list-content ol').data('current',page);
             jQuery('.content-list-content ol').data('next',resp.next);
             jQuery('.content-list-content ol').data('loaded',true);
