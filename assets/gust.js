@@ -71,6 +71,9 @@
       if (typeof get.message != 'undefined' && get.message=='subscriber') {
         Gust.throw_error('As a subscriber, you do not have permission to edit this blog');        
       }
+      if (typeof get.error != 'undefined') {
+        Gust.throw_error(decodeURI(get.error));        
+      }
       setInterval('Gust.update_times()',30000);
     },
     detect_get : function() {
@@ -304,6 +307,9 @@
             'GET',
             {},
             function(resp){
+              if(typeof resp.error != 'undefined') {
+                window.location = document.referrer.split("?")[0]+ '?error='+resp.error;
+              }
               var entry = resp.post;
               var id = entry.id;
               Gust.store_position(id,entry.type);
