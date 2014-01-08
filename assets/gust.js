@@ -286,7 +286,7 @@
           jQuery.each(Gust.all_categories,function(){
             Gust.add_category(this.name,this.term_id,this);
           });
-          jQuery('.entry-categories-menu li>i,.entry-categories-menu li>div').click(Gust.toggle_checkbox);
+          jQuery('.entry-categories-menu li>div').click(Gust.toggle_checkbox);
           jQuery('.entry-categories-menu').bind('wheel',function(event) {
             var delta = event.originalEvent.deltaY;
             jQuery(this).scrollTop(jQuery(this).scrollTop()+delta);
@@ -467,8 +467,11 @@
       var box = jQuery(this).parent().find('i.fa').first();
       if (box.hasClass('fa-square-o')) {
         box.removeClass('fa-square-o').addClass('fa-check-square-o');
-        if (box.parent().parent().parent().parent().find('i.fa').first().hasClass('fa-square-o')) {
-          box.parent().parent().parent().parent().find('i.fa').first().click();
+        var parent = box.parent().parent().parent();
+        if (parent.hasClass('submenu')) {
+          parent = parent.parent();
+          parent.children('div').click();
+          console.log(parent.children('div'));
         }
       } else {
         box.removeClass('fa-check-square-o').addClass('fa-square-o');
