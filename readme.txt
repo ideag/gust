@@ -4,7 +4,7 @@ Donate link: http://wordofpress.com/gust
 Tags: ghost, admin panel, markdown, editor, dashboard, admin
 Requires at least: 3.0.1
 Tested up to: 3.8
-Stable tag: 0.3.2
+Stable tag: 0.3.3
 License: MIT
 License URI: http://wordofpress.com/gust/license
 
@@ -34,6 +34,10 @@ Requirements:
 1. Go to yourdomain.com/gust
 
 == Frequently Asked Questions ==
+
+= Empty post list with Disqus commenting system =
+
+Please check 'Output Javascript in footer' option in Disqus plugin options screen to fix.
 
 = Why I cannot add/remove categories = 
 

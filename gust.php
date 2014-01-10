@@ -4,15 +4,16 @@ Plugin Name: Gust
 Plugin URI: https://github.com/ideag/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.3.2
+Version: 0.3.3
 Author URI: http://wp.tribuna.lt/
 */
+error_reporting(-1);
 define ('GUST_NAME',          'gust');
 define ('GUST_SUBPATH',       gust_get_subpath());
 define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
 define ('GUST_API_ROOT',      '/api/v0\.1');
 define ('GUST_TITLE',         'Gust');
-define ('GUST_VERSION',       'v0.3.2');
+define ('GUST_VERSION',       'v0.3.3');
 define ('GUST_PHP_REQUIRED',  '5.3.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
@@ -58,7 +59,7 @@ function gust_is_pretty_permalinks(){
 }
 
 add_action('init','gust_init_rewrites');
-add_action('pre_get_posts','gust_drop_in');
+add_action('pre_get_posts','gust_drop_in',1);
 
 function gust_init_rewrites() {
   add_rewrite_tag( '%gust_api%', '(ghost|'.GUST_NAME.'|api)'); 
