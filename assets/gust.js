@@ -477,7 +477,6 @@
         if (parent.hasClass('submenu')) {
           parent = parent.parent();
           parent.children('div').click();
-          console.log(parent.children('div'));
         }
       } else {
         box.removeClass('fa-check-square-o').addClass('fa-square-o');
@@ -534,11 +533,15 @@
         'POST',
         data,
         function(resp){
-          Gust.update_editor(resp.post);
-          var toggle_object = jQuery(jQuery('.options.up').data('toggle'));
-          toggle_object.fadeOut(200);
-          jQuery(document).off('mouseup',Gust.hide_save);
-          Gust.throw_success('Post updated');
+          if (typeof resp.error != 'undefined') {
+            Gust.throw_error(resp.error);
+          } else {
+            Gust.update_editor(resp.post);
+            var toggle_object = jQuery(jQuery('.options.up').data('toggle'));
+            toggle_object.fadeOut(200);
+            jQuery(document).off('mouseup',Gust.hide_save);
+            Gust.throw_success('Post updated');
+          }
         }
       );
     },
@@ -945,8 +948,14 @@
         dataType: 'json',
         'data': data,
       })
-      .done(response)
-      .fail(function(a,b){console.log(a,b);});      
+      .done(function(resp){
+        if (typeof resp.error != 'undefined') {
+          Gust.throw_error(resp.error);
+        } else {
+          response(resp);
+        }
+      })
+      .fail(function(a,b){console.log(a,b);Gust.throw_error('API error: '+b);});      
     },
     templates : {
       'list_item'       : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',

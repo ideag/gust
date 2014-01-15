@@ -7,7 +7,7 @@ Author: Arūnas Liuiza
 Version: 0.3.3
 Author URI: http://wp.tribuna.lt/
 */
-error_reporting(-1);
+//error_reporting(-1);
 define ('GUST_NAME',          'gust');
 define ('GUST_SUBPATH',       gust_get_subpath());
 define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
@@ -17,8 +17,21 @@ define ('GUST_VERSION',       'v0.3.3');
 define ('GUST_PHP_REQUIRED',  '5.3.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
+
+register_activation_hook(__FILE__,'gust_install');
+function gust_install(){
+  gust_init_rewrites();
+  flush_rewrite_rules();
+  gust_permalink_check();
+  gust_version_check();
+} 
+
+add_action('init','gust_init_rewrites');
+add_action('pre_get_posts','gust_drop_in',1);
+// monitor for PHP version and permalink changes
 add_action('admin_init','gust_version_check');
 add_action('admin_init','gust_permalink_check');
+
 function gust_version_check() {
   // check for PHP >= 5.3
   if (version_compare(phpversion(), GUST_PHP_REQUIRED) < 0) {
@@ -58,14 +71,10 @@ function gust_is_pretty_permalinks(){
     return true;
 }
 
-add_action('init','gust_init_rewrites');
-add_action('pre_get_posts','gust_drop_in',1);
-
 function gust_init_rewrites() {
   add_rewrite_tag( '%gust_api%', '(ghost|'.GUST_NAME.'|api)'); 
   add_rewrite_tag( '%gust_q%', '(.*)'); 
   add_permastruct('gust_calls', '%gust_api%/%gust_q%',array('with_front'=>false));
-  flush_rewrite_rules();
 }
 
 function gust_drop_in($q) {
