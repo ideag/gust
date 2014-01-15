@@ -58,6 +58,10 @@ This is an early release, so some features, like category/featured images suppor
 
 ## Changelog
 
+### 0.3.3
+* several bugfixes
+* some fixes for better debuging
+
 ### 0.3.2 
 
 * Bugfix - low level php notices failing on some setups
