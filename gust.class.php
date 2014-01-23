@@ -64,6 +64,32 @@ class Gust {
           return  $attachment['guid'];
         }
   }
+  public static function get_autosave($id){
+    $post = wp_get_post_autosave( $id );
+    $ret = array();
+    $ret['post'] = array(
+      'id' =>$post->ID,
+      'title' => $post->post_title,
+      'markdown' => Gust::content_markdown($post->ID,$post->post_content),
+      'time' => $post->post_modified_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_modified_gmt)):''
+    );
+    return $ret;
+  }
+  public static function put_autosave($id,$data){
+    $old_revision = wp_get_post_autosave( $id ); 
+    wp_delete_post_revision($old_revision->ID);
+    $post = get_post($id);
+    $post->post_title = $data['title'];
+    $post->post_content = $data['text'];
+    unset($post->post_date);
+    unset($post->post_date_gmt);
+    unset($post->post_modified);
+    unset($post->post_modified_gmt);
+    $revision_id = _wp_put_post_revision( $post, true );
+    add_metadata('post',$revision_id, '_md', $data['markdown'],true);
+    // add_metadata instead of add_post_meta, because it does not work on revisions
+    return $revision_id;
+  }
   public static function new_post($type) {
     $arr = array('post_type'=>$type,'post_status'=>'auto-draft','post_content'=>' ','post_author'=>get_current_user_id());
     $id = wp_insert_post($arr,true);
@@ -163,13 +189,20 @@ class Gust {
   private static function content_markdown($post_id,$post_content) {
     $md = get_post_meta($post_id,'_md',true);
     if (!$md) {
-      $path = plugin_dir_path(__FILE__);
-      require_once($path.'/markdown.php');
-      if (function_exists('mb_convert_encoding'))
-        $post_content = mb_convert_encoding($post_content, 'HTML-ENTITIES', 'UTF-8');
-      $markdown = new HTML_To_Markdown($post_content,array('header_style'=>'atx'));
-      $md = $markdown->output();
-      update_post_meta( $post_id, '_md', $md );
+      //check for „Markdown on Save Improved“
+      $mdosi = get_post_meta($post_id,'_sd_is_markdown',true);
+      if ($mdosi) {
+        $md = get_post_field('post_content_filtered',$post_id,'raw');
+        update_post_meta( $post_id, '_md', $md );
+      } else {
+        $path = plugin_dir_path(__FILE__);
+        require_once($path.'/markdown.php');
+        if (function_exists('mb_convert_encoding'))
+          $post_content = mb_convert_encoding($post_content, 'HTML-ENTITIES', 'UTF-8');
+        $markdown = new HTML_To_Markdown($post_content,array('header_style'=>'atx'));
+        $md = $markdown->output();
+        update_post_meta( $post_id, '_md', $md );
+      }
     }
     return $md;
   }

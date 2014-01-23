@@ -2,7 +2,52 @@
     api_base : '/api/v0.1',
     ghost_base : '/ghost',
     plugin_base : '/wp-content/plugins/wp-ghost',
+    autosave_interval : 60, //min
     all_tags : [],
+    autosave : function(){
+      var id = jQuery('body').data('id');
+      Gust.api(
+        '/autosave/'+id,
+        'POST',
+        {
+          'title':jQuery('#entry-title').val(),
+          'text':Gust.converter_backend.makeHtml(Gust.uploadMgr.getEditorValue()),
+          'markdown': Gust.uploadMgr.getEditorValue()
+        },
+        function(resp){
+          //Gust.throw_success(resp);
+        }
+      );
+    },
+    restore_autosave : function(entry){
+      var id = entry.id;
+      Gust.api(
+        '/autosave/'+id,
+        'GET',
+        {},
+        function(resp){
+          var data = resp.post;
+          var save_time = moment(entry.updated_at).unix();
+          var auto_time = moment(data.time).unix();
+          if (auto_time > save_time && data.markdown != entry.markdown) {
+            jQuery('body').data('autosave',data);
+            Gust.show_dialog(
+              'There is more recent autosave for this post. Load changes?',
+              function(){
+                var data = jQuery('body').data('autosave');
+                jQuery('#entry-title').val(data.title);
+                Gust.editor.setValue(data.markdown);            
+                Gust.hide_dialog();
+              },
+              function(){
+                jQuery('body').data('autosave',false);
+                Gust.hide_dialog();
+              }
+            );
+          }
+        }
+      );
+    },
     show_amount : function(val) {
       jQuery('.count2').text('€'+val);
       jQuery('#tiny_amount').val(val);
@@ -312,6 +357,8 @@
               }
               var entry = resp.post;
               var id = entry.id;
+              Gust.restore_autosave(entry);
+              setInterval('Gust.autosave();',Gust.autosave_interval*1000);
               Gust.store_position(id,entry.type);
               jQuery('#entry-title').val(entry.title);
               jQuery('#entry-markdown').html(entry.markdown);

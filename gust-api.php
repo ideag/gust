@@ -84,6 +84,28 @@
       Flight::render('json.php',array('return'=>$return));      
     });
 
+    Flight::route('GET '.GUST_API_ROOT.'/autosave/@id:[0-9]+', function($id){
+      if (Gust::auth('edit_post',$id)) {
+        $return = Gust::get_autosave($id);
+      } else {
+        $return = array('error'=>'You have no permission to edit this post');
+      }
+      Flight::json($return);      
+    });
+    Flight::route('POST '.GUST_API_ROOT.'/autosave/@id:[0-9]+', function($id){
+      if (Gust::auth('edit_post',$id)) {
+        $ret = Gust::put_autosave($id,$_POST);
+        if (is_wp_error($ret )) {
+          $return = array('error'=>$ret->get_error_message());
+        } else {
+          $return = array('id'=>$id);          
+        }
+      } else {
+        $return = array('error'=>'You have no permission to edit this post');
+      }
+      Flight::json($return);      
+    });
+
     Flight::route('POST '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
       if (Gust::auth('edit_post',$id)) {
         if (isset($_POST['featured'])) {
