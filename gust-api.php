@@ -3,12 +3,12 @@
     // login
     Flight::route('POST '.GUST_API_ROOT.'/session',function(){
       $return = Gust::login($_POST['username'],$_POST['password']);
-      Flight::render('json.php',array('return'=>$return));
+      Flight::json($return);      
     });
     // remind password
     Flight::route('POST '.GUST_API_ROOT.'/password',function(){
       $return = Gust::retrieve_password($_POST['username']);
-      Flight::render('json.php',array('return'=>$return));
+      Flight::json($return);      
     });
     // upload
     Flight::route('POST '.GUST_API_ROOT.'/upload/@id:[0-9]+',function($id){
@@ -22,7 +22,7 @@
       } else {
         $return = array('error'=>'You have no permission to remove this image');
       }     
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
     // get post by id
@@ -32,7 +32,7 @@
       } else {
         $return = array('error'=>'You have no permission to edit this post');
       }
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
 
@@ -42,7 +42,7 @@
       } else {
         $return = array('error'=>'You have no permission to edit this post');
       }
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
     Flight::route('GET '.GUST_API_ROOT.'/categories',function(){
@@ -51,7 +51,7 @@
       } else {
         $return = array('error'=>'You have no permission to edit this post');
       }
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
 
@@ -67,7 +67,7 @@
       } else {
         $return = array('error'=>'You have no permission to edit this post');
       }
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
     Flight::route('DELETE '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
@@ -81,7 +81,7 @@
       } else {
         $return = array('error'=>'You have no permission to delete this post');
       }
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
     Flight::route('GET '.GUST_API_ROOT.'/autosave/@id:[0-9]+', function($id){
@@ -172,7 +172,7 @@
       } else {
         $return = array('error'=>'You have no permission to edit this post');
       }
-      Flight::render('json.php',array('return'=>$return));      
+      Flight::json($return);      
     });
 
 ?>
