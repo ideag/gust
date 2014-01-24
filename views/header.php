@@ -3,7 +3,7 @@
             <nav id="global-nav" role="navigation">
                 <ul id="main-menu" >
 <?php 
-  $post_types = get_post_types(array('show_ui'=>true),'objects');
+  $post_types = get_post_types(array('show_ui'=>true,'_builtin'=>true),'objects');
   foreach ($post_types as $name=>$post_type) : 
     if ($name != 'attachment') :
 ?>
