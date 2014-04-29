@@ -1,5 +1,5 @@
-<?php include('header-top.php'); ?>
-<?php include('header.php'); ?>          
+<?php include('header-top.html.php'); ?>
+<?php include('header.html.php'); ?>          
         <main role="main" id="main">
             <aside id="notifications">
             </aside>
@@ -82,6 +82,6 @@
                 </div>
             </nav>
         </footer>
-<?php require('scripts.php'); ?>
+<?php require('scripts.html.php'); ?>
     </body>
 </html>

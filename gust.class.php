@@ -66,18 +66,21 @@ class Gust {
   }
   public static function get_autosave($id){
     $post = wp_get_post_autosave( $id );
-    $ret = array();
-    $ret['post'] = array(
-      'id' =>$post->ID,
-      'title' => $post->post_title,
-      'markdown' => Gust::content_markdown($post->ID,$post->post_content),
-      'time' => $post->post_modified_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_modified_gmt)):''
-    );
+    if (!is_wp_error($post)&&$post) {
+      $ret = array();
+      $ret['post'] = array(
+        'id' =>$post->ID,
+        'title' => $post->post_title,
+        'markdown' => Gust::content_markdown($post->ID,$post->post_content),
+        'time' => $post->post_modified_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_modified_gmt)):''
+      );      
+    } else {
+      $ret = false;
+    }
     return $ret;
   }
   public static function put_autosave($id,$data){
     $old_revision = wp_get_post_autosave( $id ); 
-    wp_delete_post_revision($old_revision->ID);
     $post = get_post($id);
     $post->post_title = $data['title'];
     $post->post_content = $data['text'];
@@ -87,7 +90,10 @@ class Gust {
     unset($post->post_modified_gmt);
     $revision_id = _wp_put_post_revision( $post, true );
     add_metadata('post',$revision_id, '_md', $data['markdown'],true);
-    // add_metadata instead of add_post_meta, because it does not work on revisions
+    if ($old_revision) {
+      wp_delete_post_revision($old_revision->ID);
+    }
+    # add_metadata instead of add_post_meta, because it does not work on revisions
     return $revision_id;
   }
   public static function new_post($type) {

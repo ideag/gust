@@ -3,8 +3,8 @@ Contributors: ideag
 Donate link: http://wordofpress.com/gust
 Tags: ghost, admin panel, markdown, editor, dashboard, admin
 Requires at least: 3.0.1
-Tested up to: 3.8
-Stable tag: 0.3.3
+Tested up to: 3.9
+Stable tag: 0.4.0
 License: MIT
 License URI: http://wordofpress.com/gust/license
 
@@ -19,12 +19,10 @@ Current features:
 *   Posts/Pages Markdown editor
 *   Media upload integration
 *   Post tags support
-*   **NEW** Post category support
-*   **NEW** Post scheduling support
-
-Requirements:
-
-*   PHP **5.3** or greater
+*   Post category support
+*   Post scheduling support
+*   **NEW** PHP 5.2 Compatability
+*   **NEW** Autosave support
 
 == Installation ==
 
@@ -45,7 +43,7 @@ Category manager is comming in v0.4
 
 = Why do you require PHP 5.3? =
 
-One of the libraries Gust uses, Flight, requires it.
+PHP 5.3 is not required anymore. Since v0.4.0 Gust has the same requirements as WordPress itself.
 
 = Are you affiliated with Ghost =
 
@@ -57,7 +55,14 @@ This is an early release, so some features, like category/featured images suppor
 
 == Changelog ==
 
-### 0.3.3
+= 0.4.0 =
+* Major code rewrite
+* Flight routing library replaced with custom version of Dispatch to allow for PHP 5.2 support
+* Autosaves
+* Updated jQuery, moment.js and other javascript libraries
+* Tested on WordPress 3.9
+
+= 0.3.3 =
 * several bugfixes
 * some fixes for better debuging
 

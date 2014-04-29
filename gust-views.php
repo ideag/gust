@@ -1,72 +1,66 @@
 <?php
-    Flight::route('GET /'.GUST_NAME,function(){
+class Gust_views {
+  static function root(){
       if (Gust::auth()) {
-        Flight::redirect(GUST_ROOT.'/post');
+        D::redirect(GUST_ROOT.'/post');
       } else if (Gust::auth('read')) {
-        Flight::redirect(GUST_ROOT.'/login?message=subscriber');
+        D::redirect(GUST_ROOT.'/login?message=subscriber');
       } else {
-        Flight::redirect(GUST_ROOT.'/login');
+        D::redirect(GUST_ROOT.'/login');
       }
-    });
-    Flight::route('/'.GUST_NAME.'/coffee/confirm',function(){
+    }
+  static function login(){
       if (Gust::auth()) {
-        Flight::redirect(GUST_ROOT.'/post?coffee=confirm');
+        D::redirect(GUST_ROOT);
       } else {
-        Flight::redirect(GUST_ROOT.'/login?coffee=confirm');
+        D::render('login',array('body_class'=>'ghost-login'));
       }
-    });
-
-    Flight::route('GET /'.GUST_NAME.'/signout',function(){
+    }
+  static function post_type($type){
+      if (Gust::auth()) {
+        D::render('list',array('body_class'=>'manage','type'=>$type),false);
+      } else {
+        D::redirect(GUST_ROOT.'/login');
+      }
+    }
+  static function signout(){
       wp_logout();
-      Flight::redirect(GUST_ROOT);
-    });
-    Flight::route('GET /'.GUST_NAME.'/@type:post|page',function($type){
+      D::redirect(GUST_ROOT);
+    }
+  static function forgotten(){
       if (Gust::auth()) {
-        Flight::render('list.php',array('body_class'=>'manage','type'=>$type));
+        D::redirect(GUST_ROOT);
       } else {
-        Flight::redirect(GUST_ROOT.'/login');
+        D::render('forgotten',array('body_class'=>'ghost-forgotten'),false);
       }
-    });
-    Flight::route('GET /'.GUST_NAME.'/login',function(){
+    }
+    static function coffee_confirm(){
       if (Gust::auth()) {
-        Flight::redirect(GUST_ROOT);
+        D::redirect(GUST_ROOT.'/post?coffee=confirm');
       } else {
-        Flight::render('login.php',array('body_class'=>'ghost-login'));
+        D::redirect(GUST_ROOT.'/login?coffee=confirm');
       }
-    });
-    Flight::route('GET /'.GUST_NAME.'/forgotten',function(){
-      if (Gust::auth()) {
-        Flight::redirect(GUST_ROOT);
-      } else {
-        Flight::render('forgotten.php',array('body_class'=>'ghost-forgotten'));
-      }
-    });
-    Flight::route('POST /'.GUST_NAME.'/coffee',function(){
-      Gust::paypal_submit();
-    });      
-
-    Flight::route('GET /'.GUST_NAME.'/editor/',function(){
-      Flight::redirect(GUST_ROOT.'/editor/post');
-    });
-    Flight::route('GET /'.GUST_NAME.'/editor/@type:post|page',function($type){
+    }
+    static function editor_default(){
+      D::redirect(GUST_ROOT.'/editor/post');
+    }
+    static function editor_new($type){
       if (Gust::auth()) {
         $id = Gust::new_post($type);
-        Flight::redirect(GUST_ROOT.'/editor/'.$id);
+        D::redirect(GUST_ROOT.'/editor/'.$id);
       } else {
-        Flight::render('forgotten.php',array('body_class'=>'ghost-forgotten'));
+        D::render('login',array('body_class'=>'ghost-login'));
       }
-    });
-    Flight::route('GET /'.GUST_NAME.'/editor/@id:[0-9]+',function($id){
+    }
+    static function editor($id){
       if (Gust::auth()) {
-        Flight::render('editor.php',array('body_class'=>'ghost-login'));
+        D::render('editor',array('body_class'=>'ghost-login'));
       } else {
-        Flight::render('login.php',array('body_class'=>'ghost-login'));
+        D::render('login',array('body_class'=>'ghost-login'));
       }
-    });
-
-    // redirect from /ghost
-    Flight::route('/ghost(/@q:.*)',function($q){
-        Flight::redirect(GUST_ROOT.'/'.$q);
-    });
-
+    }
+    static function ghost($q) {
+      D::redirect(GUST_ROOT.'/'.$q);      
+    }
+}
 ?>

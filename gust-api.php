@@ -1,98 +1,49 @@
 <?php 
 
-    // login
-    Flight::route('POST '.GUST_API_ROOT.'/session',function(){
-      $return = Gust::login($_POST['username'],$_POST['password']);
-      Flight::json($return);      
-    });
-    // remind password
-    Flight::route('POST '.GUST_API_ROOT.'/password',function(){
-      $return = Gust::retrieve_password($_POST['username']);
-      Flight::json($return);      
-    });
-    // upload
-    Flight::route('POST '.GUST_API_ROOT.'/upload/@id:[0-9]+',function($id){
+class Gust_API {
+  static function login() {
+    $return = Gust::login($_POST['username'],$_POST['password']);
+    D::json($return);      
+  }
+  static function forgotten() {
+    $return = Gust::retrieve_password($_POST['username']);
+    D::json($return);      
+  }
+  static function tax($type) {
+      if (Gust::auth('edit_posts' )) {
+        if ($type=='tags') {
+          $return = Gust::get_tags();
+        }
+        else if ($type=='categories') {
+          $return = Gust::get_categories();
+        }
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+  }
+  static function upload($id) {
       if (Gust::auth()) {
         echo Gust::upload($id);
-      }      
-    });
-    Flight::route('DELETE '.GUST_API_ROOT.'/upload',function(){
+      }          
+  }
+  static function upload_delete($id) {
       if (Gust::auth('edit_posts')) {
         $return = Gust::delete($_GET['url']);
       } else {
-        $return = array('error'=>'You have no permission to remove this image');
+        $return = array('error'=>__('You have no permission to remove this image','gust'));
       }     
-      Flight::json($return);      
-    });
-
-    // get post by id
-    Flight::route('GET '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
-      if (Gust::auth('edit_post', $id )) {
-        $return = Gust::get_post($id);
-      } else {
-        $return = array('error'=>'You have no permission to edit this post');
-      }
-      Flight::json($return);      
-    });
-
-
-    Flight::route('GET '.GUST_API_ROOT.'/tags',function(){
-      if (Gust::auth('edit_posts' )) {
-        $return = Gust::get_tags();
-      } else {
-        $return = array('error'=>'You have no permission to edit this post');
-      }
-      Flight::json($return);      
-    });
-
-    Flight::route('GET '.GUST_API_ROOT.'/categories',function(){
-      if (Gust::auth('edit_posts')) {
-        $return = Gust::get_categories();
-      } else {
-        $return = array('error'=>'You have no permission to edit this post');
-      }
-      Flight::json($return);      
-    });
-
-
-    // get list of posts
-    Flight::route('GET '.GUST_API_ROOT.'/posts',function(){
-      if (Gust::auth('edit_posts')) {
-        $return = Gust::get_posts(
-          isset($_GET['page'])?$_GET['page']:1,
-          isset($_GET['type'])?$_GET['type']:'post',
-          isset($_GET['status'])?$_GET['status']:false,
-          isset($_GET['limit'])?$_GET['limit']:false
-        );
-      } else {
-        $return = array('error'=>'You have no permission to edit this post');
-      }
-      Flight::json($return);      
-    });
-
-    Flight::route('DELETE '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
-      if (Gust::auth('delete_post',$id )) {
-        $ret = wp_delete_post($id);
-        if (is_wp_error($ret )) {
-          $return = array('error'=>$ret->get_error_message());
-        } else {
-          $return = array('id'=>$id);          
-        }
-      } else {
-        $return = array('error'=>'You have no permission to delete this post');
-      }
-      Flight::json($return);      
-    });
-
-    Flight::route('GET '.GUST_API_ROOT.'/autosave/@id:[0-9]+', function($id){
+      D::json($return);      
+  }
+  static function autosave_get($id) {
       if (Gust::auth('edit_post',$id)) {
         $return = Gust::get_autosave($id);
       } else {
-        $return = array('error'=>'You have no permission to edit this post');
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      Flight::json($return);      
-    });
-    Flight::route('POST '.GUST_API_ROOT.'/autosave/@id:[0-9]+', function($id){
+      D::json($return);          
+  }
+  static function autosave($id) {
       if (Gust::auth('edit_post',$id)) {
         $ret = Gust::put_autosave($id,$_POST);
         if (is_wp_error($ret )) {
@@ -101,12 +52,47 @@
           $return = array('id'=>$id);          
         }
       } else {
-        $return = array('error'=>'You have no permission to edit this post');
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      Flight::json($return);      
-    });
-
-    Flight::route('POST '.GUST_API_ROOT.'/post(/@id:[0-9]+)',function($id){
+      D::json($return);          
+  }
+  static function posts() {
+      if (Gust::auth('edit_posts')) {
+        $return = Gust::get_posts(
+          isset($_GET['page'])?$_GET['page']:1,
+          isset($_GET['type'])?$_GET['type']:'post',
+          isset($_GET['status'])?$_GET['status']:false,
+          isset($_GET['limit'])?$_GET['limit']:false
+        );
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+    }
+  static function post($id) {
+      if (Gust::auth('edit_post', $id )) {
+        $return = Gust::get_post($id);
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+    }
+  static function post_delete($id) {
+// TO DO move actual logic to Gust class
+      if (Gust::auth('delete_post',$id )) {
+        $ret = wp_delete_post($id);
+        if (is_wp_error($ret )) {
+          $return = array('error'=>$ret->get_error_message());
+        } else {
+          $return = array('id'=>$id);          
+        }
+      } else {
+        $return = array('error'=>__('You have no permission to delete this post','gust'));
+      }
+      D::json($return);      
+  }
+  static function post_save($id) {
+// TO DO move actual logic to Gust class
       if (Gust::auth('edit_post',$id)) {
         if (isset($_POST['featured'])) {
           if($_POST['featured']==1 && !isset($_POST['markdown'])) {
@@ -121,6 +107,7 @@
           } else {
             $date = date('Y-m-d H:i:s',$_POST['published_at']+ get_option( 'gmt_offset' ) * 3600);            
           }
+//        }
 //          $date = date('Y-m-d H:i:s',$_POST['published_at']);
           $arr = array(
             'ID' => $id,
@@ -166,13 +153,13 @@
             wp_set_post_terms($id,$tags,'category');
           }
           wp_update_post($arr,true);
-//          print_r($id);
           $return = Gust::get_post($id);
         }
       } else {
-        $return = array('error'=>'You have no permission to edit this post');
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      Flight::json($return);      
-    });
+      D::json($return);      
+  }
 
+}
 ?>

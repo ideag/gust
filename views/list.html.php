@@ -1,5 +1,5 @@
-<?php include('header-top.php'); ?>
-<?php include('header.php'); ?>          
+<?php include('header-top.html.php'); ?>
+<?php include('header.html.php'); ?>          
         <main role="main" id="main">
             <aside id="notifications">
             </aside>
@@ -22,6 +22,6 @@
 
         <div id="modal-container"></div>
         <div class="modal-background fade"></div>
-<?php require('scripts.php'); ?>
+<?php require('scripts.html.php'); ?>
     </body>
 </html>

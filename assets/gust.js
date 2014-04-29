@@ -26,24 +26,26 @@
         'GET',
         {},
         function(resp){
-          var data = resp.post;
-          var save_time = moment(entry.updated_at).unix();
-          var auto_time = moment(data.time).unix();
-          if (auto_time > save_time && data.markdown != entry.markdown) {
-            jQuery('body').data('autosave',data);
-            Gust.show_dialog(
-              'There is more recent autosave for this post. Load changes?',
-              function(){
-                var data = jQuery('body').data('autosave');
-                jQuery('#entry-title').val(data.title);
-                Gust.editor.setValue(data.markdown);            
-                Gust.hide_dialog();
-              },
-              function(){
-                jQuery('body').data('autosave',false);
-                Gust.hide_dialog();
-              }
-            );
+          if (resp) {
+            var data = resp.post;
+            var save_time = moment(entry.updated_at).unix();
+            var auto_time = moment(data.time).unix();
+            if (auto_time > save_time && data.markdown != entry.markdown) {
+              jQuery('body').data('autosave',data);
+              Gust.show_dialog(
+                'There is more recent autosave for this post. Load changes?',
+                function(){
+                  var data = jQuery('body').data('autosave');
+                  jQuery('#entry-title').val(data.title);
+                  Gust.editor.setValue(data.markdown);            
+                  Gust.hide_dialog();
+                },
+                function(){
+                  jQuery('body').data('autosave',false);
+                  Gust.hide_dialog();
+                }
+              );
+            }            
           }
         }
       );
@@ -1002,7 +1004,7 @@
           response(resp);
         }
       })
-      .fail(function(a,b){console.log(a,b);Gust.throw_error('API error: '+b);});      
+      .fail(function(a,b){console.log(a,b);Gust.throw_error('API error: '+b+' '+a.responseText);});      
     },
     templates : {
       'list_item'       : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',

@@ -4,7 +4,7 @@ Plugin Name: Gust
 Plugin URI: https://github.com/ideag/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.3.3
+Version: 0.4.0
 Author URI: http://wp.tribuna.lt/
 */
 //error_reporting(-1);
@@ -13,8 +13,7 @@ define ('GUST_SUBPATH',       gust_get_subpath());
 define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
 define ('GUST_API_ROOT',      '/api/v0\.1');
 define ('GUST_TITLE',         'Gust');
-define ('GUST_VERSION',       'v0.3.3');
-define ('GUST_PHP_REQUIRED',  '5.3.0');
+define ('GUST_VERSION',       'v0.4.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
 
@@ -23,33 +22,13 @@ function gust_install(){
   gust_init_rewrites();
   flush_rewrite_rules();
   gust_permalink_check();
-  gust_version_check();
 } 
 
 add_action('init','gust_init_rewrites');
 add_action('pre_get_posts','gust_drop_in',1);
-// monitor for PHP version and permalink changes
-add_action('admin_init','gust_version_check');
+// monitor for permalink changes
 add_action('admin_init','gust_permalink_check');
 
-function gust_version_check() {
-  // check for PHP >= 5.3
-  if (version_compare(phpversion(), GUST_PHP_REQUIRED) < 0) {
-    add_action( 'admin_notices', 'gust_bad_version_notice',1000 );   
-    $basename = plugin_basename(__FILE__);
-    deactivate_plugins($basename); 
-    do_action('deactivate_'.$basename);
-    $deactivated[$basename] = time(); 
-    update_option( 'recently_activated', $deactivated + (array) get_option( 'recently_activated' ) );
-  }
-}
-function gust_bad_version_notice() {
-    ?>
-    <div class="error">
-        <p><?php echo sprintf(__('Gust: You PHP (%s) version is not supported, at least %s is required. Plugin deactivated.', 'gust' ),phpversion(),GUST_PHP_REQUIRED); ?></p>
-    </div>
-    <?php
-}
 function gust_permalink_check(){
   if (!gust_is_pretty_permalinks()) {
     add_action( 'admin_notices', 'gust_no_permalink_notice',1000 );   
@@ -80,19 +59,44 @@ function gust_init_rewrites() {
 function gust_drop_in($q) {
   if ((get_query_var('gust_api')=='ghost'||get_query_var('gust_api')==GUST_NAME||get_query_var('gust_api')=='api' )&& $q->is_main_query()) {
     define('WP_ADMIN',true);
-    require_once(GUST_PLUGIN_PATH.'/assets/flight/Flight.php');
-    Flight::set('flight.views.path', GUST_PLUGIN_PATH.'/views');
+    require_once(GUST_PLUGIN_PATH.'/assets/dispatch/dispatch.php');
+    D::config('dispatch.views', GUST_PLUGIN_PATH.'views');
+    D::config('dispatch.layout', false);
+    D::config('dispatch.url', get_bloginfo('url'));
+    require_once('gust.class.php');
     if (get_query_var('gust_api')=='api' && $q->is_main_query()) {
-      require_once('gust.class.php');
       require_once('gust-api.php');
-    } else if (get_query_var('gust_api')==GUST_NAME && $q->is_main_query()) {
-      require_once('gust.class.php');
+      D::on('POST',  '/'.GUST_API_ROOT.'/session',                array('Gust_API', 'login'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/password',               array('Gust_API', 'forgotten'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/posts',                  array('Gust_API', 'posts'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/post(/:id@[0-9]+)',      array('Gust_API', 'post'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/post(/:id@[0-9]+)',      array('Gust_API', 'post_save'));
+      D::on('DELETE','/'.GUST_API_ROOT.'/post(/:id@[0-9]+)',      array('Gust_API', 'post_delete'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave_get'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/upload/:id@[0-9]+',      array('Gust_API', 'upload'));
+      D::on('DELETE','/'.GUST_API_ROOT.'/upload',                 array('Gust_API', 'upload_delete'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/:type@tags|categories',  array('Gust_API', 'tax'));
+
+    } else if (
+        (get_query_var('gust_api')==GUST_NAME || get_query_var('gust_api')=='ghost')
+        &&
+        ($q->is_main_query())
+      ) {
       require_once('gust-views.php');
-    } else if (get_query_var('gust_api')=='ghost' && $q->is_main_query()) {
-      require_once('gust.class.php');
-      require_once('gust-views.php');
+      D::on('GET',  '/ghost(/:q@.*)',                        array('Gust_views', 'ghost'));
+      D::on('GET',  '/'.GUST_NAME,                           array('Gust_views', 'root'));
+      D::on('GET',  '/'.GUST_NAME.'/login',                  array('Gust_views', 'login'));
+      D::on('GET',  '/'.GUST_NAME.'/signout',                array('Gust_views', 'signout'));
+      D::on('GET',  '/'.GUST_NAME.'/forgotten',              array('Gust_views', 'forgotten'));
+      D::on('GET',  '/'.GUST_NAME.'/:type@post|page',        array('Gust_views', 'post_type'));
+      D::on('GET',  '/'.GUST_NAME.'/editor',                 array('Gust_views', 'editor_default'));
+      D::on('GET',  '/'.GUST_NAME.'/editor/:type@post|page', array('Gust_views', 'editor_new'));
+      D::on('GET',  '/'.GUST_NAME.'/editor/:id@[0-9]+',      array('Gust_views', 'editor'));
+      D::on('POST', '/'.GUST_NAME.'/coffee',                 array('Gust',       'paypal_submit'));
+      D::on('*',    '/'.GUST_NAME.'/coffee/confirm',         array('Gust_views', 'coffee_confirm'));
     }
-    Flight::start();
+    D::dispatch();
     die('');
   }
 }
