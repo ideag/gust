@@ -22,7 +22,44 @@ function gust_install(){
   gust_init_rewrites();
   flush_rewrite_rules();
   gust_permalink_check();
+}
+
+
+// temp
+add_action( 'admin_bar_menu', 'toolbar_link_to_mypage', 999 );
+
+function toolbar_link_to_mypage( $wp_admin_bar ) {
+	$logo = $wp_admin_bar->get_node('wp-logo');
+	$logo->href = get_bloginfo('url').'/'.GUST_NAME.'/';
+	$wp_admin_bar->add_node($logo);
+	if (!is_admin()) {
+		$nodes = $wp_admin_bar->get_nodes();
+	        $args = array(
+        	        'id'    => 'gust',
+                	'title' => 'Gust Dashboard',
+        	        'href'  => get_bloginfo('url').'/'.GUST_NAME.'/',
+	                'meta'  => array( 'class' => 'gust' ),
+			'parent'=> 'site-name'
+        	);
+	        $wp_admin_bar->add_node( $args );
+	        $name = $wp_admin_bar->get_node('site-name');
+        	$name->href = get_bloginfo('url').'/'.GUST_NAME.'/';
+        	$wp_admin_bar->add_node($name);
+//print_r($nodes);
+		if (is_array($nodes)) foreach ($nodes as $node) {
+			if ($node->id == 'dashboard') {
+				$node->title = 'WP Dasboard';
+			}
+			$wp_admin_bar->remove_node($node->id);
+			$wp_admin_bar->add_node($node);
+		}
+	}
 } 
+add_filter('get_edit_post_link','gust_edit_post_link',10,3);
+function gust_edit_post_link($link, $post_id, $context){
+  $link = get_bloginfo('url').'/'.GUST_NAME.'/editor/'.$post_id;
+  return $link;
+}
 
 add_action('init','gust_init_rewrites');
 add_action('pre_get_posts','gust_drop_in',1);
