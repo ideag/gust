@@ -1,7 +1,7 @@
 <?php
 class Gust_Options_Data {
 	public static function list_post_types(){
-	  $post_types = get_post_types(array('show_ui'=>true,'_builtin'=>true),'objects');
+	  $post_types = get_post_types(array('show_ui'=>true),'objects');
 	  $result = array();
 	  foreach ($post_types as $name=>$post_type) : 
 	    if ($name != 'attachment') :

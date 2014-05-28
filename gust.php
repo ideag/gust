@@ -23,11 +23,11 @@ function gust_install(){
 }
 
 // === FILTERS/ACTIONS
-// options init
+// init options
 require_once('gust.class.php');
-add_action('plugins_loaded', array( 'Gust', 'init_options' ) );
-// rewrites inir
-add_action('init','gust_init_rewrites');
+add_action('init', array( 'Gust', 'init_options' ), 100 );
+// init rewrites
+add_action('init','gust_init_rewrites', 101);
 add_action('pre_get_posts','gust_drop_in',1);
 // monitor for permalink changes
 add_action('admin_init','gust_permalink_check');
@@ -35,6 +35,8 @@ add_action('admin_init','gust_permalink_check');
 add_action( 'admin_bar_menu', 'gust_admin_bar_filter', 999 );
 // filter "Edit post" link in frontend/Admin bar
 add_filter('get_edit_post_link','gust_edit_post_link',10,3);
+add_filter('post_row_actions', 'gust_edit_post_link_admin', 10, 2);
+add_filter('page_row_actions', 'gust_edit_post_link_admin', 10, 2);
 
 function gust_permalink_check(){
   if (!gust_is_pretty_permalinks()) {
@@ -70,6 +72,7 @@ function gust_drop_in($q) {
     D::config('dispatch.views', GUST_PLUGIN_PATH.'views');
     D::config('dispatch.layout', false);
     D::config('dispatch.url', get_bloginfo('url'));
+    $posttypes = implode('|',array_keys(Gust::$options['main_posttypes']));
     if (get_query_var('gust_api')=='api' && $q->is_main_query()) {
       require_once('gust-api.php');
       D::on('POST',  '/'.GUST_API_ROOT.'/session',                array('Gust_API', 'login'));
@@ -95,9 +98,9 @@ function gust_drop_in($q) {
       D::on('GET',  '/'.GUST_NAME.'/login',                  array('Gust_views', 'login'));
       D::on('GET',  '/'.GUST_NAME.'/signout',                array('Gust_views', 'signout'));
       D::on('GET',  '/'.GUST_NAME.'/forgotten',              array('Gust_views', 'forgotten'));
-      D::on('GET',  '/'.GUST_NAME.'/:type@post|page',        array('Gust_views', 'post_type'));
+      D::on('GET',  '/'.GUST_NAME.'/:type@'.$posttypes,        array('Gust_views', 'post_type'));
       D::on('GET',  '/'.GUST_NAME.'/editor',                 array('Gust_views', 'editor_default'));
-      D::on('GET',  '/'.GUST_NAME.'/editor/:type@post|page', array('Gust_views', 'editor_new'));
+      D::on('GET',  '/'.GUST_NAME.'/editor/:type@'.$posttypes, array('Gust_views', 'editor_new'));
       D::on('GET',  '/'.GUST_NAME.'/editor/:id@[0-9]+',      array('Gust_views', 'editor'));
       D::on('POST', '/'.GUST_NAME.'/coffee',                 array('Gust',       'paypal_submit'));
       D::on('*',    '/'.GUST_NAME.'/coffee/confirm',         array('Gust_views', 'coffee_confirm'));
@@ -134,12 +137,20 @@ function gust_admin_bar_filter( $wp_admin_bar ) {
   }
 } 
 
-function gust_edit_post_link($link, $post_id, $context){
-  $link = get_bloginfo('url').'/'.GUST_NAME.'/editor/'.$post_id;
+function gust_edit_post_link($link, $post_id, $context) {
+  if (!is_admin()) {
+    $link = get_bloginfo('url').'/'.GUST_NAME.'/editor/'.$post_id;
+  }
   return $link;
 }
 
-
+function gust_edit_post_link_admin($actions, $post) {
+  $posttypes = array_keys(Gust::$options['main_posttypes']);
+  if (in_array($post->post_type,$posttypes)) {
+    $actions['gust_edit'] = '<a href="'. get_bloginfo('url').'/'.GUST_NAME.'/editor/'.$post->ID . '" class="gust-edit">' . __('Edit in Gust','gust') . '</a>';
+  }
+  return $actions;
+}
 /*
 function gust_uuid_post($post_id) {
   $uuid = get_post_meta($post_id,'_uuid',true);

@@ -1,7 +1,7 @@
   Gust = {
-    api_base : '/api/v0.1',
+    api_base : '/api/gust',
     ghost_base : '/ghost',
-    plugin_base : '/wp-content/plugins/wp-ghost',
+    plugin_base : '/wp-content/plugins/gust',
     autosave_interval : 60, //min
     all_tags : [],
     autosave : function(){
@@ -107,8 +107,10 @@
           Gust.init_login();
         break;
         case 'post'  :
+	  Gust.init_list('post', 'All Posts');
+	break;
         default       :  
-          Gust.init_list('post', 'All Posts');
+          Gust.init_list(address[0], 'All '+address[0]);
         break;
       }
       var get = Gust.detect_get();

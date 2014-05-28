@@ -3,7 +3,7 @@
             <nav id="global-nav" role="navigation">
                 <ul id="main-menu" >
 <?php 
-  $post_types = get_post_types(array('show_ui'=>true,'_builtin'=>true),'objects');
+  $post_types = get_post_types(array('show_ui'=>true),'objects');
   foreach ($post_types as $name=>$post_type) : 
     if (in_array($name, array_keys(Gust::$options['main_posttypes']))) :
 ?>
