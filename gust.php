@@ -8,15 +8,13 @@ Version: 0.4.0
 Author URI: http://wp.tribuna.lt/
 */
 //error_reporting(-1);
-define ('GUST_NAME',          'gust');
 define ('GUST_SUBPATH',       gust_get_subpath());
-define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
-define ('GUST_API_ROOT',      '/api/v0\.1');
-define ('GUST_TITLE',         'Gust');
+define ('GUST_TITLE',         __('Gust','gust'));
 define ('GUST_VERSION',       'v0.4.0');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
 
+// === ACTIVATION
 register_activation_hook(__FILE__,'gust_install');
 function gust_install(){
   gust_init_rewrites();
@@ -24,47 +22,19 @@ function gust_install(){
   gust_permalink_check();
 }
 
-
-// temp
-add_action( 'admin_bar_menu', 'toolbar_link_to_mypage', 999 );
-
-function toolbar_link_to_mypage( $wp_admin_bar ) {
-	$logo = $wp_admin_bar->get_node('wp-logo');
-	$logo->href = get_bloginfo('url').'/'.GUST_NAME.'/';
-	$wp_admin_bar->add_node($logo);
-	if (!is_admin()) {
-		$nodes = $wp_admin_bar->get_nodes();
-	        $args = array(
-        	        'id'    => 'gust',
-                	'title' => 'Gust Dashboard',
-        	        'href'  => get_bloginfo('url').'/'.GUST_NAME.'/',
-	                'meta'  => array( 'class' => 'gust' ),
-			'parent'=> 'site-name'
-        	);
-	        $wp_admin_bar->add_node( $args );
-	        $name = $wp_admin_bar->get_node('site-name');
-        	$name->href = get_bloginfo('url').'/'.GUST_NAME.'/';
-        	$wp_admin_bar->add_node($name);
-//print_r($nodes);
-		if (is_array($nodes)) foreach ($nodes as $node) {
-			if ($node->id == 'dashboard') {
-				$node->title = 'WP Dasboard';
-			}
-			$wp_admin_bar->remove_node($node->id);
-			$wp_admin_bar->add_node($node);
-		}
-	}
-} 
-add_filter('get_edit_post_link','gust_edit_post_link',10,3);
-function gust_edit_post_link($link, $post_id, $context){
-  $link = get_bloginfo('url').'/'.GUST_NAME.'/editor/'.$post_id;
-  return $link;
-}
-
+// === FILTERS/ACTIONS
+// options init
+require_once('gust.class.php');
+add_action('plugins_loaded', array( 'Gust', 'init_options' ) );
+// rewrites inir
 add_action('init','gust_init_rewrites');
 add_action('pre_get_posts','gust_drop_in',1);
 // monitor for permalink changes
 add_action('admin_init','gust_permalink_check');
+// filter WordPres Admin Bar
+add_action( 'admin_bar_menu', 'gust_admin_bar_filter', 999 );
+// filter "Edit post" link in frontend/Admin bar
+add_filter('get_edit_post_link','gust_edit_post_link',10,3);
 
 function gust_permalink_check(){
   if (!gust_is_pretty_permalinks()) {
@@ -100,7 +70,6 @@ function gust_drop_in($q) {
     D::config('dispatch.views', GUST_PLUGIN_PATH.'views');
     D::config('dispatch.layout', false);
     D::config('dispatch.url', get_bloginfo('url'));
-    require_once('gust.class.php');
     if (get_query_var('gust_api')=='api' && $q->is_main_query()) {
       require_once('gust-api.php');
       D::on('POST',  '/'.GUST_API_ROOT.'/session',                array('Gust_API', 'login'));
@@ -137,6 +106,39 @@ function gust_drop_in($q) {
     die('');
   }
 }
+
+function gust_admin_bar_filter( $wp_admin_bar ) {
+  $logo = $wp_admin_bar->get_node('wp-logo');
+  $logo->href = get_bloginfo('url').'/'.GUST_NAME.'/';
+  $wp_admin_bar->add_node($logo);
+  if (!is_admin()) {
+    $name = $wp_admin_bar->get_node('site-name');
+    $name->href = get_bloginfo('url').'/'.GUST_NAME.'/';
+    $wp_admin_bar->add_node($name);
+    $nodes = $wp_admin_bar->get_nodes();
+    $args = array(
+      'id'    => 'gust',
+      'title' => __('Gust Dashboard','gust'),
+      'href'  => get_bloginfo('url').'/'.GUST_NAME.'/',
+      'meta'  => array( 'class' => 'gust' ),
+      'parent'=> 'site-name'
+    );
+    $wp_admin_bar->add_node( $args );
+    if (is_array($nodes)) foreach ($nodes as $node) {
+      if ($node->id == 'dashboard') {
+        $node->title = __('WP Dasboard','gust');
+      }
+      $wp_admin_bar->remove_node($node->id);
+      $wp_admin_bar->add_node($node);
+    }
+  }
+} 
+
+function gust_edit_post_link($link, $post_id, $context){
+  $link = get_bloginfo('url').'/'.GUST_NAME.'/editor/'.$post_id;
+  return $link;
+}
+
 
 /*
 function gust_uuid_post($post_id) {

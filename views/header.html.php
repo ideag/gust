@@ -5,18 +5,18 @@
 <?php 
   $post_types = get_post_types(array('show_ui'=>true,'_builtin'=>true),'objects');
   foreach ($post_types as $name=>$post_type) : 
-    if ($name != 'attachment') :
+    if (in_array($name, array_keys(Gust::$options['main_posttypes']))) :
 ?>
                         <li class="content" id="menu-<?php echo $name; ?>"><a href="<?php echo GUST_ROOT; ?>/<?php echo $name; ?>"><?php echo $post_type->labels->name; ?></a></li>
 <?php endif; ?>                    
 <?php endforeach; ?>                    
-                        <li class="editor"><a href="<?php echo GUST_ROOT; ?>/editor/post">New Post</a></li>                    
-<!-- TODO                        <li class="settings"><a href="<?php echo GUST_ROOT; ?>/settings/">Settings</a></li>-->
+                        <li class="editor"><a href="<?php echo GUST_ROOT; ?>/editor/post"><?php _e('New Post','gust'); ?></a></li>                    
+                        <li class="settings"><a href="<?php echo admin_url('options-general.php?page=gust_options'); ?>"><?php _e('Settings','gust'); ?></a></li>
                     
 
                     <li id="usermenu" class="subnav">
                         <a href="#" data-toggle="ul.user-menu" class="dropdown">
-                            <img class="avatar" src="<?php echo get_avatar_url(get_current_user_id(),48); ?>" alt="Avatar" />
+                            <img class="avatar" src="<?php echo get_avatar_url(get_current_user_id(),48); ?>" alt="<?php _e('Avatar','gust'); ?>" />
                             <span class="name"><?php $user = wp_get_current_user(); echo($user->data->display_name);?></span>
                         </a>
                         <ul class="user-menu overlay">

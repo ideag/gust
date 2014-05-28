@@ -1,5 +1,18 @@
 <?php
 class Gust {
+  static $options = array();
+  protected static $includes_dir;
+  public static function init_options() {
+    self::$includes_dir = plugin_dir_path( __FILE__ );
+    require_once self::$includes_dir . 'gust-options-data.php';
+    require_once self::$includes_dir . 'gust-options.php';
+    $gust_settings = new Gust_Options( Gust_Options_Data::get() );
+    self::$options   = $gust_settings->get();
+    define ('GUST_NAME',          self::$options['main_endpoint']);
+    define ('GUST_ROOT',          GUST_SUBPATH.'/'.GUST_NAME);
+    define ('GUST_API_ROOT',      '/api/'.GUST_NAME);
+  }
+
   public static function auth($cap='edit_posts',$id=false) {
     if(is_user_logged_in() && current_user_can($cap,$id)) {
       return true;
