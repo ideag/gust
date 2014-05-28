@@ -377,13 +377,13 @@
               Gust.converter = new Showdown.converter({extensions: ['ghostdown', 'github']});
               Gust.converter_backend = new Showdown.converter({extensions: ['github']});
               Gust.editor.setOption("readOnly", false);
-              if(resp.post.type=='page') {
+              if(resp.post.type!='post') {
                 jQuery('#entry-tags').hide();
               }
               jQuery.each(resp.post.tags,function(){
                 Gust.add_tag(this.name,this.term_id);
               });
-              if(resp.post.type=='page') {
+              if(resp.post.type!='post') {
                 jQuery('#entry-categories').hide();
               }
               jQuery.each(resp.post.categories,function(){
