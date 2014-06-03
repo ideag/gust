@@ -365,7 +365,7 @@
               setInterval('Gust.autosave();',Gust.autosave_interval*1000);
               Gust.store_position(id,entry.type);
               jQuery('#entry-title').val(entry.title);
-              jQuery('#entry-markdown').html(entry.markdown);
+              jQuery('#entry-markdown').text(entry.markdown);
               Gust.editor = CodeMirror.fromTextArea(document.getElementById('entry-markdown'), {
                 mode: 'gfm',
                 tabMode: 'indent',
