@@ -5235,7 +5235,7 @@ div.toggle {
 }
 
 
-.embeded-script{
+.embedded-script{
   display:block;
   border: 3px dashed #eee;
   border-radius: 3px;
@@ -5243,7 +5243,7 @@ div.toggle {
   background-color: #fafafa;
   margin-bottom:24px;
 }
-.embeded-script .title {
+.embedded-script .title {
   display: block;
   position:absolute;
   top:-10px;
@@ -5255,7 +5255,7 @@ div.toggle {
   border-radius:5px;
 }
 
-.embeded-script .content {
+.embedded-script .content {
   display: block;
   padding:10px;
   font-family:monospace;

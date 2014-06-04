@@ -739,7 +739,7 @@
         if (c){
           res = c;
         }
-        t.replaceWith('<div class="embeded-script"><span class="title">Embeded script</span><span class="content">'+res+'</span></div>');
+        t.replaceWith('<div class="embedded-script"><span class="title">Embedded script</span><span class="content">'+res+'</span></div>');
       });
 
     },
@@ -816,7 +816,7 @@
         if (c){
           res = c;
         }
-        t.parent().replaceWith('<div class="embeded-script"><span class="title">Embeded script</span><span class="content">'+res+'</span></div>');
+        t.parent().replaceWith('<div class="embedded-script"><span class="title">Embedded script</span><span class="content">'+res+'</span></div>');
       });
 
     },
