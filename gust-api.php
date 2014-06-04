@@ -27,7 +27,7 @@ class Gust_API {
         echo Gust::upload($id);
       }          
   }
-  static function upload_delete($id) {
+  static function upload_delete() {
       if (Gust::auth('edit_posts')) {
         $return = Gust::delete($_GET['url']);
       } else {

@@ -93,17 +93,17 @@ function gust_drop_in($q) {
         ($q->is_main_query())
       ) {
       require_once('gust-views.php');
-      D::on('GET',  '/ghost(/:q@.*)',                        array('Gust_views', 'ghost'));
-      D::on('GET',  '/'.GUST_NAME,                           array('Gust_views', 'root'));
-      D::on('GET',  '/'.GUST_NAME.'/login',                  array('Gust_views', 'login'));
-      D::on('GET',  '/'.GUST_NAME.'/signout',                array('Gust_views', 'signout'));
-      D::on('GET',  '/'.GUST_NAME.'/forgotten',              array('Gust_views', 'forgotten'));
-      D::on('GET',  '/'.GUST_NAME.'/:type@'.$posttypes,        array('Gust_views', 'post_type'));
-      D::on('GET',  '/'.GUST_NAME.'/editor',                 array('Gust_views', 'editor_default'));
-      D::on('GET',  '/'.GUST_NAME.'/editor/:type@'.$posttypes, array('Gust_views', 'editor_new'));
-      D::on('GET',  '/'.GUST_NAME.'/editor/:id@[0-9]+',      array('Gust_views', 'editor'));
-      D::on('POST', '/'.GUST_NAME.'/coffee',                 array('Gust',       'paypal_submit'));
-      D::on('*',    '/'.GUST_NAME.'/coffee/confirm',         array('Gust_views', 'coffee_confirm'));
+      D::on('GET',  '/ghost(/:q@.*)',                         array('Gust_views', 'ghost'));
+      D::on('GET',  '/'.GUST_NAME,                            array('Gust_views', 'root'));
+      D::on('GET',  '/'.GUST_NAME.'/login',                   array('Gust_views', 'login'));
+      D::on('GET',  '/'.GUST_NAME.'/signout',                 array('Gust_views', 'signout'));
+      D::on('GET',  '/'.GUST_NAME.'/forgotten',               array('Gust_views', 'forgotten'));
+      D::on('GET',  '/'.GUST_NAME.'/:type@'.$posttypes,       array('Gust_views', 'post_type'));
+      D::on('GET',  '/'.GUST_NAME.'/editor',                  array('Gust_views', 'editor_default'));
+      D::on('GET',  '/'.GUST_NAME.'/editor/:type@'.$posttypes,array('Gust_views', 'editor_new'));
+      D::on('GET',  '/'.GUST_NAME.'/editor/:id@[0-9]+',       array('Gust_views', 'editor'));
+      D::on('POST', '/'.GUST_NAME.'/coffee',                  array('Gust',       'paypal_submit'));
+      D::on('*',    '/'.GUST_NAME.'/coffee/confirm',          array('Gust_views', 'coffee_confirm'));
     }
     D::dispatch();
     die('');

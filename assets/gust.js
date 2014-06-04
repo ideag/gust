@@ -397,6 +397,14 @@
               });
               Gust.render_preview();
               Gust.editor.focus();
+              jQuery('.entry-markdown').click(function(){
+                jQuery('.entry-markdown').addClass('active');
+                jQuery('.entry-preview').removeClass('active');
+              })
+              jQuery('.entry-preview').click(function(){
+                jQuery('.entry-preview').addClass('active');
+                jQuery('.entry-markdown').removeClass('active');
+              })
               jQuery('.CodeMirror-scroll').scroll(Gust.sync_scroll);
               jQuery('.CodeMirror-scroll').scrollClass({target: '.entry-markdown', offset: 10});
               jQuery('.entry-preview-content').scrollClass({target: '.entry-preview', offset: 10});

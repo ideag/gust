@@ -42,10 +42,11 @@ class Gust {
     $id = Gust::get_attachment_id_from_src($url);
     $res = wp_delete_attachment($id, true );
     if ($res===false) {
-      $ret = array('error'=>'Failed to delete');
+      $return = array('error'=>'Failed to delete');
     } else {
-      $ret = array('success'=>'Image deleted');
+      $return = array('success'=>'Image deleted');
     }
+    return $return;
   }
   public static function upload($id) {
         $ret = array('files'=>array());
@@ -296,7 +297,7 @@ class Gust {
     $draft_date = date(DATE_W3C,strtotime($draft_date));
     return $draft_date;
   }  
-  private function get_attachment_id_from_src ($image_src) {
+  private static function get_attachment_id_from_src ($image_src) {
 
     global $wpdb;
     $query = "SELECT ID FROM {$wpdb->posts} WHERE guid='$image_src'";
