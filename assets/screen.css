@@ -5233,3 +5233,30 @@ div.toggle {
 #entry-tags {
   margin-left:40px;
 }
+
+
+.embeded-script{
+  display:block;
+  border: 3px dashed #eee;
+  border-radius: 3px;
+  position: relative;
+  background-color: #fafafa;
+  margin-bottom:24px;
+}
+.embeded-script .title {
+  display: block;
+  position:absolute;
+  top:-10px;
+  left: 10px;
+  background: #eee;
+  padding:0px 10px;
+  font-size:12px;
+  line-height: 17px;
+  border-radius:5px;
+}
+
+.embeded-script .content {
+  display: block;
+  padding:10px;
+  font-family:monospace;
+}
