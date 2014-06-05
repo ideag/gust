@@ -115,6 +115,51 @@ class Gust {
     $id = wp_insert_post($arr,true);
     return $id;
   }
+  public static function get_tax_term($type,$id) {
+    $term = get_term($id*1,$type);
+    if (!is_wp_error($term )&&$term) {
+      $return = array('success'=>true);
+      $return['term'] = $term;
+    } elseif (!$term) {
+      $return = array('error'=>__('Term does not exist','gust'));
+    } else {
+      $return = array('error'=>$term->get_error_message());
+    }
+    return $return;
+  }
+  public static function update_tax_term($type,$id,$data) {
+    $arr = array();
+    if (isset($data['slug']))
+      $arr['slug'] = $data['slug'];
+    if (isset($data['parent']))
+      $arr['parent'] = $data['parent'];
+    $term = wp_insert_term(
+      $id,
+      $type,
+      $arr
+    );
+    if (!is_wp_error($term )) {
+      $return = array('success'=>__('Term updated','gust'));
+      $return['term'] = get_term($term['term_id']*1,$type);
+    } else {
+      $return = array('error'=>$term->get_error_message());
+    }
+    return $return;
+  }
+  public static function delete_tax_term($type,$id,$data) {
+    $term = wp_delete_term(
+      $id,
+      $type
+    );
+    if ($term) {
+      $return = array('success'=>__('Term deleted','gust'));
+      $return['term_id'] = $id;
+    } else {
+      $return = array('error'=>__('Error deleting term.','gust'));
+    }
+    return $return;
+  }
+
   public static function new_tax_term($type,$data) {
     $arr = array();
     if (isset($data['slug']))

@@ -17,14 +17,38 @@ class Gust_API {
       }
       D::json($return);      
   }
+  static function tax_update($type,$id) {
+      if (Gust::auth('edit_posts' )) {
+        $return = Gust::update_tax_term($type,$id,$_POST); 
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+  }
+  static function tax_delete($type,$id) {
+      if (Gust::auth('edit_posts' )) {
+        $return = Gust::delete_tax_term($type,$id); 
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+  }
   static function tax($type) {
       if (Gust::auth('edit_posts' )) {
-        if ($type=='tags') {
+        if ($type=='post_tag') {
           $return = Gust::get_tags();
         }
-        else if ($type=='categories') {
+        else if ($type=='category') {
           $return = Gust::get_categories();
         }
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+  }
+  static function tax_single($type,$id) {
+      if (Gust::auth('edit_posts' )) {
+        $return = Gust::get_tax_term($type,$id);
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }

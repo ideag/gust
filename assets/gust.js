@@ -337,7 +337,7 @@
       jQuery('body').attr('class','editor');
       jQuery('body').data('id',id);
       Gust.api(
-        '/tags',
+        '/post_tag',
         'GET',
         {},
         function(resp){
@@ -345,7 +345,7 @@
         }
       );
       Gust.api(
-        '/categories',
+        '/category',
         'GET',
         {},
         function(resp){

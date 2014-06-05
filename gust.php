@@ -73,6 +73,7 @@ function gust_drop_in($q) {
     D::config('dispatch.layout', false);
     D::config('dispatch.url', get_bloginfo('url'));
     $posttypes = implode('|',array_keys(Gust::$options['main_posttypes']));
+    $taxonomies = implode('|',get_taxonomies(array('show_ui'=>true)));
     if (get_query_var('gust_api')=='api' && $q->is_main_query()) {
       require_once('gust-api.php');
       D::on('POST',  '/'.GUST_API_ROOT.'/session',                array('Gust_API', 'login'));
@@ -85,8 +86,11 @@ function gust_drop_in($q) {
       D::on('POST',  '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave'));
       D::on('POST',  '/'.GUST_API_ROOT.'/upload/:id@[0-9]+',      array('Gust_API', 'upload'));
       D::on('DELETE','/'.GUST_API_ROOT.'/upload',                 array('Gust_API', 'upload_delete'));
-      D::on('GET',   '/'.GUST_API_ROOT.'/:type@tags|categories',  array('Gust_API', 'tax'));
-      D::on('POST',  '/'.GUST_API_ROOT.'/:type@tag|category',     array('Gust_API', 'tax_add'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/:type@'.$taxonomies,               array('Gust_API', 'tax'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/:type@'.$taxonomies,               array('Gust_API', 'tax_add'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/:type@'.$taxonomies.'/:id@[0-9]+', array('Gust_API', 'tax_single'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/:type@'.$taxonomies.'/:id@[0-9]+', array('Gust_API', 'tax_update'));
+      D::on('DELETE','/'.GUST_API_ROOT.'/:type@'.$taxonomies.'/:id@[0-9]+', array('Gust_API', 'tax_delete'));
 
     } else if (
         (get_query_var('gust_api')==GUST_NAME || get_query_var('gust_api')=='ghost')
