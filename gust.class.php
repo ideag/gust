@@ -115,6 +115,25 @@ class Gust {
     $id = wp_insert_post($arr,true);
     return $id;
   }
+  public static function new_tax_term($type,$data) {
+    $arr = array();
+    if (isset($data['slug']))
+      $arr['slug'] = $data['slug'];
+    if (isset($data['parent']))
+      $arr['parent'] = $data['parent'];
+    $term = wp_insert_term(
+      $data['title'],
+      $type,
+      $arr
+    );
+    if (!is_wp_error($term )) {
+      $return = array('success'=>__('Category added.','gust'));
+      $return['term'] = get_term($term['term_id']*1,$type);
+    } else {
+      $return = array('error'=>$term->get_error_message());
+    }
+    return $return;
+  }
   public static function get_tags(){
     $ret = get_terms('post_tag',array('hide_empty'=>'0','orderby'=>'count'));
     return $ret;

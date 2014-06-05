@@ -5,75 +5,22 @@
     autosave_interval : 60, //min
     date_format : 'YYYY MMM DD HH:mm',
     all_tags : [],
-    autosave : function(){
-      var id = jQuery('body').data('id');
-      Gust.api(
-        '/autosave/'+id,
-        'POST',
-        {
-          'title':jQuery('#entry-title').val(),
-          'text':Gust.converter_backend.makeHtml(Gust.uploadMgr.getEditorValue()),
-          'markdown': Gust.uploadMgr.getEditorValue()
-        },
-        function(resp){
-          //Gust.throw_success(resp);
-        }
-      );
-    },
-    restore_autosave : function(entry){
-      var id = entry.id;
-      Gust.api(
-        '/autosave/'+id,
-        'GET',
-        {},
-        function(resp){
-          if (resp) {
-            var data = resp.post;
-            var save_time = moment(entry.updated_at).unix();
-            var auto_time = moment(data.time).unix();
-            if (auto_time > save_time && data.markdown != entry.markdown) {
-              jQuery('body').data('autosave',data);
-              Gust.show_dialog(
-                'There is more recent autosave for this post. Load changes?',
-                function(){
-                  var data = jQuery('body').data('autosave');
-                  jQuery('#entry-title').val(data.title);
-                  Gust.editor.setValue(data.markdown);            
-                  Gust.hide_dialog();
-                },
-                function(){
-                  jQuery('body').data('autosave',false);
-                  Gust.hide_dialog();
-                }
-              );
-            }            
-          }
-        }
-      );
-    },
-    show_amount : function(val) {
-      jQuery('.count2').text('€'+val);
-      jQuery('#tiny_amount').val(val);
-      jQuery('.count').html('');
-      for (var i = 0; i<val/2; ++i) {
-        jQuery('.count').append('<i class="fa fa-coffee"></i>');
-      }
-    },
     init : function(api_base,ghost_base,plugin_base,date_format) {
       if (api_base) Gust.api_base = api_base;
       if (ghost_base) Gust.ghost_base = ghost_base;
       if (plugin_base) Gust.plugin_base = plugin_base;
       if (date_format) Gust.date_format = date_format;
       Gust.templates = {
-        'list_item'       : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',
-        'preview_item'    : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="" placeholder="'+Gust.date_format+'">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
-        'notice_error'    : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-error notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
-        'notice_success'  : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
-        'dialog'          : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%text%</h1></header>                <section class="modal-body"><div></div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
-        'dialog_markdown' : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
-        'dialog_coffee'   : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
-        'tag'             : '<span class="tag" data-tag-id="%id%">%title%</span>',
-        'category'        : '<li class="post-setting" data-category-id="%id%"><div class="category-title"><i class="fa fa-square-o"></i> %title%</div><ul class="submenu"></ul></li>'
+        'list_item'           : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',
+        'preview_item'        : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="" placeholder="'+Gust.date_format+'">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
+        'notice_error'        : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-error notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
+        'notice_success'      : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
+        'dialog'              : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%heading%</h1></header>                <section class="modal-body"><div>%text%</div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
+        'dialog_markdown'     : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
+        'dialog_coffee'       : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
+        'tag'                 : '<span class="tag" data-tag-id="%id%">%title%</span>',
+        'category'            : '<li class="post-setting" data-category-id="%id%"><div class="category-title"><i class="fa fa-square-o"></i> %title%</div><ul class="submenu"></ul></li>',
+        'category_new'        : '<li class="category-new"><div class="category-title"><i class="fa fa-plus"></i> %title%</div><ul class="submenu"></ul></li>'
       };
       var address = document.location.pathname;
       address = address.split(Gust.ghost_base);
@@ -120,8 +67,8 @@
           Gust.init_login();
         break;
         case 'post'  :
-	  Gust.init_list('post', 'All Posts');
-	break;
+	        Gust.init_list('post', 'All Posts');
+	      break;
         default       :  
           Gust.init_list(address[0], 'All '+address[0]);
         break;
@@ -154,6 +101,61 @@
             toggle_object.fadeOut(200);
             jQuery(document).off('mouseup',Gust.hide_sub);
           }
+    },
+    autosave : function(){
+      var id = jQuery('body').data('id');
+      Gust.api(
+        '/autosave/'+id,
+        'POST',
+        {
+          'title':jQuery('#entry-title').val(),
+          'text':Gust.converter_backend.makeHtml(Gust.uploadMgr.getEditorValue()),
+          'markdown': Gust.uploadMgr.getEditorValue()
+        },
+        function(resp){
+          //Gust.throw_success(resp);
+        }
+      );
+    },
+    restore_autosave : function(entry){
+      var id = entry.id;
+      Gust.api(
+        '/autosave/'+id,
+        'GET',
+        {},
+        function(resp){
+          if (resp) {
+            var data = resp.post;
+            var save_time = moment(entry.updated_at).unix();
+            var auto_time = moment(data.time).unix();
+            if (auto_time > save_time && data.markdown != entry.markdown) {
+              jQuery('body').data('autosave',data);
+              Gust.show_dialog(
+                'There is more recent autosave for this post. Load changes?',
+                '',
+                function(){
+                  var data = jQuery('body').data('autosave');
+                  jQuery('#entry-title').val(data.title);
+                  Gust.editor.setValue(data.markdown);            
+                  Gust.hide_dialog();
+                },
+                function(){
+                  jQuery('body').data('autosave',false);
+                  Gust.hide_dialog();
+                }
+              );
+            }            
+          }
+        }
+      );
+    },
+    show_amount : function(val) {
+      jQuery('.count2').text('€'+val);
+      jQuery('#tiny_amount').val(val);
+      jQuery('.count').html('');
+      for (var i = 0; i<val/2; ++i) {
+        jQuery('.count').append('<i class="fa fa-coffee"></i>');
+      }
     },
     init_login  : function() {
       jQuery('#login').submit(function(event){
@@ -299,6 +301,7 @@
         event.preventDefault();
         Gust.show_dialog(
           'Are you sure you want to delete this post?',
+          '',          
           function(){
             Gust.api(
               '/post/'+id,
@@ -351,7 +354,58 @@
           jQuery.each(Gust.all_categories,function(){
             Gust.add_category(this.name,this.term_id,this);
           });
-          jQuery('.entry-categories-menu li>div').click(Gust.toggle_checkbox);
+          Gust.add_category_new();
+          jQuery('.entry-categories-menu li.category-new>div').click(function(){
+              var cats = '';
+              jQuery('.entry-categories-menu li.post-setting>div').each(function(){
+                var title = jQuery(this).text();
+                var c = jQuery(this).parents('.post-setting').size();
+                for (var a = 1;a<c;++a) {
+                  title = '-'+title;
+                }
+                title = jQuery.trim(title);
+                var value = jQuery(this).parent().attr('data-category-id');
+                cats += '<option value="'+value+'">'+title+'</option>';
+              });
+
+              Gust.show_dialog(
+                'Add new category',
+                '<form id="settings-general" novalidate="novalidate"><fieldset>'+
+                '<div class="form-group"><label for="category-title">Category title</label><input id="category-title" name="category-title" type="text" value=""></div>'+
+                '<div class="form-group"><label for="category-slug">Category slug</label><input id="category-slug" name="category-slug" type="text" value=""></div>'+
+                '<div class="form-group"><label for="category-parent">Category parent</label><select id="category-parent" name="category-parent"><option value="">- no parent -</option>'+cats+'</select></div>'+
+                '</fieldset></form>',
+                function(){
+                  data = {
+                    'title' : jQuery('#category-title').val(),
+                    'slug' : jQuery('#category-slug').val(),
+                    'parent' : jQuery('#category-parent').val(),                    
+                  };
+                  Gust.api(
+                    '/category',
+                    'POST',
+                    data,
+                    function(resp){
+                      if (typeof resp.success != 'undefined') {
+                        Gust.throw_success(resp.success);
+                      } else {
+                        Gust.throw_error(resp.error);
+                      }
+                      Gust.add_category(
+                        resp.term.name,
+                        resp.term.term_id,
+                        resp.term
+                      );
+                      Gust.hide_dialog();
+                    }
+                  );
+                },
+                function(){
+//                  jQuery('body').data('autosave',false);
+                  Gust.hide_dialog();
+                }
+              );
+          });
           jQuery('.entry-categories-menu').bind('wheel',function(event) {
             var delta = event.originalEvent.deltaY;
             jQuery(this).scrollTop(jQuery(this).scrollTop()+delta);
@@ -536,9 +590,23 @@
       new_tag = new_tag.replace('%title%',tag);
       if (term.parent!=0) {
         var parent = jQuery('.entry-categories-menu li[data-category-id='+term.parent+']>ul');
+        parent.append(new_tag);
       } else {
-        var parent = jQuery('.entry-categories-menu');
+        var parent = jQuery('.entry-categories-menu li.category-new');
+        if (parent.size()>0) {
+          parent.before(new_tag);
+        } else {
+          jQuery('.entry-categories-menu').append(new_tag);
+        }
       }
+      jQuery('li[data-category-id='+id+']>div').click(Gust.toggle_checkbox);
+    },
+    add_category_new : function() {
+      var tag_id = 'new';
+      var tag = 'New category';
+      var new_tag = Gust.templates.category_new.replace('%id%',tag_id);
+      new_tag = new_tag.replace('%title%',tag);
+      var parent = jQuery('.entry-categories-menu');
       parent.append(new_tag);
     },
     toggle_checkbox: function(){
@@ -802,6 +870,7 @@
         event.preventDefault();
         Gust.show_dialog(
           'Are you sure you want to delete this post?',
+          '',
           function(){
             Gust.api(
               '/post/'+id,
@@ -989,9 +1058,11 @@
         }
       });
     },
-    show_dialog : function(text,confirm,deny) {
+    show_dialog : function(heading,text,confirm,deny) {
       jQuery('#modal-container, .modal-background').show();
-      jQuery('#modal-container').html(Gust.templates.dialog.replace('%text%',text));
+      var html = Gust.templates.dialog.replace('%heading%',heading);
+      html = html.replace('%text%',text);
+      jQuery('#modal-container').html(html);
       jQuery('#modal-container article, .modal-background').addClass('in');
       jQuery('#modal-container .button-add').click(confirm);
       jQuery('#modal-container .button-delete').click(deny?deny:Gust.hide_dialog);

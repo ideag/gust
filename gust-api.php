@@ -9,6 +9,14 @@ class Gust_API {
     $return = Gust::retrieve_password($_POST['username']);
     D::json($return);      
   }
+  static function tax_add($type) {
+      if (Gust::auth('edit_posts' )) {
+        $return = Gust::new_tax_term($type,$_POST); 
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+  }
   static function tax($type) {
       if (Gust::auth('edit_posts' )) {
         if ($type=='tags') {

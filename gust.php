@@ -86,6 +86,7 @@ function gust_drop_in($q) {
       D::on('POST',  '/'.GUST_API_ROOT.'/upload/:id@[0-9]+',      array('Gust_API', 'upload'));
       D::on('DELETE','/'.GUST_API_ROOT.'/upload',                 array('Gust_API', 'upload_delete'));
       D::on('GET',   '/'.GUST_API_ROOT.'/:type@tags|categories',  array('Gust_API', 'tax'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/:type@tag|category',     array('Gust_API', 'tax_add'));
 
     } else if (
         (get_query_var('gust_api')==GUST_NAME || get_query_var('gust_api')=='ghost')
