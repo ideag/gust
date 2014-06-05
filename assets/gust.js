@@ -1057,7 +1057,7 @@
   };
 
 
-
+// TO DO: overhaul keyboard shortcut API, make it more extensive, and compatible with more uncommon keyboard layouts. Seen Ghost issue https://github.com/TryGhost/Ghost/issues/1463
 var   
 
 MarkdownShortcuts = [
@@ -1068,12 +1068,12 @@ MarkdownShortcuts = [
             {'key': 'Ctrl+Alt+U', 'style': 'strike'},
             {'key': 'Ctrl+Shift+K', 'style': 'code'},
             {'key': 'Meta+K', 'style': 'code'},
-            {'key': 'Ctrl+Alt+1', 'style': 'h1'},
-            {'key': 'Ctrl+Alt+2', 'style': 'h2'},
-            {'key': 'Ctrl+Alt+3', 'style': 'h3'},
-            {'key': 'Ctrl+Alt+4', 'style': 'h4'},
-            {'key': 'Ctrl+Alt+5', 'style': 'h5'},
-            {'key': 'Ctrl+Alt+6', 'style': 'h6'},
+//            {'key': 'Ctrl+Alt+1', 'style': 'h1'},
+//            {'key': 'Ctrl+Alt+2', 'style': 'h2'},
+//            {'key': 'Ctrl+Alt+3', 'style': 'h3'},
+//            {'key': 'Ctrl+Alt+4', 'style': 'h4'},
+//            {'key': 'Ctrl+Alt+5', 'style': 'h5'},
+//            {'key': 'Ctrl+Alt+6', 'style': 'h6'},
             {'key': 'Ctrl+Shift+L', 'style': 'link'},
             {'key': 'Ctrl+Shift+I', 'style': 'image'},
             {'key': 'Ctrl+Q', 'style': 'blockquote'},
