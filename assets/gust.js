@@ -1033,6 +1033,18 @@
         type: method,
         dataType: 'json',
         'data': data,
+        'statusCode' : {
+          405: function(){
+            var context = this;
+            var t = context.type;
+            context.type = 'POST'
+            if (!context.data) {
+              context.data = {};
+            }
+            context.data['_method'] = t;
+            jQuery.ajax(context);
+          }
+        }
       })
       .done(function(resp){
         if (typeof resp.error != 'undefined') {
