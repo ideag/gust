@@ -3,6 +3,7 @@
     ghost_base : '/ghost',
     plugin_base : '/wp-content/plugins/gust',
     autosave_interval : 60, //min
+    date_format : 'YYYY MMM DD HH:mm',
     all_tags : [],
     autosave : function(){
       var id = jQuery('body').data('id');
@@ -58,10 +59,22 @@
         jQuery('.count').append('<i class="fa fa-coffee"></i>');
       }
     },
-    init : function(api_base,ghost_base,plugin_base) {
+    init : function(api_base,ghost_base,plugin_base,date_format) {
       if (api_base) Gust.api_base = api_base;
       if (ghost_base) Gust.ghost_base = ghost_base;
       if (plugin_base) Gust.plugin_base = plugin_base;
+      if (date_format) Gust.date_format = date_format;
+      Gust.templates = {
+        'list_item'       : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',
+        'preview_item'    : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="" placeholder="'+Gust.date_format+'">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
+        'notice_error'    : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-error notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
+        'notice_success'  : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
+        'dialog'          : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%text%</h1></header>                <section class="modal-body"><div></div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
+        'dialog_markdown' : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
+        'dialog_coffee'   : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
+        'tag'             : '<span class="tag" data-tag-id="%id%">%title%</span>',
+        'category'        : '<li class="post-setting" data-category-id="%id%"><div class="category-title"><i class="fa fa-square-o"></i> %title%</div><ul class="submenu"></ul></li>'
+      };
       var address = document.location.pathname;
       address = address.split(Gust.ghost_base);
       address = address[1].slice(1);
@@ -224,8 +237,8 @@
     },
     update_editor_button : function(entry){
       if (entry.published_at) {
-        jQuery('.post-setting-date').val(moment(entry.published_at).format('YYYY MMM DD HH:mm'));
-        jQuery('.post-setting-date').attr('data-date',moment(entry.published_at).format('YYYY MMM DD HH:mm'));
+        jQuery('.post-setting-date').val(moment(entry.published_at).format(Gust.date_format));
+        jQuery('.post-setting-date').attr('data-date',moment(entry.published_at).format(Gust.date_format));
       }
       jQuery('.entry-settings').unbind('click');
       jQuery('.entry-settings').click(function(event){
@@ -774,8 +787,8 @@
       viewer.find('.post-setting-slug').val(data.slug);
       viewer.find('.post-setting-slug').attr('data-slug',data.slug);
       if (data.published_at) {
-        viewer.find('.post-setting-date').val(moment(data.published_at).format('YYYY MMM DD HH:mm'));
-        viewer.find('.post-setting-date').attr('data-date',moment(data.published_at).format('YYYY MMM DD HH:mm'));
+        viewer.find('.post-setting-date').val(moment(data.published_at).format(Gust.date_format));
+        viewer.find('.post-setting-date').attr('data-date',moment(data.published_at).format(Gust.date_format));
       }
       viewer.find('.post-settings').unbind();
       viewer.find('.post-settings').click(function(event){
@@ -854,8 +867,8 @@
       }
     },
     validate_settings : function() {
-      var n = jQuery('.post-setting-date').val()?moment(jQuery('.post-setting-date').val()):0;
-      var o = jQuery('.post-setting-date').attr('data-date')?moment(jQuery('.post-setting-date').attr('data-date')):0;
+      var n = jQuery('.post-setting-date').val()?moment(jQuery('.post-setting-date').val(),Gust.date_format):0;
+      var o = jQuery('.post-setting-date').attr('data-date')?moment(jQuery('.post-setting-date').attr('data-date'),Gust.date_format):0;
       var id = jQuery('.content-list-content ol li.active').attr('data-id');
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         Gust.throw_error('Invalid date');
@@ -871,8 +884,8 @@
             if ( typeof resp.error != 'undefined') {
               Gust.throw_error(resp.error);
             } else {
-              jQuery('.post-setting-date').val(moment(resp.post.published_at).format('YYYY MMM DD HH:mm'));  
-              jQuery('.post-setting-date').attr('data-date',moment(resp.post.published_at).format('YYYY MMM DD HH:mm'));  
+              jQuery('.post-setting-date').val(moment(resp.post.published_at).format(Gust.date_format));  
+              jQuery('.post-setting-date').attr('data-date',moment(resp.post.published_at).format(Gust.date_format));  
               Gust.update_item(resp.post);
               jQuery('.content-list-content ol li[data-id='+resp.post.id+']').click();
               Gust.throw_success('Date updated');
@@ -902,8 +915,8 @@
       return true;
     },
     validate_settings_editor : function() {
-      var n = jQuery('.post-setting-date').val()?moment(jQuery('.post-setting-date').val()):0;
-      var o = jQuery('.post-setting-date').attr('data-date')?moment(jQuery('.post-setting-date').attr('data-date')):0;
+      var n = jQuery('.post-setting-date').val()?moment(jQuery('.post-setting-date').val(),Gust.date_format):0;
+      var o = jQuery('.post-setting-date').attr('data-date')?moment(jQuery('.post-setting-date').attr('data-date'),Gust.date_format):0;
       var id = jQuery('body').data('id');
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         Gust.throw_error('Invalid date');
@@ -921,8 +934,8 @@
             } else {
               var date_show = resp.post.published_at?resp.post.published_at:resp.post.created_at;
               Gust.update_editor_button(resp.post);
-//             jQuery('.post-setting-date').val(moment(date_show).format('YYYY MMM DD HH:mm'));  
-//              jQuery('.post-setting-date').attr('data-date',moment(date_show).format('YYYY MMM DD HH:mm'));  
+//             jQuery('.post-setting-date').val(moment(date_show).format(Gust.date_format));  
+//              jQuery('.post-setting-date').attr('data-date',moment(date_show).format(Gust.date_format));  
               Gust.throw_success('Date updated');
             }
           }
@@ -1055,17 +1068,7 @@
       })
       .fail(function(a,b){console.log(a,b);Gust.throw_error('API error: '+b+' '+a.responseText);});      
     },
-    templates : {
-      'list_item'       : '<li><a class="permalink" href="#"><h3 class="entry-title"></h3><section class="entry-meta"><time datetime="2013-01-04" class="date"><span class=""></span></time></section></a></li>',
-      'preview_item'    : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="" placeholder="YYYY Mon DD hh:mm">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
-      'notice_error'    : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-error notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
-      'notice_success'  : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
-      'dialog'          : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%text%</h1></header>                <section class="modal-body"><div></div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
-      'dialog_markdown' : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
-      'dialog_coffee'   : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
-      'tag'             : '<span class="tag" data-tag-id="%id%">%title%</span>',
-      'category'        : '<li class="post-setting" data-category-id="%id%"><div class="category-title"><i class="fa fa-square-o"></i> %title%</div><ul class="submenu"></ul></li>'
-    }
+    templates : {}
   };
 
 

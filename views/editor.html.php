@@ -42,7 +42,7 @@
                     </div>
                 </section>
                 <section id="entry-tags" href="#" class="left">
-                    <label class="tag-label" for="tags"><span class="hidden">Tags</span></label>
+                    <label class="tag-label" for="tags"><span class="hidden"><?php _e('Tags','gust'); ?></span></label>
                     <div class="tags"></div>
                     <input type="hidden" class="tags-holder" id="tags-holder">
                     <input class="tag-input" id="tags" type="text" data-input-behaviour="tag">
@@ -51,11 +51,11 @@
                 <div class="right">
 
                     <section id="entry-controls">
-                        <a class="entry-settings" href="#" data-toggle=".entry-settings-menu"><span class="hidden">Post Settings</span></a>
+                        <a class="entry-settings" href="#" data-toggle=".entry-settings-menu"><span class="hidden"><?php _e('Post Settings','gust'); ?></span></a>
                         <ul class="entry-settings-menu menu-right overlay" style="display: none;">
                             <li class="post-setting">
                                 <div class="post-setting-label">
-                                    <label for="url">URL</label>
+                                    <label for="url"><?php _e('URL','gust'); ?></label>
                                 </div>
                                 <div class="post-setting-field">
                                     <input id="url" class="post-setting-slug" type="text" value="">
@@ -63,19 +63,19 @@
                             </li>
                             <li class="post-setting">
                                 <div class="post-setting-label">
-                                    <label for="pub-date">Pub Date</label>
+                                    <label for="pub-date"><?php _e('Pub Date','gust'); ?></label>
                                 </div>
                                 <div class="post-setting-field">
-                                    <input id="pub-date" class="post-setting-date" type="text" value="" placeholder="YYYY Mon DD hh:mm"><!--<span class="post-setting-calendar"></span>-->
+                                    <input id="pub-date" class="post-setting-date" type="text" value="" placeholder="<?php echo Gust::$options['main_dateformat']; ?>"><!--<span class="post-setting-calendar"></span>-->
                                 </div>
                             </li>
-                            <li><a href="#" class="delete">Delete This Post</a></li>
+                            <li><a href="#" class="delete"><?php _e('Delete This Post','gust'); ?></a></li>
                         </ul>
                     </section>
 
                     <section id="entry-actions" class="js-publish-splitbutton splitbutton-save">
-                        <button type="button" class="js-publish-button button-save" data-status="published">Update Post</button>
-                        <a class="options up" data-toggle="ul.editor-options" href="#"><span class="hidden">Options</span></a>
+                        <button type="button" class="js-publish-button button-save" data-status="published"><?php _e('Update Post','gust'); ?></button>
+                        <a class="options up" data-toggle="ul.editor-options" href="#"><span class="hidden"><?php _e('Options','gust');?></span></a>
                         <ul class="editor-options overlay" style="display: none;">
                         </ul>
                     </section>

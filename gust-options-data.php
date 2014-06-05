@@ -26,6 +26,7 @@ class Gust_Options_Data {
 					'post' => true,
 					'page' => true
 				),
+				'main_dateformat'		=> 'YYYY MMM DD hh:mm',
 			),
 			'section'           => array(
 				array(
@@ -35,6 +36,11 @@ class Gust_Options_Data {
 						array(
 							'slug'        => 'endpoint',
 							'title'       => __( 'URL endpoint', 'gust' ),
+							'type'        => 'text'
+						),
+						array(
+							'slug'        => 'dateformat',
+							'title'       => __( 'Date format', 'gust' ),
 							'type'        => 'text'
 						),
 						array(
