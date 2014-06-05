@@ -104,8 +104,14 @@ No upgrade notices
 
 ## Screenshots
 
-1. Login screen
-2. List of posts/pages
-3. Post editor screen
-4. **New** - post tagging interface
+### Login screen
+![Login Screen](screenshot-1.png)
 
+### List of posts/pages
+![List of posts/pages](screenshot-2.png)
+
+### Post editor screen
+![Post editor screen](screenshot-3.png)
+
+### **New** - post tagging interface
+![post tagging interface](screenshot-4.png)
