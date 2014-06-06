@@ -49,6 +49,26 @@ class Gust_API {
     }
     D::json($return);      
   }
+  static function post_meta_delete($id,$meta_key) {
+    if (Gust::auth('edit_posts' )) {
+      if ($_SERVER['REQUEST_METHOD']=='DELETE') {
+        $data = file_get_contents('php://input');
+        parse_str($data,$_POST);
+      }
+      $return = Gust::delete_meta($id,$meta_key,$_POST); 
+    } else {
+      $return = array('error'=>__('You have no permission to edit this post','gust'));
+    }
+    D::json($return);      
+  }
+  static function post_meta_update($id,$meta_key) {
+    if (Gust::auth('edit_posts' )) {
+      $return = Gust::update_meta($id,$meta_key,$_POST); 
+    } else {
+      $return = array('error'=>__('You have no permission to edit this post','gust'));
+    }
+    D::json($return);      
+  }
   static function tax($type) {
       if (Gust::auth('edit_posts' )) {
         if ($type=='post_tag') {

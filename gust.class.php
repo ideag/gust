@@ -190,6 +190,28 @@ class Gust {
     }
     return $return;
   }
+  public static function update_meta($post_id,$meta_key,$data) {
+    if ($data['value']==$data['old_value']) {
+      $return = array('warning'=>__('Nothing to update','gust'));
+    } else {
+      $return = update_post_meta($post_id, $meta_key, $data['value'], $data['old_value']);  
+      if ($return) {
+        $return = array('success'=>__('Custom field updated.','gust'));
+      } else {
+        $return = array('error'=>__('Error updating custom field.','gust'));
+      }
+    }
+    return $return;
+  }
+  public static function delete_meta($post_id,$meta_key,$data) {
+    $return = delete_post_meta($post_id, $meta_key, $data['old_value']);  
+    if ($return) {
+      $return = array('success'=>__('Custom field deleted.','gust'));
+    } else {
+      $return = array('error'=>__('Error deleting custom field.','gust'));
+    }
+    return $return;
+  }
   public static function get_meta_keys(){
     global $wpdb;
       $keys = $wpdb->get_col( "

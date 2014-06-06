@@ -364,7 +364,7 @@
         e.preventDefault();
       var item = '<tr>'+
       '<td><input class="input-name" type="text" value=""></td>'+
-      '<td><textarea class="input-value" rows="1"></textarea></td>'+
+      '<td><textarea class="input-value" rows="1" data-init-value=""></textarea></td>'+
       '<td>'+
       '<a class="input-update js-button button-add"><i class="fa fa-floppy-o"></i></a> '+
       '<a class="input-delete js-button button-delete"><i class="fa fa-trash-o"></i></a> '+
@@ -374,13 +374,62 @@
       if(data) {
         jQuery('.edit-custom-fields tbody tr').last().find('input.input-name').val(data.name);
         jQuery('.edit-custom-fields tbody tr').last().find('.input-value').val(data.value);
+        jQuery('.edit-custom-fields tbody tr').last().find('.input-value').attr('data-init-value',data.value);
       }
       jQuery('.edit-custom-fields tbody tr').last().find('input.input-name').autocomplete({
         source:function(request, response) {
           var results = jQuery.ui.autocomplete.filter(Gust.all_meta_keys, request.term);
           response(results.slice(0, 10));
         },
-      });      
+      });    
+      jQuery('.edit-custom-fields tbody tr').last().find('.input-update').click(function(e){
+        var tr = jQuery(this).parent().parent();
+        e.preventDefault();
+        var data = {
+          'name'      : tr.find('.input-name').val(),
+          'value'     : tr.find('.input-value').val(),
+          'old_value' : tr.find('.input-value').attr('data-init-value')
+        }      
+        var id = jQuery('body').data('id');
+        if (data.value != data.old_value) {
+          Gust.api(
+            '/post/'+id+'/meta/'+data.name,
+            'POST',
+            data,
+            function(resp){
+              if(resp.success) {
+                Gust.throw_success(resp.success);
+              } else if (resp.error) {
+                Gust.throw_error(resp.error);
+              }
+            }
+          );
+        }
+      });  
+      jQuery('.edit-custom-fields tbody tr').last().find('.input-delete').click(function(e){
+        var tr = jQuery(this).parent().parent();
+        e.preventDefault();
+        console.log('aaaaa');
+        var data = {
+          'name'      : tr.find('.input-name').val(),
+          'value'     : tr.find('.input-value').val(),
+          'old_value' : tr.find('.input-value').attr('data-init-value')
+        }      
+        var id = jQuery('body').data('id');
+        Gust.api(
+          '/post/'+id+'/meta/'+data.name,
+          'DELETE',
+          data,
+          function(resp){
+            if(resp.success) {
+              Gust.throw_success(resp.success);
+              tr.remove();
+            } else if (resp.error) {
+              Gust.throw_error(resp.error);
+            }
+          }
+        );
+      });  
     },
     init_editor : function(id){
       jQuery('body').attr('class','editor');

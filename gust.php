@@ -85,10 +85,8 @@ function gust_drop_in($q) {
       D::on('GET',   '/'.GUST_API_ROOT.'/metakeys',               array('Gust_API', 'get_meta_keys'));
 
       D::on('GET',   '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta',           array('Gust_API', 'post_meta_list'));
-//      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta',           array('Gust_API', 'post_meta_add'));
-//      D::on('GET',   '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:id@[^/]+', array('Gust_API', 'post_meta_get'));
-//      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:id@[^/]+', array('Gust_API', 'post_meta_update'));
-//      D::on('DELETE','/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:id@[^/]+', array('Gust_API', 'post_meta_delete'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:meta_key@[a-zA-Z0-9_-]+', array('Gust_API', 'post_meta_update'));
+      D::on('DELETE','/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:meta_key@[a-zA-Z0-9_-]+', array('Gust_API', 'post_meta_delete'));
       D::on('GET',   '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave_get'));
       D::on('POST',  '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave'));
       D::on('POST',  '/'.GUST_API_ROOT.'/upload/:id@[0-9]+',      array('Gust_API', 'upload'));
