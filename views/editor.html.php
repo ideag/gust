@@ -69,6 +69,7 @@
                                     <input id="pub-date" class="post-setting-date" type="text" value="" placeholder="<?php echo Gust::$options['main_dateformat']; ?>"><!--<span class="post-setting-calendar"></span>-->
                                 </div>
                             </li>
+                            <li><a href="#" class="add" id="edit-custom-fields"><i class="fa fa-pencil">&nbsp;</i> <?php _e('Edit Custom Fields','gust'); ?></a></li>
                             <li><a href="#" class="delete"><?php _e('Delete This Post','gust'); ?></a></li>
                         </ul>
                     </section>

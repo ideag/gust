@@ -179,6 +179,29 @@ class Gust {
     }
     return $return;
   }
+  public static function get_meta_list($post_id) {
+    $result = get_post_custom( $post_id );
+    $return = array();
+    if (is_array($result)) foreach ($result as $key=>$value) {
+      if (is_array($value)) foreach ( $value as $k => $v ) {
+        if ($key[0]!='_')
+          $return[] = array('name'=>$key,'value'=>$v);
+      }
+    }
+    return $return;
+  }
+  public static function get_meta_keys(){
+    global $wpdb;
+      $keys = $wpdb->get_col( "
+           SELECT meta_key
+           FROM $wpdb->postmeta
+           GROUP BY meta_key
+           HAVING meta_key NOT LIKE '\_%'
+           ORDER BY meta_key
+           " );
+    $return = $keys;
+    return $return;
+  }
   public static function get_tags(){
     $ret = get_terms('post_tag',array('hide_empty'=>'0','orderby'=>'count'));
     return $ret;

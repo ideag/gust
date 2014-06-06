@@ -5,6 +5,7 @@
     autosave_interval : 60, //min
     date_format : 'YYYY MMM DD HH:mm',
     all_tags : [],
+    all_meta_keys : ['alfa','beta','gama','delta','aaa','bbb','ccc','ddd'],
     init : function(api_base,ghost_base,plugin_base,date_format) {
       if (api_base) Gust.api_base = api_base;
       if (ghost_base) Gust.ghost_base = ghost_base;
@@ -358,6 +359,29 @@
         return false;
       }
     },
+    add_meta_field : function(e,data){
+      if (e)
+        e.preventDefault();
+      var item = '<tr>'+
+      '<td><input class="input-name" type="text" value=""></td>'+
+      '<td><textarea class="input-value" rows="1"></textarea></td>'+
+      '<td>'+
+      '<a class="input-update js-button button-add"><i class="fa fa-floppy-o"></i></a> '+
+      '<a class="input-delete js-button button-delete"><i class="fa fa-trash-o"></i></a> '+
+      '</td>'+
+      '</tr>';
+      jQuery('.edit-custom-fields tbody').append(item);
+      if(data) {
+        jQuery('.edit-custom-fields tbody tr').last().find('input.input-name').val(data.name);
+        jQuery('.edit-custom-fields tbody tr').last().find('.input-value').val(data.value);
+      }
+      jQuery('.edit-custom-fields tbody tr').last().find('input.input-name').autocomplete({
+        source:function(request, response) {
+          var results = jQuery.ui.autocomplete.filter(Gust.all_meta_keys, request.term);
+          response(results.slice(0, 10));
+        },
+      });      
+    },
     init_editor : function(id){
       jQuery('body').attr('class','editor');
       jQuery('body').data('id',id);
@@ -367,6 +391,14 @@
         {},
         function(resp){
           Gust.all_tags = resp;
+        }
+      );
+      Gust.api(
+        '/metakeys',
+        'GET',
+        {},
+        function(resp){
+          Gust.all_meta_keys = resp;
         }
       );
       Gust.api(
@@ -493,6 +525,36 @@
               });
               Gust.render_preview();
               Gust.editor.focus();
+              jQuery('#edit-custom-fields').click(function(e){
+                e.preventDefault();
+                var content = '<form class="edit-custom-fields" novalidate="novalidate"><fieldset><table class="modal-markdown-help-table">'+
+                '<thead><tr>'+
+                '<th class="name">Field Name</th><th class="value">Value</th><th class="action">Actions</th>'+
+                '</tr></thead>';
+                content += '<tfoot><tr><th colspan="3">'+
+                '<a class="input-add js-button button-add"><i class="fa fa-plus"></i> Add new</a>'+ 
+                '</th></tr><tfoot>';
+                content += '<tbody>';
+                content += '</tbody>';
+                content += '</table></fieldset></form>';
+                Gust.show_dialog({
+                  'title': 'Edit Custom Fields',
+                  'content' : content,
+                  'close': true
+                });
+                Gust.api(
+                  '/post/'+id+'/meta',
+                  'GET',
+                  {},
+                  function(resp){
+                    for (var i in resp) {
+                      Gust.add_meta_field(false,resp[i]);
+                    }
+                  },
+                  true
+                );
+                jQuery('a.input-add').click(Gust.add_meta_field);
+              });
               jQuery('.entry-markdown').click(function(){
                 jQuery('.entry-markdown').addClass('active');
                 jQuery('.entry-preview').removeClass('active');
@@ -1182,10 +1244,11 @@
     go_to : function(location) {
       document.location = location;
     },
-    api : function(point,method,data,response) {
+    api : function(point,method,data,response,sync) {
       return jQuery.ajax({
         url: Gust.api_base+point,
         type: method,
+        async: !sync,
         dataType: 'json',
         'data': data,
         'statusCode' : {

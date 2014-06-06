@@ -33,6 +33,22 @@ class Gust_API {
       }
       D::json($return);      
   }
+  static function get_meta_keys() {
+      if (Gust::auth('edit_posts' )) {
+        $return = Gust::get_meta_keys(); 
+      } else {
+        $return = array('error'=>__('You have no permission to edit this post','gust'));
+      }
+      D::json($return);      
+  }
+  static function post_meta_list($id) {
+    if (Gust::auth('edit_posts' )) {
+      $return = Gust::get_meta_list($id); 
+    } else {
+      $return = array('error'=>__('You have no permission to edit this post','gust'));
+    }
+    D::json($return);      
+  }
   static function tax($type) {
       if (Gust::auth('edit_posts' )) {
         if ($type=='post_tag') {
