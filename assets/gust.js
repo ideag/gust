@@ -1154,7 +1154,9 @@
       }
     },
     hide_dialog : function(e){
-      e.preventDefault();
+      if (e) {
+        e.preventDefault();
+      }
       jQuery('#modal-container, .modal-background').hide();
       jQuery('#modal-container article, .modal-background').removeClass('in');
     },
