@@ -15,9 +15,9 @@
         'preview_item'        : '<header class="floatingheader"><button class="button-back" href="#">Back</button><a class="unfeatured" href="#"><span class="hidden">Star</span></a><span class="status"></span><span class="normal">by</span><span class="author"></span><section class="post-controls"><a class="post-edit" href="#"><span class="hidden">Edit Post</span></a><a class="post-settings" href="#" data-toggle=".post-settings-menu"><span class="hidden">Post Settings</span></a><ul class="post-settings-menu menu-drop-right overlay" style="display: none;"><li class="post-setting">                <div class="post-setting-label">                    <label for="url">URL</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-slug" type="text" value="sdf-sdfsdf-sd-fsd-fsd">                </div>            </li>            <li class="post-setting">                <div class="post-setting-label">                    <label for="url">Pub Date</label>                </div>                <div class="post-setting-field">                    <input class="post-setting-date" type="text" value="" placeholder="'+Gust.date_format+'">                </div>            </li>            <li><a href="#" class="delete">Delete</a></li>        </ul>    </section></header><section class="content-preview-content">    <div class="wrapper"></div></section>',
         'notice_error'        : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-error notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
         'notice_success'      : '<div class="js-bb-notification" style="display: block; height: auto;"><section class="notification-success notification-passive js-notification">    %text%    <a class="close" href="#"><span class="hidden">Close</span></a></section></div>',
-        'dialog'              : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%heading%</h1></header>                <section class="modal-body"><div>%text%</div></section>                <footer class="modal-footer">            <button class="js-button-accept button-add">Yes</button>            <button class="js-button-reject button-delete">No</button>        </footer>            </section></article>',
-        'dialog_markdown'     : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Markdown Help</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><div><section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section></div></section>            </section></article>',
-        'dialog_coffee'       : '<article class="modal-info modal-style-wide fade js-modal in">    <section class="modal-content">        <header class="modal-header"><h1>Buy Arūnas a cup of coffee</h1></header>        <a class="close" href="#"><span class="hidden">Close</span></a>        <section class="modal-body"><p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form></section>            </section></article>',
+        'dialog'              : '<article class="modal-action modal-style-wide modal-style-centered fade js-modal">    <section class="modal-content">        <header class="modal-header"><h1>%heading%</h1></header><a class="close" href="#"><span class="hidden">Close</span></a>                <section class="modal-body"><div>%text%</div></section>                <footer class="modal-footer"></footer>            </section></article>',
+        'markdown_table'      : '<section class="markdown-help-container">    <table class="modal-markdown-help-table">        <thead>            <tr>                <th>Result</th>                <th>Markdown</th>                <th>Shortcut</th>            </tr>        </thead>        <tbody>            <tr>                <td><strong>Bold</strong></td>                <td>**text**</td>                <td>Ctrl / Cmd + B</td>            </tr>            <tr>                <td><em>Emphasize</em></td>                <td>__text__</td>                <td>Ctrl / Cmd + I</td>            </tr>            <tr>                <td><code>Inline Code</code></td>                <td>`code`</td>                <td>Cmd + K / Ctrl + Shift + K</td>            </tr>            <tr>                <td>Strike-through</td>                <td>~~text~~</td>                <td>Ctrl + Alt + U</td>            </tr>            <tr>                <td><a href="#">Link</a></td>                <td>[title](http://)</td>                <td>Ctrl + Shift + L</td>            </tr>            <tr>                <td>Image</td>                <td>![alt](http://)</td>                <td>Ctrl + Shift + I</td>            </tr>            <tr>                <td>List</td>                <td>* item</td>                <td>Ctrl + L</td>            </tr>            <tr>                <td>Blockquote</td>                <td>&gt; quote</td>                <td>Ctrl + Q</td>            </tr>            <tr>                <td>H1</td>                <td># Heading</td>                <td>Ctrl + Alt + 1</td>            </tr>            <tr>                <td>H2</td>                <td>## Heading</td>                <td>Ctrl + Alt + 2</td>            </tr>            <tr>                <td>H3</td>                <td>### Heading</td>                <td>Ctrl + Alt + 3</td>            </tr>            <tr>                <td>H4</td>                <td>#### Heading</td>                <td>Ctrl + Alt + 4</td>            </tr>            <tr>                <td>H5</td>                <td>##### Heading</td>                <td>Ctrl + Alt + 5</td>            </tr>            <tr>                <td>H6</td>                <td>###### Heading</td>                <td>Ctrl + Alt + 6</td>            </tr>       <!--     <tr>                <td>Select Word</td>                <td></td>                <td>Ctrl + Alt + W</td>            </tr>            <tr>                <td>Uppercase</td>                <td></td>                <td>Ctrl + U</td>            </tr>            <tr>                <td>Lowercase</td>                <td></td>                <td>Ctrl + Shift + U</td>            </tr>            <tr>                <td>Titlecase</td>                <td></td>                <td>Ctrl + Alt + Shift + U</td>            </tr> -->           <tr>                <td>Insert Current Date</td>                <td></td>              <td>Ctrl + Shift + 1</td>            </tr>        </tbody>    </table>    For further Markdown syntax reference: <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown Documentation</a></section>',
+        'coffee'              : '<p class="note">A ridiculous amount of coffee was consumed in the process of building Gust. Add some fuel if you\'d like to keep me going!</p><form action="/gust/coffee" method="post" class="tiny_form" data-icon="coffee" data-price="600" data-currency="%s Lt ">  <p></p> <div id="amount_slider"></div> <p>   <input type="hidden" id="tiny_amount" name="tiny_amount" value="200"/>  </p><div id="right"><span class="count"></span>    <small class="count2"></small></div><input type="hidden" name="tiny_currency" value="EUR"/><input type="hidden" name="tiny_text" value="Coffee to Arunas for Gust development"/><button type="submit" name="tiny_paypal" value="1"><i class="fa fa-shopping-cart"></i></button></form>',
         'tag'                 : '<span class="tag" data-tag-id="%id%">%title%</span>',
         'category'            : '<li class="post-setting" data-category-id="%id%"><div class="category-title"><i class="fa fa-square-o"></i> %title%</div><ul class="submenu"></ul></li>',
         'category_new'        : '<li class="category-new"><div class="category-title"><i class="fa fa-plus"></i> %title%</div><ul class="submenu"></ul></li>'
@@ -34,7 +34,15 @@
       });
       jQuery('#coffee').click(function(e){
         e.preventDefault();
-        Gust.show_dialog_coffee();
+        Gust.show_dialog({
+          'title'   : 'Buy Arūnas a cup of coffee',
+          'content' : Gust.templates.coffee,
+          'centered': false,
+          'close' : {
+            'title' : 'No, thanks',
+          },
+          'actions' : {}
+        })
         jQuery('#amount_slider').css({'margin':'0px 16px'});
         jQuery('#amount_slider').noUiSlider({
           'range':[2,20],
@@ -130,20 +138,28 @@
             var auto_time = moment(data.time).unix();
             if (auto_time > save_time && data.markdown != entry.markdown) {
               jQuery('body').data('autosave',data);
-              Gust.show_dialog(
-                'There is more recent autosave for this post. Load changes?',
-                '',
-                function(){
-                  var data = jQuery('body').data('autosave');
-                  jQuery('#entry-title').val(data.title);
-                  Gust.editor.setValue(data.markdown);            
-                  Gust.hide_dialog();
-                },
-                function(){
-                  jQuery('body').data('autosave',false);
-                  Gust.hide_dialog();
-                }
-              );
+              Gust.show_dialog({
+                'title'   : 'There is more recent autosave for this post. Load changes?',
+                'content' : '',
+                'actions' : {
+                  'confirm' : {
+                    'title' : 'Yes',
+                    'cb' :function(){
+                      var data = jQuery('body').data('autosave');
+                      jQuery('#entry-title').val(data.title);
+                      Gust.editor.setValue(data.markdown);            
+                      Gust.hide_dialog();
+                    }
+                  },
+                  'deny' : {
+                    'title' : 'No',
+                    'cb' : function(){
+                      jQuery('body').data('autosave',false);
+                      Gust.hide_dialog();
+                    }
+                  }
+                } 
+              });
             }            
           }
         }
@@ -299,26 +315,35 @@
       jQuery('a.delete').attr('href',Gust.ghost_base+'/delete/'+entry.id);
       jQuery('a.delete').click(function(event){
         event.preventDefault();
-        Gust.show_dialog(
-          'Are you sure you want to delete this post?',
-          '',          
-          function(){
-            Gust.api(
-              '/post/'+id,
-              'DELETE',
-              {},
-              function(resp){
-                localStorage.removeItem('list_position_'+type);
-                Gust.hide_dialog();
-                if (typeof resp.id != 'undefined') {
-                  window.location = Gust.ghost_base+'/'+type;
-                } else {
-                  Gust.throw_error(resp.error);
-                }
+        Gust.show_dialog({
+          'title' :'Are you sure you want to delete this post?',
+          'content' : '',
+          'actions' : {
+            'confirm' : {
+              'title' : 'Yes',
+              'cb' : function(){
+                Gust.api(
+                  '/post/'+id,
+                  'DELETE',
+                  {},
+                  function(resp){
+                    localStorage.removeItem('list_position_'+type);
+                    Gust.hide_dialog();
+                    if (typeof resp.id != 'undefined') {
+                      window.location = Gust.ghost_base+'/'+type;
+                    } else {
+                      Gust.throw_error(resp.error);
+                    }
+                  }
+                );
               }
-            );
-          }
-        );
+            },
+            'deny' : {
+              'title' : 'No',
+              'cb' : false
+            }
+          }          
+        });
       });
     },
     store_position : function(id,type){
@@ -356,55 +381,59 @@
           });
           Gust.add_category_new();
           jQuery('.entry-categories-menu li.category-new>div').click(function(){
-              var cats = '';
-              jQuery('.entry-categories-menu li.post-setting>div').each(function(){
-                var title = jQuery(this).text();
-                var c = jQuery(this).parents('.post-setting').size();
-                for (var a = 1;a<c;++a) {
-                  title = '-'+title;
-                }
-                title = jQuery.trim(title);
-                var value = jQuery(this).parent().attr('data-category-id');
-                cats += '<option value="'+value+'">'+title+'</option>';
-              });
-
-              Gust.show_dialog(
-                'Add new category',
-                '<form id="settings-general" novalidate="novalidate"><fieldset>'+
+            var cats = '';
+            jQuery('.entry-categories-menu li.post-setting>div').each(function(){
+              var title = jQuery(this).text();
+              var c = jQuery(this).parents('.post-setting').size();
+              for (var a = 1;a<c;++a) {
+                title = '-'+title;
+              }
+              title = jQuery.trim(title);
+              var value = jQuery(this).parent().attr('data-category-id');
+              cats += '<option value="'+value+'">'+title+'</option>';
+            });
+            Gust.show_dialog({
+              'title'   : 'Add new category',
+              'content' : '<form id="settings-general" novalidate="novalidate"><fieldset>'+
                 '<div class="form-group"><label for="category-title">Category title</label><input id="category-title" name="category-title" type="text" value=""></div>'+
                 '<div class="form-group"><label for="category-slug">Category slug</label><input id="category-slug" name="category-slug" type="text" value=""></div>'+
                 '<div class="form-group"><label for="category-parent">Category parent</label><select id="category-parent" name="category-parent"><option value="">- no parent -</option>'+cats+'</select></div>'+
                 '</fieldset></form>',
-                function(){
-                  data = {
-                    'title' : jQuery('#category-title').val(),
-                    'slug' : jQuery('#category-slug').val(),
-                    'parent' : jQuery('#category-parent').val(),                    
-                  };
-                  Gust.api(
-                    '/category',
-                    'POST',
-                    data,
-                    function(resp){
-                      if (typeof resp.success != 'undefined') {
-                        Gust.throw_success(resp.success);
-                      } else {
-                        Gust.throw_error(resp.error);
+              'actions' : {
+                'confirm' : {
+                  'title' : 'Add',
+                  'cb' : function(){
+                    data = {
+                      'title' : jQuery('#category-title').val(),
+                      'slug' : jQuery('#category-slug').val(),
+                      'parent' : jQuery('#category-parent').val(),                    
+                    };
+                    Gust.api(
+                      '/category',
+                      'POST',
+                      data,
+                      function(resp){
+                        if (typeof resp.success != 'undefined') {
+                          Gust.throw_success(resp.success);
+                        } else {
+                          Gust.throw_error(resp.error);
+                        }
+                        Gust.add_category(
+                          resp.term.name,
+                          resp.term.term_id,
+                          resp.term
+                        );
+                        Gust.hide_dialog();
                       }
-                      Gust.add_category(
-                        resp.term.name,
-                        resp.term.term_id,
-                        resp.term
-                      );
-                      Gust.hide_dialog();
-                    }
-                  );
+                    );
+                  }
                 },
-                function(){
-//                  jQuery('body').data('autosave',false);
-                  Gust.hide_dialog();
+                'deny' : {
+                  'title' : 'Cancel',
+                  'cb' : false
                 }
-              );
+              }
+            });
           });
           jQuery('.entry-categories-menu').bind('wheel',function(event) {
             var delta = event.originalEvent.deltaY;
@@ -530,7 +559,14 @@
       });
       jQuery('.markdown-help').click(function(e){
         e.preventDefault();
-        Gust.show_dialog_md();
+        Gust.show_dialog({
+          'title' : 'Markdown Help',
+          'content' : Gust.templates.markdown_table,
+          'actions' : {},
+          'close' : {
+            'cb' : Gust.hide_dialog
+          }
+        });
       });
     },
     find_tags: function (searchTerm) {
@@ -868,31 +904,40 @@
       viewer.find('a.delete').attr('href',Gust.ghost_base+'/delete/'+data.id);
       viewer.find('a.delete').click(function(event){
         event.preventDefault();
-        Gust.show_dialog(
-          'Are you sure you want to delete this post?',
-          '',
-          function(){
-            Gust.api(
-              '/post/'+id,
-              'DELETE',
-              {},
-              function(resp){
-                Gust.hide_dialog();
-                if (typeof resp.id != 'undefined') {
-                  var item = jQuery('.content-list-content ol li[data-id='+resp.id+']');
-                  var new_item = item.next();
-                  item.fadeOut('fast', function() {
-                    this.remove();
-                    new_item.click();
-                    Gust.throw_success('Post #'+resp.id+' deleted');
-                  });
-                } else {
-                  Gust.throw_error(resp.error);
-                }
+        Gust.show_dialog({
+          'title' : 'Are you sure you want to delete this post?',
+          'content' : '',
+          'actions' : {
+            'confirm' : {
+              'title' : 'Yes',
+              'cb' : function(){
+                Gust.api(
+                  '/post/'+id,
+                  'DELETE',
+                  {},
+                  function(resp){
+                    Gust.hide_dialog();
+                    if (typeof resp.id != 'undefined') {
+                      var item = jQuery('.content-list-content ol li[data-id='+resp.id+']');
+                      var new_item = item.next();
+                      item.fadeOut('fast', function() {
+                        this.remove();
+                        new_item.click();
+                        Gust.throw_success('Post #'+resp.id+' deleted');
+                      });
+                    } else {
+                      Gust.throw_error(resp.error);
+                    }
+                  }
+                );
               }
-            );
+            },
+            'deny' : {
+              'title' : 'No',
+              'cb' : false
+            }
           }
-        );
+        });
       });
       document.getElementsByClassName('content-preview-content')[0].getElementsByClassName('wrapper')[0].innerHTML = '<h1>'+data.title+'</h1>'+data.html;
       jQuery('.content-preview-content .wrapper script').each(function(){
@@ -1058,34 +1103,58 @@
         }
       });
     },
-    show_dialog : function(heading,text,confirm,deny) {
+    show_dialog : function(args) {
       jQuery('#modal-container, .modal-background').show();
-      var html = Gust.templates.dialog.replace('%heading%',heading);
-      html = html.replace('%text%',text);
+      var html = Gust.templates.dialog.replace('%heading%',args.title);
+      html = html.replace('%text%',args.content);
       jQuery('#modal-container').html(html);
+      if (jQuery.isPlainObject(args.close)||args.close) {
+        jQuery('#modal-container .close').show();
+        var action = args.close.cb?args.close.cb:Gust.hide_dialog;
+        var title = args.close.title?args.close.title:'Close';
+        jQuery('#modal-container .close .hidden').html(title);
+        jQuery('#modal-container .close').attr('title',title);
+        jQuery('#modal-container .close').click(action);
+      } else {
+        jQuery('#modal-container .close').hide();
+      }
+      if (args.centered!==false) {
+        jQuery('#modal-container>article').addClass('modal-style-centered');
+      } else {
+        jQuery('#modal-container>article').removeClass('modal-style-centered');
+      }
+      if (args.wide!==false) {
+        jQuery('#modal-container>article').addClass('modal-style-wide');
+      } else {
+        jQuery('#modal-container>article').removeClass('modal-style-wide');
+      }
       jQuery('#modal-container article, .modal-background').addClass('in');
-      jQuery('#modal-container .button-add').click(confirm);
-      jQuery('#modal-container .button-delete').click(deny?deny:Gust.hide_dialog);
+      for (var id in args.actions) {
+        var default_classes = {
+          'confirm' : 'add',
+          'deny'    : 'delete'
+        };
+        var default_title = {
+          'confirm' : 'Yes',
+          'deny'    : 'No'
+        };
+        var default_actions = {
+          'confirm' : Gust.hide_dialog,
+          'deny'    : Gust.hide_dialog
+        };
+        var cl = args.actions[id].class?args.actions[id].class:(default_classes[id]?default_classes[id]:'default');
+        var title = args.actions[id].title?args.actions[id].title:(default_titles[id]?default_titles[id]:'');
+        var action = args.actions[id].cb?args.actions[id].cb:(default_actions[id]?default_actions[id]:Gust.hide_dialog);
+        var button = '<button id="dialog-%id%" class="js-button-accept button-%class%">%title%</button> ';
+        button = button.replace('%class%',cl);
+        button = button.replace('%id%',id);
+        button = button.replace('%title%',title);
+        jQuery('.modal-footer').append(button);
+        jQuery('#dialog-'+id).click(action);
+      }
     },
-    show_dialog_md : function() {
-      jQuery('#modal-container, .modal-background').show();
-      jQuery('#modal-container').html(Gust.templates.dialog_markdown);
-      jQuery('#modal-container article, .modal-background').addClass('in');
-      jQuery('#modal-container .close, .modal-background').click(Gust.hide_dialog_md);
-    },
-    show_dialog_coffee : function() {
-      jQuery('#modal-container, .modal-background').show();
-      jQuery('#modal-container').html(Gust.templates.dialog_coffee);
-      jQuery('#modal-container article, .modal-background').addClass('in');
-      jQuery('#modal-container .close, .modal-background').click(Gust.hide_dialog_md);
-    },
-    hide_dialog_md : function(e){
+    hide_dialog : function(e){
       e.preventDefault();
-      jQuery('#modal-container, .modal-background').hide();
-      jQuery('#modal-container article, .modal-background').removeClass('in');
-      jQuery('.modal-background').unbind('click',Gust.hide_dialog_md);
-    },
-    hide_dialog : function(){
       jQuery('#modal-container, .modal-background').hide();
       jQuery('#modal-container article, .modal-background').removeClass('in');
     },
