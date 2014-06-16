@@ -38,6 +38,18 @@ class Gust {
     }
     return $return;
   }
+  public static function delete_image($post_id,$data) {
+    if ($data['featured']) {
+      delete_post_thumbnail($post_id );
+    }
+    $res = wp_delete_attachment($data['id'], true );
+    if ($res===false) {
+      $return = array('error'=>'Failed to delete');
+    } else {
+      $return = array('success'=>'Image deleted','id'=>$data['id']);
+    }
+    return $return;
+  }
   public static function delete($url) {
     $id = Gust::get_attachment_id_from_src($url);
     $res = wp_delete_attachment($id, true );
@@ -66,6 +78,10 @@ class Gust {
               'post_status' => 'inherit'
           );
           $attach_id = wp_insert_attachment( $attachment, $filename,$id);          
+          include_once( ABSPATH . 'wp-admin/includes/image.php' );
+          $attach_data = wp_generate_attachment_metadata($attach_id,$filename);
+//          print_r($attach_data);
+          wp_update_attachment_metadata($attach_id,$attach_data);
           $file = array(
             'name'  => basename($filename),
             'size'  => filesize($filename),
@@ -75,7 +91,17 @@ class Gust {
             'deleteType' => 'DELETE'
           );
           $ret['files'][] = $file;
-          return  $attachment['guid'];
+          if(isset($_POST['new_upload']) && $_POST['new_upload']) {
+            $i = wp_get_attachment_image_src($attach_id);
+            $result['success'] = array(
+              'id' => $attach_id,
+              'url' => $i[0],
+              'featured' => false
+            );
+            return $result;
+          } else {
+            return $attachment['guid'];
+          }
         }
   }
   public static function get_autosave($id){
@@ -190,20 +216,22 @@ class Gust {
     }
     return $return;
   }
-  public static function update_meta($post_id,$meta_key,$data) {
-    if ($data['value']==$data['old_value']) {
-      $return = array('warning'=>__('Nothing to update','gust'));
-    } else {
+  public static function update_meta($post_id,$data) {
+    $meta_key = $data['name'];
+//    if ($data['value']==$data['old_value']) {
+//      $return = array('warning'=>__('Nothing to update','gust'));
+//    } else {
       $return = update_post_meta($post_id, $meta_key, $data['value'], $data['old_value']);  
       if ($return) {
         $return = array('success'=>__('Custom field updated.','gust'));
       } else {
         $return = array('error'=>__('Error updating custom field.','gust'));
       }
-    }
+//    }
     return $return;
   }
-  public static function delete_meta($post_id,$meta_key,$data) {
+  public static function delete_meta($post_id,$data) {
+    $meta_key = $data['name'];
     $return = delete_post_meta($post_id, $meta_key, $data['old_value']);  
     if ($return) {
       $return = array('success'=>__('Custom field deleted.','gust'));
@@ -212,6 +240,38 @@ class Gust {
     }
     return $return;
   }
+  public static function set_featured($post_id,$data) {
+    if (isset($data['featured'])) {
+      $return = set_post_thumbnail( $post_id, $data['featured'] );
+    }
+    if ($return) {
+      return array('success'=>__('Featured image selected.','gust') );
+    } else {
+      return array('error'=>__('Error - featured image could not be set.','gust'));
+    }
+  }
+  public static function get_image_list($post_id) {
+    $media = get_attached_media( 'image', $post_id );
+    //$return = delete_post_meta($post_id, $meta_key, $data['old_value']);  
+    if ($media) {
+      $post_thumbnail_id = get_post_thumbnail_id( $post_id );
+      $result = array();
+      foreach ($media as $image_id => $image) {
+        $i = wp_get_attachment_image_src($image_id);
+        $result[] = array(
+          'id' => $image_id,
+          'url' => $i[0],
+          'featured' => $post_thumbnail_id==$image_id
+        );
+      }
+      $return = array('success'=>__('Post images received.','gust'));
+      $return['media'] = $result;
+      $return['featured'] = $post_thumbnail_id;
+    } else {
+      $return = array('error'=>__('Error receiving post images.','gust'));
+    }
+    return $return;
+  }  
   public static function get_meta_keys(){
     global $wpdb;
       $keys = $wpdb->get_col( "
@@ -395,7 +455,8 @@ class Gust {
       "author_id" => $post->post_author,
       "author" => Gust::format_user( $post->post_author ),
       "tags" => Gust::get_post_tags($post->ID*1),
-      "categories" => Gust::get_post_tags($post->ID*1,'category')
+      "categories" => Gust::get_post_tags($post->ID*1,'category'),
+      'custom_fields' => post_type_supports( $post->post_type, 'custom-fields' )
     );
     return $return;
   }

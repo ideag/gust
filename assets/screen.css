@@ -5347,3 +5347,35 @@ a.ui-state-focus {
         font-weight: normal;
         margin: -1px;
 }
+
+
+.images .image {float:left;border:5px solid #eeeeee; border-radius:5px; margin-top:10px; margin-right:10px;cursor:pointer;position:relative;}
+.images .image img {display: block;}
+.images .image.selected { border-color:#4598e2;}
+.images .image:hover {border-color:#2f8cde;}
+.images .image .delete {
+  position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 3px 8px;
+  border-radius:3px;
+  background: rgba(0, 0, 0, 0.3);
+  color:#fff;
+}
+.images .image .delete:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+.new-image {
+  display: inline-block;
+  width: 100%;
+  clear:both;
+  padding:10px;
+  border:5px solid #eeeeee;
+  margin-top:10px;
+  box-sizing:border-box;
+  cursor:pointer;
+  border-radius:5px;
+}
+
+.new-image:hover {border-color:#2f8cde;}
+.new-image input {display:none;}

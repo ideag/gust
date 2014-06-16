@@ -49,21 +49,37 @@ class Gust_API {
     }
     D::json($return);      
   }
-  static function post_meta_delete($id,$meta_key) {
+  static function post_image_list($id) {
     if (Gust::auth('edit_posts' )) {
-      if ($_SERVER['REQUEST_METHOD']=='DELETE') {
-        $data = file_get_contents('php://input');
-        parse_str($data,$_POST);
-      }
-      $return = Gust::delete_meta($id,$meta_key,$_POST); 
+      $return = Gust::get_image_list($id); 
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
     D::json($return);      
   }
-  static function post_meta_update($id,$meta_key) {
+  static function post_set_featured($id) {
     if (Gust::auth('edit_posts' )) {
-      $return = Gust::update_meta($id,$meta_key,$_POST); 
+      $return = Gust::set_featured($id,$_POST); 
+    } else {
+      $return = array('error'=>__('You have no permission to edit this post','gust'));
+    }
+    D::json($return);      
+  }
+  static function post_meta_delete($id) {
+    if (Gust::auth('edit_posts' )) {
+      if ($_SERVER['REQUEST_METHOD']=='DELETE') {
+        $data = file_get_contents('php://input');
+        parse_str($data,$_POST);
+      }
+      $return = Gust::delete_meta($id,$_POST); 
+    } else {
+      $return = array('error'=>__('You have no permission to edit this post','gust'));
+    }
+    D::json($return);      
+  }
+  static function post_meta_update($id) {
+    if (Gust::auth('edit_posts' )) {
+      $return = Gust::update_meta($id,$_POST); 
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
@@ -94,6 +110,23 @@ class Gust_API {
       if (Gust::auth()) {
         echo Gust::upload($id);
       }          
+  }
+  static function post_image_add($id) {
+      if (Gust::auth()) {
+        D::json(Gust::upload($id));
+      }          
+  }
+  static function post_image_delete($id) {
+      if (Gust::auth('edit_posts')) {
+        if ($_SERVER['REQUEST_METHOD']=='DELETE') {
+          $data = file_get_contents('php://input');
+          parse_str($data,$_POST);
+        }
+        $return = Gust::delete_image($id,$_POST);
+      } else {
+        $return = array('error'=>__('You have no permission to remove this image','gust'));
+      }     
+      D::json($return);      
   }
   static function upload_delete() {
       if (Gust::auth('edit_posts')) {

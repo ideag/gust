@@ -70,6 +70,9 @@
                                 </div>
                             </li>
                             <li><a href="#" class="add" id="edit-custom-fields"><i class="fa fa-pencil">&nbsp;</i> <?php _e('Edit Custom Fields','gust'); ?></a></li>
+<?php if (current_theme_supports('post-thumbnails')): ?>
+                            <li><a href="#" class="add" id="edit-featured-image"><i class="fa fa-picture-o">&nbsp;</i> <?php _e('Edit Featured Image','gust'); ?></a></li>
+<?php endif; ?>
                             <li><a href="#" class="delete"><?php _e('Delete This Post','gust'); ?></a></li>
                         </ul>
                     </section>

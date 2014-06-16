@@ -83,14 +83,17 @@ function gust_drop_in($q) {
       D::on('POST',  '/'.GUST_API_ROOT.'/post(/:id@[0-9]+)',      array('Gust_API', 'post_save'));
       D::on('DELETE','/'.GUST_API_ROOT.'/post(/:id@[0-9]+)',      array('Gust_API', 'post_delete'));
       D::on('GET',   '/'.GUST_API_ROOT.'/metakeys',               array('Gust_API', 'get_meta_keys'));
-
-      D::on('GET',   '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta',           array('Gust_API', 'post_meta_list'));
-      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:meta_key@[a-zA-Z0-9_-]+', array('Gust_API', 'post_meta_update'));
-      D::on('DELETE','/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta/:meta_key@[a-zA-Z0-9_-]+', array('Gust_API', 'post_meta_delete'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta',   array('Gust_API', 'post_meta_list'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta',   array('Gust_API', 'post_meta_update'));
+      D::on('DELETE','/'.GUST_API_ROOT.'/post/:id@[0-9]+/meta',   array('Gust_API', 'post_meta_delete'));
       D::on('GET',   '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave_get'));
       D::on('POST',  '/'.GUST_API_ROOT.'/autosave/:id@[0-9]+',    array('Gust_API', 'autosave'));
       D::on('POST',  '/'.GUST_API_ROOT.'/upload/:id@[0-9]+',      array('Gust_API', 'upload'));
       D::on('DELETE','/'.GUST_API_ROOT.'/upload',                 array('Gust_API', 'upload_delete'));
+      D::on('GET',   '/'.GUST_API_ROOT.'/post/:id@[0-9]+/image',  array('Gust_API', 'post_image_list'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/image',  array('Gust_API', 'post_image_add'));
+      D::on('DELETE','/'.GUST_API_ROOT.'/post/:id@[0-9]+/image',  array('Gust_API', 'post_image_delete'));
+      D::on('POST',  '/'.GUST_API_ROOT.'/post/:id@[0-9]+/featured',  array('Gust_API', 'post_set_featured'));
       D::on('GET',   '/'.GUST_API_ROOT.'/:type@'.$taxonomies,               array('Gust_API', 'tax'));
       D::on('POST',  '/'.GUST_API_ROOT.'/:type@'.$taxonomies,               array('Gust_API', 'tax_add'));
       D::on('GET',   '/'.GUST_API_ROOT.'/:type@'.$taxonomies.'/:id@[0-9]+', array('Gust_API', 'tax_single'));

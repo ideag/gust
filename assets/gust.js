@@ -359,11 +359,67 @@
         return false;
       }
     },
+    add_media_item : function(e,data){
+      if (e)
+        e.preventDefault();
+      var item = '<div class="image">'+
+      '<image src="" alt="" class=""/>'+
+      '<div class="delete"><i class="fa fa-trash-o"></i></div>'+
+      '</div>';
+      jQuery('.images').append(item);
+      var img = jQuery('.images .image').last();
+      img.find('img').attr('src',data.url);
+      img.attr('data-id',data.id);
+      if (data.featured) 
+        img.addClass('selected');
+      img.find('.delete').click(function(e){
+        e.stopPropagation();
+        var id = jQuery('body').data('id');
+        var data = {
+          'id':jQuery(this).parent().attr('data-id'),
+          'featured':jQuery(this).parent().hasClass('selected')
+        };
+        Gust.api(
+          '/post/'+id+'/image',
+          'DELETE',
+          data,
+          function(resp){
+            console.log(resp);
+            if(resp.success) {
+              jQuery('.images .image[data-id='+resp.id+']').remove();
+              Gust.throw_success(resp.success);
+            } else {
+              Gust.throw_error(resp.error);
+            }
+          }
+        ); 
+      });
+      img.click(function(e){
+        jQuery('.images .image').removeClass('selected');
+        jQuery(this).addClass('selected');
+        var data = {
+          featured:jQuery(this).attr('data-id')
+        };
+        var id = jQuery('body').data('id');
+        Gust.api(
+          '/post/'+id+'/featured',
+          'POST',
+          data,
+          function(resp){
+            if(resp.success) {
+              Gust.throw_success(resp.success);
+            } else {
+              Gust.throw_error(resp.error);
+            }
+          }          
+        );
+      });
+    },
     add_meta_field : function(e,data){
       if (e)
         e.preventDefault();
       var item = '<tr>'+
-      '<td><input class="input-name" type="text" value=""></td>'+
+      '<td><input class="input-name" type="text" value="" data-init-value=""></td>'+
       '<td><textarea class="input-value" rows="1" data-init-value=""></textarea></td>'+
       '<td>'+
       '<a class="input-update js-button button-add"><i class="fa fa-floppy-o"></i></a> '+
@@ -373,6 +429,7 @@
       jQuery('.edit-custom-fields tbody').append(item);
       if(data) {
         jQuery('.edit-custom-fields tbody tr').last().find('input.input-name').val(data.name);
+        jQuery('.edit-custom-fields tbody tr').last().find('input.input-name').attr('data-init-value',data.name);
         jQuery('.edit-custom-fields tbody tr').last().find('.input-value').val(data.value);
         jQuery('.edit-custom-fields tbody tr').last().find('.input-value').attr('data-init-value',data.value);
       }
@@ -387,13 +444,14 @@
         e.preventDefault();
         var data = {
           'name'      : tr.find('.input-name').val(),
+          'old_name'  : tr.find('.input-name').attr('data-init-value'),
           'value'     : tr.find('.input-value').val(),
           'old_value' : tr.find('.input-value').attr('data-init-value')
         }      
         var id = jQuery('body').data('id');
-        if (data.value != data.old_value) {
+        if (data.value != data.old_value || data.name != data.old_name) {
           Gust.api(
-            '/post/'+id+'/meta/'+data.name,
+            '/post/'+id+'/meta',
             'POST',
             data,
             function(resp){
@@ -405,19 +463,31 @@
             }
           );
         }
+        if (tr.find('.input-name').attr('data-init-value') && (data.name != tr.find('.input-name').attr('data-init-value'))){
+          var delete_data = data;
+          delete_data.name = tr.find('.input-name').attr('data-init-value');
+          Gust.api(
+            '/post/'+id+'/meta',
+            'DELETE',
+            delete_data,
+            function(resp){
+            }
+          ); 
+        }
+        tr.find('.input-value').attr('data-init-value',tr.find('.input-value').val());
+        tr.find('.input-name').attr('data-init-value',tr.find('.input-name').val());
       });  
       jQuery('.edit-custom-fields tbody tr').last().find('.input-delete').click(function(e){
         var tr = jQuery(this).parent().parent();
         e.preventDefault();
-        console.log('aaaaa');
         var data = {
-          'name'      : tr.find('.input-name').val(),
+          'name'      : tr.find('.input-name').attr('data-init-value'),
           'value'     : tr.find('.input-value').val(),
           'old_value' : tr.find('.input-value').attr('data-init-value')
         }      
         var id = jQuery('body').data('id');
         Gust.api(
-          '/post/'+id+'/meta/'+data.name,
+          '/post/'+id+'/meta',
           'DELETE',
           data,
           function(resp){
@@ -574,36 +644,58 @@
               });
               Gust.render_preview();
               Gust.editor.focus();
-              jQuery('#edit-custom-fields').click(function(e){
+              jQuery('#edit-featured-image').click(function(e){
                 e.preventDefault();
-                var content = '<form class="edit-custom-fields" novalidate="novalidate"><fieldset><table class="modal-markdown-help-table">'+
-                '<thead><tr>'+
-                '<th class="name">Field Name</th><th class="value">Value</th><th class="action">Actions</th>'+
-                '</tr></thead>';
-                content += '<tfoot><tr><th colspan="3">'+
-                '<a class="input-add js-button button-add"><i class="fa fa-plus"></i> Add new</a>'+ 
-                '</th></tr><tfoot>';
-                content += '<tbody>';
-                content += '</tbody>';
-                content += '</table></fieldset></form>';
-                Gust.show_dialog({
-                  'title': 'Edit Custom Fields',
-                  'content' : content,
-                  'close': true
-                });
+                var content = '<div class="images"></div><div class="new-image"><i class="fa fa-plus"></i> Add new image <input data-url="upload" class="js-fileupload main fileupload" type="file" name="uploadimage"></div>';                
                 Gust.api(
-                  '/post/'+id+'/meta',
+                  '/post/'+id+'/image',
                   'GET',
                   {},
                   function(resp){
-                    for (var i in resp) {
-                      Gust.add_meta_field(false,resp[i]);
+                    for (var i in resp.media) {
+                      Gust.add_media_item(false,resp.media[i],resp.featured);
                     }
-                  },
-                  true
+                  }
                 );
-                jQuery('a.input-add').click(Gust.add_meta_field);
+                Gust.show_dialog({
+                  'title': 'Edit Featured Image',
+                  'content' : content,
+                  'close': true
+                });                
+                Gust.init_uploads_featured();
               });
+              if (entry.custom_fields) {
+                jQuery('#edit-custom-fields').click(function(e){
+                  e.preventDefault();
+                  var content = '<form class="edit-custom-fields" novalidate="novalidate"><fieldset><table class="modal-markdown-help-table">'+
+                  '<thead><tr>'+
+                  '<th class="name">Field Name</th><th class="value">Value</th><th class="action">Actions</th>'+
+                  '</tr></thead>';
+                  content += '<tfoot><tr><th colspan="3">'+
+                  '<a class="input-add js-button button-add"><i class="fa fa-plus"></i> Add new</a>'+ 
+                  '</th></tr><tfoot>';
+                  content += '<tbody>';
+                  content += '</tbody>';
+                  content += '</table></fieldset></form>';
+                  Gust.show_dialog({
+                    'title': 'Edit Custom Fields',
+                    'content' : content,
+                    'close': true
+                  });
+                  Gust.api(
+                    '/post/'+id+'/meta',
+                    'GET',
+                    {},
+                    function(resp){
+                      for (var i in resp) {
+                        Gust.add_meta_field(false,resp[i]);
+                      }
+                    },
+                    true
+                  );
+                  jQuery('a.input-add').click(Gust.add_meta_field);
+                });
+              }
               jQuery('.entry-markdown').click(function(){
                 jQuery('.entry-markdown').addClass('active');
                 jQuery('.entry-preview').removeClass('active');
@@ -978,6 +1070,30 @@
         t.replaceWith('<div class="embedded-script"><span class="title">Embedded script</span><span class="content">'+res+'</span></div>');
       });
 
+    },
+    init_uploads_featured : function(){
+      jQuery('.new-image').click(function(e){
+        e.preventDefault();
+        jQuery(this).find('input[type=file]').click();
+      });
+      jQuery('.new-image input[type=file]').click(function(e){
+        e.stopPropagation();
+      });
+      var id = jQuery('body').data('id');
+      jQuery('.new-image').fileupload({
+        dropZone: jQuery('.new-image'),
+        url: Gust.api_base+'/post/'+id+'/image',
+        formData: {'new_upload':true},
+        add: function (e, data) {
+            var jqXHR = data.submit();
+        },
+        success: function(data) {
+          Gust.add_media_item(false,data.success,false);
+        },
+        fail:function(e, data){
+          console.log(data);
+        }
+      });
     },
     init_uploads: function(){
           jQuery('.js-drop-zone').upload({editor: true});
