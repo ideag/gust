@@ -39,14 +39,17 @@ class Gust {
     return $return;
   }
   public static function delete_image($post_id,$data) {
-    if ($data['featured']) {
+    $del = false;
+    $feat_id = get_post_thumbnail_id( $post_id );
+    if ($data['id']==$feat_id) {
       delete_post_thumbnail($post_id );
+      $del = true;
     }
     $res = wp_delete_attachment($data['id'], true );
     if ($res===false) {
       $return = array('error'=>'Failed to delete');
     } else {
-      $return = array('success'=>'Image deleted','id'=>$data['id']);
+      $return = array('success'=>'Image deleted','id'=>$data['id'],'del'=>$del);
     }
     return $return;
   }

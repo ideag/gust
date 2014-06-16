@@ -16,13 +16,18 @@ At the begining, Ghost was supposed to be a fork of WordPress. Then there was a 
 
 Current features:
 
+*   **NEW** PHP 5.2 Compatability
+*   **NEW** Autosave support
+*   **NEW** Featured image (post-thumbnail) support
+*   **NEW** Custom fields (post-meta) support
+*   **NEW** Experimental custom post types support (have to be enabled via Options page)
+*   **NEW** Add new category dialog
+*   **NEW** Tighter integration with WordPress (Admin Bar links, Edit links, etc.)
 *   Posts/Pages Markdown editor
 *   Media upload integration
 *   Post tags support
 *   Post category support
 *   Post scheduling support
-*   **NEW** PHP 5.2 Compatability
-*   **NEW** Autosave support
 
 == Installation ==
 
@@ -39,7 +44,7 @@ Please check 'Output Javascript in footer' option in Disqus plugin options scree
 
 = Why I cannot add/remove categories = 
 
-Category manager is comming in v0.4
+You can add categories since v0.4. Taxonomy manager is comming in next release
 
 = Why do you require PHP 5.3? =
 
@@ -51,16 +56,23 @@ No, I am not. This is an unofficial port, hence the different name.
 
 = Where is the X feature =
 
-This is an early release, so some features, like category/featured images support, are not present, yet. They will be, later on, if the plugin gets enough interest.
+This is an early release, so some features are not present, yet. They will be, later on, if the plugin gets enough interest.
 
 == Changelog ==
 
 = 0.4.0 =
 * Major code rewrite
 * Flight routing library replaced with custom version of Dispatch to allow for PHP 5.2 support
+* Options page
+* Experimental custom post type (CPT) support
+* Featured images support
+* Custom fields support
+* Add new category dialog
+* Tighter integration with WordPress - links in Admin Bar, Edit post links to gust etc.
 * Autosaves
 * Updated jQuery, moment.js and other javascript libraries
 * Tested on WordPress 3.9
+* A LOT of bug fixes
 
 = 0.3.3 =
 * several bugfixes

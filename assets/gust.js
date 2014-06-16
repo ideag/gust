@@ -376,8 +376,7 @@
         e.stopPropagation();
         var id = jQuery('body').data('id');
         var data = {
-          'id':jQuery(this).parent().attr('data-id'),
-          'featured':jQuery(this).parent().hasClass('selected')
+          'id':jQuery(this).parent().attr('data-id')
         };
         Gust.api(
           '/post/'+id+'/image',
