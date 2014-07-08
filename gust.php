@@ -7,6 +7,7 @@ Author: Arūnas Liuiza
 Version: 0.4.0
 Author URI: http://wp.tribuna.lt/
 */
+error_reporting(-1);
 define ('GUST_SUBPATH',       gust_get_subpath());
 define ('GUST_TITLE',         __('Gust','gust'));
 define ('GUST_VERSION',       'v0.4.0');

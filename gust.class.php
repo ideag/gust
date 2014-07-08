@@ -465,7 +465,7 @@ class Gust {
   }
   private static function unpublished_draft_date($post_id){
     global $wpdb;
-    $draft_date_array = $wpdb->get_results( 'SELECT post_date FROM wp_posts WHERE ID = '.$post_id );
+    $draft_date_array = $wpdb->get_results( 'SELECT post_date FROM '.$wpdb->prefix.'posts WHERE ID = '.$post_id );
     $draft_date = $draft_date_array[0]->post_date;
     $draft_date = date(DATE_W3C,strtotime($draft_date));
     return $draft_date;
