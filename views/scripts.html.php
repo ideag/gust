@@ -6,7 +6,7 @@
         <script>window.jQuery.ui || document.write('<script src="<?php echo GUST_PLUGIN_URL; ?>assets/jquery-ui.js?v=<?php echo GUST_VERSION; ?>"">\x3C/script>')</script>
         <script src="//cdn.jsdelivr.net/codemirror/3.14.0/codemirror.min.js"></script>
         <script>window.CodeMirror || document.write('<script src="<?php echo GUST_PLUGIN_URL; ?>assets/codemirror.min.js?v=<?php echo GUST_VERSION; ?>"">\x3C/script>')</script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"/></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
         <script>window._ || document.write('<script src="<?php echo GUST_PLUGIN_URL; ?>assets/underscore-min.js?v=<?php echo GUST_VERSION; ?>"">\x3C/script>')</script>
         <script src="//cdn.jsdelivr.net/showdown/0.3.1/showdown.js"></script>
         <script>window.Showdown || document.write('<script src="<?php echo GUST_PLUGIN_URL; ?>assets/showdown.j?v=<?php echo GUST_VERSION; ?>"">\x3C/script>')</script>
