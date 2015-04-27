@@ -69,16 +69,16 @@
         case 'attachment'  :
           Gust.init_list('attachment', 'All Files');
         break;
-        case 'forgotten'  : 
+        case 'forgotten'  :
           Gust.init_forgotten();
         break;
-        case 'login'  : 
+        case 'login'  :
           Gust.init_login();
         break;
         case 'post'  :
 	        Gust.init_list('post', 'All Posts');
 	      break;
-        default       :  
+        default       :
           Gust.init_list(address[0], 'All '+address[0]);
         break;
       }
@@ -87,10 +87,10 @@
         Gust.throw_success('Thank you for the coffee!');
       }
       if (typeof get.message != 'undefined' && get.message=='subscriber') {
-        Gust.throw_error('As a subscriber, you do not have permission to edit this blog');        
+        Gust.throw_error('As a subscriber, you do not have permission to edit this blog');
       }
       if (typeof get.error != 'undefined') {
-        Gust.throw_error(decodeURI(get.error));        
+        Gust.throw_error(decodeURI(get.error));
       }
       setInterval('Gust.update_times()',30000);
     },
@@ -148,7 +148,7 @@
                     'cb' :function(){
                       var data = jQuery('body').data('autosave');
                       jQuery('#entry-title').val(data.title);
-                      Gust.editor.setValue(data.markdown);            
+                      Gust.editor.setValue(data.markdown);
                       Gust.hide_dialog();
                     }
                   },
@@ -159,9 +159,9 @@
                       Gust.hide_dialog();
                     }
                   }
-                } 
+                }
               });
-            }            
+            }
           }
         }
       );
@@ -268,17 +268,18 @@
       });
       jQuery('.button-save').attr('data-status',entry.status);
       switch (entry.status) {
-        case 'draft' : 
+        case 'auto-draft' :
+        case 'draft' :
           jQuery('.button-save').html('Save Draft');
           jQuery('ul.editor-options').html('');
           if (moment(entry.published_at).unix() > moment().unix() ) {
             jQuery('ul.editor-options').append('<li data-status="published"><a href="#">Schedule Post</a></li>');
           } else  {
-            jQuery('ul.editor-options').append('<li data-status="published"><a href="#">Publish Post</a></li>');          
+            jQuery('ul.editor-options').append('<li data-status="published"><a href="#">Publish Post</a></li>');
           }
           jQuery('ul.editor-options').append('<li data-status="draft" class="active"><a href="#">Save Draft</a></li>');
         break;
-        case 'published' : 
+        case 'published' :
           jQuery('.button-save').html('Update Post');
           jQuery('ul.editor-options').html('');
           jQuery('ul.editor-options').append('<li data-status="published" class="active"><a href="#">Update Post</a></li>');
@@ -288,13 +289,13 @@
             jQuery('ul.editor-options').append('<li data-status="draft"><a href="#">Unpublish Post</a></li>');
           }
         break;
-        case 'pending' : 
+        case 'pending' :
           jQuery('.button-save').html('Save Changes');
           jQuery('ul.editor-options').html('');
           jQuery('ul.editor-options').append('<li data-status="published"><a href="#">Confirm Post</a></li>');
           jQuery('ul.editor-options').append('<li data-status="pending" class="active"><a href="#">Save Changes</a></li>');
         break;
-        case 'scheduled' : 
+        case 'scheduled' :
           jQuery('.button-save').html('Save Changes');
           jQuery('ul.editor-options').html('');
           jQuery('ul.editor-options').append('<li data-status="scheduled" class="active"><a href="#">Save Changes</a></li>');
@@ -343,7 +344,7 @@
               'title' : 'No',
               'cb' : false
             }
-          }          
+          }
         });
       });
     },
@@ -370,7 +371,7 @@
       var img = jQuery('.images .image').last();
       img.find('img').attr('src',data.url);
       img.attr('data-id',data.id);
-      if (data.featured) 
+      if (data.featured)
         img.addClass('selected');
       img.find('.delete').click(function(e){
         e.stopPropagation();
@@ -383,7 +384,6 @@
           'DELETE',
           data,
           function(resp){
-            console.log(resp);
             if(resp.success) {
               jQuery('.images .image[data-id='+resp.id+']').remove();
               Gust.throw_success(resp.success);
@@ -391,7 +391,7 @@
               Gust.throw_error(resp.error);
             }
           }
-        ); 
+        );
       });
       img.click(function(e){
         jQuery('.images .image').removeClass('selected');
@@ -410,7 +410,7 @@
             } else {
               Gust.throw_error(resp.error);
             }
-          }          
+          }
         );
       });
     },
@@ -437,7 +437,7 @@
           var results = jQuery.ui.autocomplete.filter(Gust.all_meta_keys, request.term);
           response(results.slice(0, 10));
         },
-      });    
+      });
       jQuery('.edit-custom-fields tbody tr').last().find('.input-update').click(function(e){
         var tr = jQuery(this).parent().parent();
         e.preventDefault();
@@ -446,7 +446,7 @@
           'old_name'  : tr.find('.input-name').attr('data-init-value'),
           'value'     : tr.find('.input-value').val(),
           'old_value' : tr.find('.input-value').attr('data-init-value')
-        }      
+        }
         var id = jQuery('body').data('id');
         if (data.value != data.old_value || data.name != data.old_name) {
           Gust.api(
@@ -471,11 +471,11 @@
             delete_data,
             function(resp){
             }
-          ); 
+          );
         }
         tr.find('.input-value').attr('data-init-value',tr.find('.input-value').val());
         tr.find('.input-name').attr('data-init-value',tr.find('.input-name').val());
-      });  
+      });
       jQuery('.edit-custom-fields tbody tr').last().find('.input-delete').click(function(e){
         var tr = jQuery(this).parent().parent();
         e.preventDefault();
@@ -483,7 +483,7 @@
           'name'      : tr.find('.input-name').attr('data-init-value'),
           'value'     : tr.find('.input-value').val(),
           'old_value' : tr.find('.input-value').attr('data-init-value')
-        }      
+        }
         var id = jQuery('body').data('id');
         Gust.api(
           '/post/'+id+'/meta',
@@ -498,7 +498,7 @@
             }
           }
         );
-      });  
+      });
     },
     init_editor : function(id){
       jQuery('body').attr('class','editor');
@@ -556,7 +556,7 @@
                     data = {
                       'title' : jQuery('#category-title').val(),
                       'slug' : jQuery('#category-slug').val(),
-                      'parent' : jQuery('#category-parent').val(),                    
+                      'parent' : jQuery('#category-parent').val(),
                     };
                     Gust.api(
                       '/category',
@@ -645,7 +645,7 @@
               Gust.editor.focus();
               jQuery('#edit-featured-image').click(function(e){
                 e.preventDefault();
-                var content = '<div class="images"></div><div class="new-image"><i class="fa fa-plus"></i> Add new image <input data-url="upload" class="js-fileupload main fileupload" type="file" name="uploadimage"></div>';                
+                var content = '<div class="images"></div><div class="new-image"><i class="fa fa-plus"></i> Add new image <input data-url="upload" class="js-fileupload main fileupload" type="file" name="uploadimage"></div>';
                 Gust.api(
                   '/post/'+id+'/image',
                   'GET',
@@ -660,7 +660,7 @@
                   'title': 'Edit Featured Image',
                   'content' : content,
                   'close': true
-                });                
+                });
                 Gust.init_uploads_featured();
               });
               if (entry.custom_fields) {
@@ -671,7 +671,7 @@
                   '<th class="name">Field Name</th><th class="value">Value</th><th class="action">Actions</th>'+
                   '</tr></thead>';
                   content += '<tfoot><tr><th colspan="3">'+
-                  '<a class="input-add js-button button-add"><i class="fa fa-plus"></i> Add new</a>'+ 
+                  '<a class="input-add js-button button-add"><i class="fa fa-plus"></i> Add new</a>'+
                   '</th></tr><tfoot>';
                   content += '<tbody>';
                   content += '</tbody>';
@@ -712,18 +712,11 @@
                 toggle_object.show();
                 jQuery(document).on('mouseup',Gust.hide_save);
               });
-    /*          shortcut.add("Ctrl+Alt+C", function () {
-                    self.showHTML();
-              });
-                shortcut.add("Ctrl+Alt+C", function () {
-                    self.showHTML();
-                });*/
-
                 _.each(MarkdownShortcuts, function (combo) {
                     shortcut.add(combo.key, function () {
                         return Gust.editor.addMarkdown({style: combo.style});
                     });
-                });          
+                });
               Gust.update_editor(resp.post);
             }
           );
@@ -789,7 +782,7 @@
         return tagNameMatches && !hasAlreadyBeenAdded;
       });
       return matchingTagModels;
-    },    
+    },
     show_suggestions: function (target, _searchTerm) {
       jQuery('#entry-tags ul').show();
       var searchTerm = _searchTerm.toString().toLowerCase(),
@@ -972,21 +965,21 @@
                 jQuery('.content-list-content').scrollTop(jQuery('li[data-id='+position+']').position().top-jQuery('li[data-id='+position+']').parent().position().top);
               } else {
                 Gust.append_list(position);
-              } 
+              }
             } else {
-              jQuery('.content-list-content ol li:first-child').click();              
+              jQuery('.content-list-content ol li:first-child').click();
             }
             watchScrollPosition(
               '.content-list-content',
               '.content-list-content ol',
-              Gust.append_list, 
+              Gust.append_list,
               100, 200
-            );            
+            );
           }
         }
       );
     },
-    append_list : function(position) {      
+    append_list : function(position) {
       var page = jQuery('.content-list-content ol').data('next');
       var current = jQuery('.content-list-content ol').data('current');
       if (page!=current && jQuery('.content-list-content ol').data('loaded')) {
@@ -1006,7 +999,7 @@
                 jQuery('.content-list-content').scrollTop(jQuery('li[data-id='+position+']').position().top-jQuery('li[data-id='+position+']').parent().position().top);
               } else {
                 Gust.append_list(position);
-              } 
+              }
             }
             jQuery('.content-list-content ol').data('current',page);
             jQuery('.content-list-content ol').data('next',resp.next);
@@ -1213,19 +1206,19 @@
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         Gust.throw_error('Invalid date');
         return false;
-      } 
+      }
       if (n &&o && n.unix()!=o.unix()) {
         var data = {'published_at':n.unix()};
         Gust.api(
           '/post/'+id,
           'POST',
           data,
-          function(resp){          
+          function(resp){
             if ( typeof resp.error != 'undefined') {
               Gust.throw_error(resp.error);
             } else {
-              jQuery('.post-setting-date').val(moment(resp.post.published_at).format(Gust.date_format));  
-              jQuery('.post-setting-date').attr('data-date',moment(resp.post.published_at).format(Gust.date_format));  
+              jQuery('.post-setting-date').val(moment(resp.post.published_at).format(Gust.date_format));
+              jQuery('.post-setting-date').attr('data-date',moment(resp.post.published_at).format(Gust.date_format));
               Gust.update_item(resp.post);
               jQuery('.content-list-content ol li[data-id='+resp.post.id+']').click();
               Gust.throw_success('Date updated');
@@ -1239,12 +1232,12 @@
           '/post/'+id,
           'POST',
           data,
-          function(resp){          
+          function(resp){
             if ( typeof resp.error != 'undefined') {
               Gust.throw_error(resp.error);
             } else {
-              jQuery('.post-setting-slug').val(resp.post.slug);  
-              jQuery('.post-setting-slug').attr('data-slug',resp.post.slug);  
+              jQuery('.post-setting-slug').val(resp.post.slug);
+              jQuery('.post-setting-slug').attr('data-slug',resp.post.slug);
               Gust.update_item(resp.post);
               jQuery('.content-list-content ol li[data-id='+resp.post.id+']').click();
               Gust.throw_success('URL updated');
@@ -1261,21 +1254,21 @@
       if (jQuery('.post-setting-date').val() && !n.isValid()) {
         Gust.throw_error('Invalid date');
         return false;
-      } 
+      }
       if (/*jQuery('.post-setting-date').val() && */n &&o && n.unix()!=o.unix()) {
         var data = {'published_at':n.unix()};
         Gust.api(
           '/post/'+id,
           'POST',
           data,
-          function(resp){          
+          function(resp){
             if ( typeof resp.error != 'undefined') {
               Gust.throw_error(resp.error);
             } else {
               var date_show = resp.post.published_at?resp.post.published_at:resp.post.created_at;
               Gust.update_editor_button(resp.post);
-//             jQuery('.post-setting-date').val(moment(date_show).format(Gust.date_format));  
-//              jQuery('.post-setting-date').attr('data-date',moment(date_show).format(Gust.date_format));  
+//             jQuery('.post-setting-date').val(moment(date_show).format(Gust.date_format));
+//              jQuery('.post-setting-date').attr('data-date',moment(date_show).format(Gust.date_format));
               Gust.throw_success('Date updated');
             }
           }
@@ -1287,12 +1280,12 @@
           '/post/'+id,
           'POST',
           data,
-          function(resp){          
+          function(resp){
             if ( typeof resp.error != 'undefined') {
               Gust.throw_error(resp.error);
             } else {
-              jQuery('.post-setting-slug').val(resp.post.slug);  
-              jQuery('.post-setting-slug').attr('data-slug',resp.post.slug);  
+              jQuery('.post-setting-slug').val(resp.post.slug);
+              jQuery('.post-setting-slug').attr('data-slug',resp.post.slug);
               Gust.update_item(resp.post);
               jQuery('.content-list-content ol li[data-id='+resp.post.id+']').click();
               Gust.throw_success('URL updated');
@@ -1435,14 +1428,14 @@
           response(resp);
         }
       })
-      .fail(function(a,b){console.log(a,b);Gust.throw_error('API error: '+b+' '+a.responseText);});      
+      .fail(function(a,b){console.log(a,b);Gust.throw_error('API error: '+b+' '+a.responseText);});
     },
     templates : {}
   };
 
 
 // TO DO: overhaul keyboard shortcut API, make it more extensive, and compatible with more uncommon keyboard layouts. Seen Ghost issue https://github.com/TryGhost/Ghost/issues/1463
-var   
+var
 
 MarkdownShortcuts = [
             {'key': 'Ctrl+B', 'style': 'bold'},

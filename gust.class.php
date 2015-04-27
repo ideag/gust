@@ -26,7 +26,7 @@ class Gust {
     $creds['user_login']    = $user;
     $creds['user_password'] = $pass;
     $creds['remember'] = true;
-    $user = wp_signon( $creds, false );     
+    $user = wp_signon( $creds, false );
     if (is_wp_error($user)) {
       $return = array(
         'error' => $user->get_error_message()
@@ -80,7 +80,7 @@ class Gust {
               'post_content' => '',
               'post_status' => 'inherit'
           );
-          $attach_id = wp_insert_attachment( $attachment, $filename,$id);          
+          $attach_id = wp_insert_attachment( $attachment, $filename,$id);
           include_once( ABSPATH . 'wp-admin/includes/image.php' );
           $attach_data = wp_generate_attachment_metadata($attach_id,$filename);
 //          print_r($attach_data);
@@ -116,14 +116,14 @@ class Gust {
         'title' => $post->post_title,
         'markdown' => Gust::content_markdown($post->ID,$post->post_content),
         'time' => $post->post_modified_gmt!='0000-00-00 00:00:00'?date(DATE_W3C,strtotime($post->post_modified_gmt)):''
-      );      
+      );
     } else {
       $ret = false;
     }
     return $ret;
   }
   public static function put_autosave($id,$data){
-    $old_revision = wp_get_post_autosave( $id ); 
+    $old_revision = wp_get_post_autosave( $id );
     $post = get_post($id);
     $post->post_title = $data['title'];
     $post->post_content = $data['text'];
@@ -224,7 +224,7 @@ class Gust {
 //    if ($data['value']==$data['old_value']) {
 //      $return = array('warning'=>__('Nothing to update','gust'));
 //    } else {
-      $return = update_post_meta($post_id, $meta_key, $data['value'], $data['old_value']);  
+      $return = update_post_meta($post_id, $meta_key, $data['value'], $data['old_value']);
       if ($return) {
         $return = array('success'=>__('Custom field updated.','gust'));
       } else {
@@ -235,7 +235,7 @@ class Gust {
   }
   public static function delete_meta($post_id,$data) {
     $meta_key = $data['name'];
-    $return = delete_post_meta($post_id, $meta_key, $data['old_value']);  
+    $return = delete_post_meta($post_id, $meta_key, $data['old_value']);
     if ($return) {
       $return = array('success'=>__('Custom field deleted.','gust'));
     } else {
@@ -255,7 +255,7 @@ class Gust {
   }
   public static function get_image_list($post_id) {
     $media = get_attached_media( 'image', $post_id );
-    //$return = delete_post_meta($post_id, $meta_key, $data['old_value']);  
+    //$return = delete_post_meta($post_id, $meta_key, $data['old_value']);
     if ($media) {
       $post_thumbnail_id = get_post_thumbnail_id( $post_id );
       $result = array();
@@ -274,7 +274,7 @@ class Gust {
       $return = array('error'=>__('Error receiving post images.','gust'));
     }
     return $return;
-  }  
+  }
   public static function get_meta_keys(){
     global $wpdb;
       $keys = $wpdb->get_col( "
@@ -303,7 +303,7 @@ class Gust {
       'post_status'=>get_post_stati('','names')
     );
     $query = new WP_Query($args);
-    while ($query->have_posts()) : 
+    while ($query->have_posts()) :
       $query->the_post();
       $ret['post'] = Gust::format_post($query->post);
     endwhile;
@@ -332,7 +332,7 @@ class Gust {
       $args['author']=get_current_user_id();
     }
     $query = new WP_Query($args);
-    while ($query->have_posts()) : 
+    while ($query->have_posts()) :
       $query->the_post();
       $ret['posts'][] = Gust::format_post($query->post);
     endwhile;
@@ -362,14 +362,14 @@ class Gust {
       'custom' => isset($_POST['tiny_text2'])?': '.$_POST['tiny_text2']:'',
       'currency_code' => 'EUR',
       'no_shipping' => '1',
-    ); 
+    );
     echo '<html><head><meta charset="utf-8"/></head><body><form id="form" action="'.$address.'" method="post">';
     foreach ($data as $key => $value) {
       echo "<input type='hidden' name='{$key}' value='{$value}'/>";
     }
     echo '</form>';
     echo '<script>document.getElementById("form").submit();</script></body></html>';
-    die('PAYPAL');    
+    die('PAYPAL');
   }
   public static function get_post_tags($post_id,$taxonomy='post_tag'){
     return wp_get_post_terms($post_id, $taxonomy);
@@ -469,7 +469,7 @@ class Gust {
     $draft_date = $draft_date_array[0]->post_date;
     $draft_date = date(DATE_W3C,strtotime($draft_date));
     return $draft_date;
-  }  
+  }
   private static function get_attachment_id_from_src ($image_src) {
 
     global $wpdb;
@@ -546,6 +546,3 @@ class Gust {
   }
 
 }
-
-
-?>

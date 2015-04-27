@@ -60,7 +60,6 @@ class Gust_views {
       }
     }
     static function ghost($q) {
-      D::redirect(GUST_ROOT.'/'.$q);      
+      D::redirect(GUST_ROOT.'/'.$q);
     }
 }
-?>

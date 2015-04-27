@@ -1,69 +1,69 @@
-<?php 
+<?php
 
 class Gust_API {
   static function login() {
     $return = Gust::login($_POST['username'],$_POST['password']);
-    D::json($return);      
+    D::json($return);
   }
   static function forgotten() {
     $return = Gust::retrieve_password($_POST['username']);
-    D::json($return);      
+    D::json($return);
   }
   static function tax_add($type) {
       if (Gust::auth('edit_posts' )) {
-        $return = Gust::new_tax_term($type,$_POST); 
+        $return = Gust::new_tax_term($type,$_POST);
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function tax_update($type,$id) {
       if (Gust::auth('edit_posts' )) {
-        $return = Gust::update_tax_term($type,$id,$_POST); 
+        $return = Gust::update_tax_term($type,$id,$_POST);
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function tax_delete($type,$id) {
       if (Gust::auth('edit_posts' )) {
-        $return = Gust::delete_tax_term($type,$id); 
+        $return = Gust::delete_tax_term($type,$id);
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function get_meta_keys() {
       if (Gust::auth('edit_posts' )) {
-        $return = Gust::get_meta_keys(); 
+        $return = Gust::get_meta_keys();
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function post_meta_list($id) {
     if (Gust::auth('edit_posts' )) {
-      $return = Gust::get_meta_list($id); 
+      $return = Gust::get_meta_list($id);
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
-    D::json($return);      
+    D::json($return);
   }
   static function post_image_list($id) {
     if (Gust::auth('edit_posts' )) {
-      $return = Gust::get_image_list($id); 
+      $return = Gust::get_image_list($id);
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
-    D::json($return);      
+    D::json($return);
   }
   static function post_set_featured($id) {
     if (Gust::auth('edit_posts' )) {
-      $return = Gust::set_featured($id,$_POST); 
+      $return = Gust::set_featured($id,$_POST);
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
-    D::json($return);      
+    D::json($return);
   }
   static function post_meta_delete($id) {
     if (Gust::auth('edit_posts' )) {
@@ -71,19 +71,19 @@ class Gust_API {
         $data = file_get_contents('php://input');
         parse_str($data,$_POST);
       }
-      $return = Gust::delete_meta($id,$_POST); 
+      $return = Gust::delete_meta($id,$_POST);
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
-    D::json($return);      
+    D::json($return);
   }
   static function post_meta_update($id) {
     if (Gust::auth('edit_posts' )) {
-      $return = Gust::update_meta($id,$_POST); 
+      $return = Gust::update_meta($id,$_POST);
     } else {
       $return = array('error'=>__('You have no permission to edit this post','gust'));
     }
-    D::json($return);      
+    D::json($return);
   }
   static function tax($type) {
       if (Gust::auth('edit_posts' )) {
@@ -96,7 +96,7 @@ class Gust_API {
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function tax_single($type,$id) {
       if (Gust::auth('edit_posts' )) {
@@ -104,17 +104,17 @@ class Gust_API {
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function upload($id) {
       if (Gust::auth()) {
         echo Gust::upload($id);
-      }          
+      }
   }
   static function post_image_add($id) {
       if (Gust::auth()) {
         D::json(Gust::upload($id));
-      }          
+      }
   }
   static function post_image_delete($id) {
       if (Gust::auth('edit_posts')) {
@@ -125,16 +125,16 @@ class Gust_API {
         $return = Gust::delete_image($id,$_POST);
       } else {
         $return = array('error'=>__('You have no permission to remove this image','gust'));
-      }     
-      D::json($return);      
+      }
+      D::json($return);
   }
   static function upload_delete() {
       if (Gust::auth('edit_posts')) {
         $return = Gust::delete($_GET['url']);
       } else {
         $return = array('error'=>__('You have no permission to remove this image','gust'));
-      }     
-      D::json($return);      
+      }
+      D::json($return);
   }
   static function autosave_get($id) {
       if (Gust::auth('edit_post',$id)) {
@@ -142,7 +142,7 @@ class Gust_API {
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);          
+      D::json($return);
   }
   static function autosave($id) {
       if (Gust::auth('edit_post',$id)) {
@@ -150,12 +150,12 @@ class Gust_API {
         if (is_wp_error($ret )) {
           $return = array('error'=>$ret->get_error_message());
         } else {
-          $return = array('id'=>$id);          
+          $return = array('id'=>$id);
         }
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);          
+      D::json($return);
   }
   static function posts() {
       if (Gust::auth('edit_posts')) {
@@ -168,7 +168,7 @@ class Gust_API {
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
     }
   static function post($id) {
       if (Gust::auth('edit_post', $id )) {
@@ -176,7 +176,7 @@ class Gust_API {
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
     }
   static function post_delete($id) {
 // TO DO move actual logic to Gust class
@@ -185,12 +185,12 @@ class Gust_API {
         if (is_wp_error($ret )) {
           $return = array('error'=>$ret->get_error_message());
         } else {
-          $return = array('id'=>$id);          
+          $return = array('id'=>$id);
         }
       } else {
         $return = array('error'=>__('You have no permission to delete this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
   static function post_save($id) {
 // TO DO move actual logic to Gust class
@@ -206,7 +206,7 @@ class Gust_API {
           if ($_POST['published_at']=='NaN'){
             $date = '0000-00-00 00:00:00';
           } else {
-            $date = date('Y-m-d H:i:s',$_POST['published_at']+ get_option( 'gmt_offset' ) * 3600);            
+            $date = date('Y-m-d H:i:s',$_POST['published_at']+ get_option( 'gmt_offset' ) * 3600);
           }
 //        }
 //          $date = date('Y-m-d H:i:s',$_POST['published_at']);
@@ -215,14 +215,14 @@ class Gust_API {
             'edit_date' => true,
             'post_date' => $date,
             'post_date_gmt' => $date=='0000-00-00 00:00:00'?'0000-00-00 00:00:00':get_gmt_from_date($date)//date('Y-m-d H:i:s',$_POST['published_at']),
-          ); 
+          );
           $id = wp_update_post($arr);
           $return = Gust::get_post($id);
         } else if (isset($_POST['slug']) && !isset($_POST['markdown']) ) {
           $arr = array(
             'ID' => $id,
             'post_name' => $_POST['slug']
-          ); 
+          );
           $id = wp_update_post($arr,true);
           $return = Gust::get_post($id);
         } else if (isset($_POST['markdown'])) {
@@ -230,12 +230,15 @@ class Gust_API {
           if (!current_user_can('publish_post',$id) && $_POST['status']=='publish') {
             $_POST['status']='pending';
           }
+          if ( 'auto-draft' == $_POST['status'] ) {
+            $_POST['status'] = 'draft';
+          }
           $arr = array(
             'ID' => $id,
             'post_title' => $_POST['title']?$_POST['title']:'',
             'post_content' => $_POST['html']?$_POST['html']:' ',
             'post_status' => $_POST['status']
-          ); 
+          );
           if(!isset($_POST['type']) || $_POST['type']!='page') {
             $tags=$_POST['tags'];
             $tags=explode(',',$tags);
@@ -259,8 +262,6 @@ class Gust_API {
       } else {
         $return = array('error'=>__('You have no permission to edit this post','gust'));
       }
-      D::json($return);      
+      D::json($return);
   }
-
 }
-?>

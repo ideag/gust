@@ -4,8 +4,8 @@ Contributors: ideag
 Donate link: http://wordofpress.com/gust
 Tags: ghost, admin panel, markdown, editor, dashboard, admin
 Requires at least: 3.0.1
-Tested up to: 3.8
-Stable tag: 0.4.0
+Tested up to: 4.2
+Stable tag: 0.4.1
 License: MIT
 License URI: http://wordofpress.com/gust/license
 
@@ -13,7 +13,7 @@ Gust is a port of Ghost admin panel for WordPress.
 
 ## Description
 
-At the begining, Ghost was supposed to be a fork of WordPress. Then there was a talk of a plugin, that would give a next-generation admin panel for WordPress. But in the process it became a new blogging platform, built on Node.js. This plugin is an attempt to bring the nice and clean admin panel of Ghost back to the WordPress ecosystem. 
+At the begining, Ghost was supposed to be a fork of WordPress. Then there was a talk of a plugin, that would give a next-generation admin panel for WordPress. But in the process it became a new blogging platform, built on Node.js. This plugin is an attempt to bring the nice and clean admin panel of Ghost back to the WordPress ecosystem.
 
 Current features:
 
@@ -81,7 +81,7 @@ This is an early release, so some features are not present, yet. They will be, l
 * several bugfixes
 * some fixes for better debuging
 
-### 0.3.2 
+### 0.3.2
 
 * Bugfix - low level php notices failing on some setups
 * Bugfix - contributors no longer can publish a post (thanks to [glaxxon]{https://github.com/glaxxon} for reporting)
@@ -89,8 +89,8 @@ This is an early release, so some features are not present, yet. They will be, l
 ### 0.3.1
 
 * Bugfix for subdirectory setup (e.g. `domain.com/blog`)
-* Bugfix for permalinks with front word (e.g. `archives/%post_id%`) 
-* Bugfix 'Add new' button in post list view now is relative to the post type. 
+* Bugfix for permalinks with front word (e.g. `archives/%post_id%`)
+* Bugfix 'Add new' button in post list view now is relative to the post type.
 
 ### 0.3
 

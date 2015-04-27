@@ -1,16 +1,15 @@
-<?php 
+<?php
 /*
 Plugin Name: Gust
 Plugin URI: https://github.com/ideag/gust
 Description: A port of the Ghost admin interface
 Author: Arūnas Liuiza
-Version: 0.4.0
-Author URI: http://wp.tribuna.lt/
+Version: 0.4.1
+Author URI: http://arunas.co/
 */
-error_reporting(-1);
 define ('GUST_SUBPATH',       gust_get_subpath());
 define ('GUST_TITLE',         __('Gust','gust'));
-define ('GUST_VERSION',       'v0.4.0');
+define ('GUST_VERSION',       'v0.4.1');
 define ('GUST_PLUGIN_PATH',   plugin_dir_path(__FILE__));
 define ('GUST_PLUGIN_URL',    plugin_dir_url(__FILE__));
 
@@ -40,7 +39,7 @@ add_filter('page_row_actions', 'gust_edit_post_link_admin', 10, 2);
 
 function gust_permalink_check(){
   if (!gust_is_pretty_permalinks()) {
-    add_action( 'admin_notices', 'gust_no_permalink_notice',1000 );   
+    add_action( 'admin_notices', 'gust_no_permalink_notice',1000 );
   }
 }
 function gust_no_permalink_notice() {
@@ -60,8 +59,8 @@ function gust_is_pretty_permalinks(){
 }
 
 function gust_init_rewrites() {
-  add_rewrite_tag( '%gust_api%', '(ghost|'.GUST_NAME.'|api)'); 
-  add_rewrite_tag( '%gust_q%', '(.*)'); 
+  add_rewrite_tag( '%gust_api%', '(ghost|'.GUST_NAME.'|api)');
+  add_rewrite_tag( '%gust_q%', '(.*)');
   add_permastruct('gust_calls', '%gust_api%/%gust_q%',array('with_front'=>false));
 }
 
@@ -148,7 +147,7 @@ function gust_admin_bar_filter( $wp_admin_bar ) {
       $wp_admin_bar->add_node($node);
     }
   }
-} 
+}
 
 function gust_edit_post_link($link, $post_id, $context) {
   if (!is_admin()) {
@@ -196,11 +195,6 @@ function gust_gen_uuid() {
     );
 }
 */
-function get_avatar_url($id_or_email, $size=96, $default='', $alt=false){
-    $get_avatar = get_avatar( $id_or_email, $size, $default, $alt );
-    preg_match("/src='(.*?)'/i", $get_avatar, $matches);
-    return $matches[1];
-}
 
 function gust_get_subpath(){
   $url = get_bloginfo('url');
@@ -208,5 +202,3 @@ function gust_get_subpath(){
   $url = isset($url['path'])?$url['path']:'';
   return $url;
 }
-
-?>
